@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Cấu Hình Công Thức Lương - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0ea5e9",
+                        "accent": "#0ea5e9",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .formula-editor {
+            font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', monospace;
+        }
+
+        .variable-chip:hover {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100">
+    <div class="flex h-screen overflow-hidden pt-8">
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <div id="header-root"></div>
+
+            <div class="p-8 max-w-[1400px] mx-auto w-full">
+                <!-- Header Actions -->
+                <div class="flex justify-between items-end mb-8">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Cấu hình Công
+                            thức Lương</h1>
+                        <p class="text-slate-500 text-sm mt-1 uppercase tracking-wider font-medium">Payroll & Allowance
+                            Configuration</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button
+                            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-6 py-2.5 rounded-xl text-sm font-black flex items-center gap-2 hover:bg-slate-50 transition-all">
+                            <span class="material-icons-round text-sm">history</span> Lịch sử thay đổi
+                        </button>
+                        <button onclick="handleSaveConfig()"
+                            class="bg-primary text-white px-8 py-2.5 rounded-xl text-sm font-black flex items-center gap-2 shadow-xl shadow-sky-500/20 hover:bg-primary/90 transition-all">
+                            <span class="material-icons-round text-sm">save</span> Lưu cấu hình
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-12 gap-8">
+                    <!-- Left: Allowances & Variables -->
+                    <div class="col-span-12 xl:col-span-7 space-y-8">
+                        <!-- Allowances Section -->
+                        <div class="card overflow-hidden bg-white dark:bg-slate-900 border-none shadow-xl">
+                            <div
+                                class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20">
+                                <div>
+                                    <h2 class="font-black text-slate-800 dark:text-white uppercase tracking-tight">Danh
+                                        mục Phụ cấp & Khấu trừ</h2>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-0.5">
+                                        Allowances & Deductions</p>
+                                </div>
+                                <button onclick="openAddComponentModal()"
+                                    class="bg-sky-50 dark:bg-sky-950/30 text-sky-600 dark:text-sky-400 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-1 hover:bg-sky-100 transition-colors">
+                                    <span class="material-icons-round text-xs">add</span> Thêm khoản mới
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-left">
+                                    <thead class="bg-slate-50/50 dark:bg-slate-800/50">
+                                        <tr>
+                                            <th
+                                                class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                                Mã</th>
+                                            <th
+                                                class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                                Tên khoản</th>
+                                            <th
+                                                class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
+                                                Loại</th>
+                                            <th
+                                                class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">
+                                                Giá trị</th>
+                                            <th
+                                                class="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">
+                                                Chịu thuế?</th>
+                                            <th class="px-6 py-4"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                            <td class="px-6 py-4 font-mono text-[10px] font-bold text-sky-500">
+                                                MEAL_ALLOW</td>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm font-black text-slate-700 dark:text-slate-300">Phụ
+                                                    cấp ăn trưa</div>
+                                                <div class="text-[9px] text-slate-400 font-bold uppercase">午餐补贴</div>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <span
+                                                    class="px-2 py-0.5 text-[9px] font-black rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400 uppercase tracking-widest border border-emerald-100">Cố
+                                                    định</span>
+                                            </td>
+                                            <td class="px-6 py-4 text-right font-black text-slate-900 dark:text-white">
+                                                730,000</td>
+                                            <td class="px-6 py-4">
+                                                <div class="flex justify-center">
+                                                    <label class="relative inline-flex items-center cursor-pointer">
+                                                        <input type="checkbox" class="sr-only peer">
+                                                        <div
+                                                            class="w-9 h-5 bg-slate-200 peer-focus:outline-none dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500">
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <button
+                                                    class="text-slate-300 hover:text-red-500 transition-colors"><span
+                                                        class="material-icons-round text-sm">delete_outline</span></button>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                            <td class="px-6 py-4 font-mono text-[10px] font-bold text-sky-500">
+                                                TRAVEL_EXP</td>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm font-black text-slate-700 dark:text-slate-300">Phụ
+                                                    cấp đi lại</div>
+                                                <div class="text-[9px] text-slate-400 font-bold uppercase">交通补贴</div>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <span
+                                                    class="px-2 py-0.5 text-[9px] font-black rounded-lg bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-400 uppercase tracking-widest border border-emerald-100">Cố
+                                                    định</span>
+                                            </td>
+                                            <td class="px-6 py-4 text-right font-black text-slate-900 dark:text-white">
+                                                500,000</td>
+                                            <td class="px-6 py-4">
+                                                <div class="flex justify-center">
+                                                    <label class="relative inline-flex items-center cursor-pointer">
+                                                        <input type="checkbox" checked class="sr-only peer">
+                                                        <div
+                                                            class="w-9 h-5 bg-slate-200 peer-focus:outline-none dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500">
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <button
+                                                    class="text-slate-300 hover:text-red-500 transition-colors"><span
+                                                        class="material-icons-round text-sm">delete_outline</span></button>
+                                            </td>
+                                        </tr>
+                                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+                                            <td class="px-6 py-4 font-mono text-[10px] font-bold text-sky-500">
+                                                INS_DEDUCT</td>
+                                            <td class="px-6 py-4">
+                                                <div class="text-sm font-black text-slate-700 dark:text-slate-300">Khấu
+                                                    trừ Bảo hiểm</div>
+                                                <div class="text-[9px] text-slate-400 font-bold uppercase">保险扣除</div>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <span
+                                                    class="px-2 py-0.5 text-[9px] font-black rounded-lg bg-amber-50 text-amber-600 dark:bg-amber-950/20 dark:text-amber-400 uppercase tracking-widest border border-amber-100">Phần
+                                                    trăm</span>
+                                            </td>
+                                            <td class="px-6 py-4 text-right font-black text-red-500">10.5%</td>
+                                            <td class="px-6 py-4">
+                                                <div class="flex justify-center">
+                                                    <label class="relative inline-flex items-center cursor-pointer">
+                                                        <input type="checkbox" class="sr-only peer">
+                                                        <div
+                                                            class="w-9 h-5 bg-slate-200 peer-focus:outline-none dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500">
+                                                        </div>
+                                                    </label>
+                                                </div>
+                                            </td>
+                                            <td class="px-6 py-4 text-center">
+                                                <button
+                                                    class="text-slate-300 hover:text-red-500 transition-colors"><span
+                                                        class="material-icons-round text-sm">delete_outline</span></button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Variables Section -->
+                        <div class="card p-8 bg-white dark:bg-slate-900 border-none shadow-xl">
+                            <div class="flex items-center gap-3 mb-6">
+                                <span class="material-icons-round text-sky-500">info</span>
+                                <h3 class="text-sm font-black uppercase tracking-widest text-slate-800 dark:text-white">
+                                    Thư viện Biến hệ thống <span
+                                        class="text-[10px] text-slate-400 font-medium normal-case ml-2">(Click để chèn
+                                        nhanh vào công thức)</span>
+                                </h3>
+                            </div>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <button onclick="insertVariable('{Base_Salary}')"
+                                    class="variable-chip group flex flex-col gap-1 p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl transition-all hover:bg-sky-50 dark:hover:bg-sky-950/30 hover:border-sky-200 text-left">
+                                    <code
+                                        class="text-sky-600 font-black text-xs uppercase tracking-tighter">{Base_Salary}</code>
+                                    <span class="text-[10px] font-bold text-slate-500">Lương cơ bản (Hợp đồng)</span>
+                                </button>
+                                <button onclick="insertVariable('{Working_Days}')"
+                                    class="variable-chip group flex flex-col gap-1 p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl transition-all hover:bg-sky-50 dark:hover:bg-sky-950/30 hover:border-sky-200 text-left">
+                                    <code
+                                        class="text-sky-600 font-black text-xs uppercase tracking-tighter">{Working_Days}</code>
+                                    <span class="text-[10px] font-bold text-slate-500">Số ngày đi làm thực tế</span>
+                                </button>
+                                <button onclick="insertVariable('{Standard_Days}')"
+                                    class="variable-chip group flex flex-col gap-1 p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl transition-all hover:bg-sky-50 dark:hover:bg-sky-950/30 hover:border-sky-200 text-left">
+                                    <code
+                                        class="text-sky-600 font-black text-xs uppercase tracking-tighter">{Standard_Days}</code>
+                                    <span class="text-[10px] font-bold text-slate-500">Công chuẩn trong tháng (vị dụ: 22
+                                        hoặc 26)</span>
+                                </button>
+                                <button onclick="insertVariable('{OT_Hours}')"
+                                    class="variable-chip group flex flex-col gap-1 p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl transition-all hover:bg-sky-50 dark:hover:bg-sky-950/30 hover:border-sky-200 text-left">
+                                    <code
+                                        class="text-sky-600 font-black text-xs uppercase tracking-tighter">{OT_Hours}</code>
+                                    <span class="text-[10px] font-bold text-slate-500">Tổng số giờ tăng ca</span>
+                                </button>
+                                <button onclick="insertVariable('{Total_Allowance}')"
+                                    class="variable-chip group flex flex-col gap-1 p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl transition-all hover:bg-sky-50 dark:hover:bg-sky-950/30 hover:border-sky-200 text-left">
+                                    <code
+                                        class="text-sky-600 font-black text-xs uppercase tracking-tighter">{Total_Allowance}</code>
+                                    <span class="text-[10px] font-bold text-slate-500">Tổng tất cả phụ cấp được tích
+                                        chọn</span>
+                                </button>
+                                <button onclick="insertVariable('{Insurance_Deduction}')"
+                                    class="variable-chip group flex flex-col gap-1 p-4 bg-slate-50 dark:bg-slate-800 border border-slate-100 dark:border-slate-700 rounded-2xl transition-all hover:bg-sky-50 dark:hover:bg-sky-950/30 hover:border-sky-200 text-left">
+                                    <code
+                                        class="text-sky-600 font-black text-xs uppercase tracking-tighter">{Insurance_Deduction}</code>
+                                    <span class="text-[10px] font-bold text-slate-500">Khấu trừ BHXH (theo % cấu
+                                        hình)</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Formula Editor & Test -->
+                    <div class="col-span-12 xl:col-span-5 space-y-8">
+                        <!-- Formula Editor -->
+                        <div class="card p-8 bg-white dark:bg-slate-900 border-none shadow-xl">
+                            <div class="mb-8">
+                                <h2 class="text-xl font-black text-slate-800 dark:text-white tracking-tight">Cấu hình
+                                    công thức tổng</h2>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Total
+                                    Formula Configuration</p>
+                            </div>
+
+                            <div class="space-y-6">
+                                <div class="relative">
+                                    <label
+                                        class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Trình
+                                        chỉnh sửa công thức</label>
+                                    <div
+                                        class="formula-editor border border-slate-100 dark:border-slate-800 rounded-2xl overflow-hidden shadow-inner bg-slate-50 dark:bg-slate-800/50">
+                                        <div
+                                            class="bg-white dark:bg-slate-900 px-4 py-3 flex gap-4 border-b border-slate-100 dark:border-slate-800">
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-black hover:bg-sky-500 hover:text-white transition-all">+</button>
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-black hover:bg-sky-500 hover:text-white transition-all">-</button>
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-black hover:bg-sky-500 hover:text-white transition-all">*</button>
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-black hover:bg-sky-500 hover:text-white transition-all">/</button>
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-black hover:bg-sky-500 hover:text-white transition-all">(</button>
+                                            <button
+                                                class="w-8 h-8 flex items-center justify-center rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-black hover:bg-sky-500 hover:text-white transition-all">)</button>
+                                        </div>
+                                        <div id="formula-editor"
+                                            class="p-6 min-h-[160px] text-sm leading-relaxed outline-none"
+                                            contenteditable="true">
+                                            ({Base_Salary} / {Standard_Days}) * {Working_Days} + {Total_Allowance} -
+                                            {Insurance_Deduction}
+                                        </div>
+                                    </div>
+                                    <p class="text-[10px] text-slate-400 font-bold italic mt-3 flex items-center gap-2">
+                                        <span class="material-icons-round text-xs">auto_fix_high</span>
+                                        Gợi ý: Click vào các biến ở thư viện để chèn nhanh vào công thức.
+                                    </p>
+                                </div>
+
+                                <!-- Test Tool -->
+                                <div
+                                    class="bg-slate-900 border border-white/5 rounded-3xl p-8 relative overflow-hidden shadow-xl">
+                                    <div class="absolute top-0 right-0 p-8 opacity-5">
+                                        <span class="material-icons-round text-6xl text-white">science</span>
+                                    </div>
+                                    <div class="relative z-10">
+                                        <div class="flex items-center justify-between mb-6">
+                                            <h4 class="text-[10px] font-black uppercase text-slate-400 tracking-widest">
+                                                Chạy thử công thức (Test Simulation)</h4>
+                                            <span
+                                                class="px-3 py-1 bg-emerald-500/10 text-emerald-400 text-[9px] font-black rounded-lg border border-emerald-500/20 uppercase tracking-widest">Ready</span>
+                                        </div>
+
+                                        <!-- Inputs -->
+                                        <div class="grid grid-cols-2 gap-4 mb-6">
+                                            <div>
+                                                <label
+                                                    class="block text-[9px] text-slate-500 mb-1.5 uppercase font-black">Lương
+                                                    CB (Hợp đồng)</label>
+                                                <input id="test-base"
+                                                    class="w-full bg-white/5 border-white/10 rounded-xl p-2.5 text-sm font-black text-white focus:ring-sky-500"
+                                                    type="number" value="15000000" />
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="block text-[9px] text-slate-500 mb-1.5 uppercase font-black">Ngày
+                                                    công thực tế</label>
+                                                <input id="test-work-days"
+                                                    class="w-full bg-white/5 border-white/10 rounded-xl p-2.5 text-sm font-black text-white focus:ring-sky-500"
+                                                    type="number" value="22" />
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="block text-[9px] text-slate-500 mb-1.5 uppercase font-black">Công
+                                                    chuẩn (Tháng)</label>
+                                                <input id="test-std-days"
+                                                    class="w-full bg-white/5 border-white/10 rounded-xl p-2.5 text-sm font-black text-white focus:ring-sky-500"
+                                                    type="number" value="22" />
+                                            </div>
+                                            <div>
+                                                <label
+                                                    class="block text-[9px] text-slate-500 mb-1.5 uppercase font-black">Giờ
+                                                    OT</label>
+                                                <input id="test-ot"
+                                                    class="w-full bg-white/5 border-white/10 rounded-xl p-2.5 text-sm font-black text-white focus:ring-sky-500"
+                                                    type="number" value="0" />
+                                            </div>
+                                        </div>
+
+                                        <!-- Dynamic Allowances -->
+                                        <div class="mb-6">
+                                            <label class="block text-[9px] text-slate-500 mb-2 uppercase font-black">Giả
+                                                lập Phụ cấp & Khấu trừ</label>
+                                            <div id="test-components-list"
+                                                class="flex flex-wrap gap-2 max-h-32 overflow-y-auto custom-scrollbar pr-2">
+                                                <!-- Checkboxes injected by JS -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Result -->
+                                        <div
+                                            class="flex items-center justify-between p-6 bg-white/5 border border-white/10 rounded-2xl">
+                                            <div>
+                                                <div
+                                                    class="text-[9px] text-slate-400 uppercase font-black tracking-widest">
+                                                    Kết quả dự tính (Net)</div>
+                                                <div id="test-result"
+                                                    class="text-2xl font-black text-white tracking-tighter">0
+                                                    <span class="text-xs font-normal opacity-50 uppercase">VND</span>
+                                                </div>
+                                            </div>
+                                            <button onclick="runTestCalculation()"
+                                                class="bg-sky-500 text-white p-3 rounded-2xl shadow-xl shadow-sky-500/20 hover:scale-110 transition-transform active:scale-95">
+                                                <span class="material-icons-round text-lg">play_arrow</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Change History -->
+                        <div class="card p-8 bg-white dark:bg-slate-900 border-none shadow-xl">
+                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Lịch sử
+                                thay đổi gần đây</h3>
+                            <div class="space-y-6">
+                                <div class="flex gap-4">
+                                    <div
+                                        class="mt-1 w-2 h-2 rounded-full bg-sky-500 shadow-lg shadow-sky-500/50 shrink-0">
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-black text-slate-700 dark:text-slate-300">Cập nhật công
+                                            thức tính OT (1.5x -> 2.0x)</p>
+                                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                                            Admin • 14:20 - 15/10/2023</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4">
+                                    <div class="mt-1 w-2 h-2 rounded-full bg-slate-200 dark:bg-slate-700 shrink-0">
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-black text-slate-500">Thêm phụ cấp thâm niên (Seniority)
+                                        </p>
+                                        <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-1">
+                                            Admin • 09:15 - 12/10/2023</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Component Modal -->
+    <div id="component-modal"
+        class="modal hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center transition-all duration-300">
+        <div class="relative bg-white dark:bg-slate-900 rounded-3xl max-w-md w-full shadow-2xl p-8">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h3 id="modal-title"
+                        class="text-xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Thêm Khoản
+                        Mới</h3>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Component details</p>
+                </div>
+                <button onclick="closeModal('component-modal')" class="text-slate-400 hover:text-slate-600">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+
+            <form id="component-form" onsubmit="handleSaveComponent(event)" class="space-y-6">
+                <input type="hidden" name="id" id="modal-comp-id">
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Mã
+                            Khoản (VD: TRAVEL_ALLOW)</label>
+                        <input type="text" name="component_code" id="modal-comp-code" required
+                            class="w-full px-4 py-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-mono text-sm uppercase text-sky-500">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Tên
+                            Tiếng Việt</label>
+                        <input type="text" name="component_name" id="modal-comp-name" required
+                            class="w-full px-4 py-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-sm font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Tên
+                            Tiếng Trung</label>
+                        <input type="text" name="component_name_zh" id="modal-comp-name-zh"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-sm font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Loại
+                            Khoản</label>
+                        <select name="component_type" id="modal-comp-type"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-sm font-bold">
+                            <option value="allowance">Phụ cấp (+)</option>
+                            <option value="deduction">Khấu trừ (-)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Cách
+                            Tính</label>
+                        <select name="calculation_type" id="modal-comp-calc"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-sm font-bold">
+                            <option value="fixed">Cố định</option>
+                            <option value="percentage">Phần trăm</option>
+                        </select>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Giá
+                            Trị Mặc Định (VND hoặc %)</label>
+                        <input type="number" name="default_value" id="modal-comp-val" required
+                            class="w-full px-4 py-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 text-sm font-bold">
+                    </div>
+                    <div class="col-span-2 flex items-center gap-3 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl">
+                        <input type="checkbox" name="is_taxable" id="modal-comp-tax"
+                            class="w-5 h-5 rounded-lg border-slate-300 text-sky-500 focus:ring-sky-500">
+                        <label for="modal-comp-tax" class="text-xs font-bold text-slate-600 dark:text-slate-400">Khoản
+                            này có tính thuế TNCN (Taxable)?</label>
+                    </div>
+                </div>
+
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeModal('component-modal')"
+                        class="flex-1 px-6 py-3 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-black uppercase text-slate-500 hover:bg-slate-50 transition-all">Hủy</button>
+                    <button type="submit"
+                        class="flex-1 px-6 py-3 rounded-xl bg-primary text-white text-sm font-black uppercase shadow-xl shadow-sky-500/20 hover:bg-primary/90 transition-all">Lưu
+                        Lại</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Confirmation -->
+    <div id="confirm-modal"
+        class="fixed inset-0 z-[150] hidden flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
+        <div
+            class="bg-white dark:bg-slate-900 w-full max-w-md rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div class="p-8 text-center">
+                <div
+                    class="w-20 h-20 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="material-icons-round text-4xl">warning_amber</span>
+                </div>
+                <h2 id="confirm-title" class="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+                    Xác nhận xóa?</h2>
+                <p id="confirm-message" class="text-slate-500 font-medium">Hành động này không thể hoàn tác.</p>
+            </div>
+            <div
+                class="p-6 bg-slate-50/50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4">
+                <button onclick="closeConfirmModal(false)"
+                    class="w-full py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 font-bold text-slate-500 hover:bg-white dark:hover:bg-slate-800 transition-all">
+                    Hủy bỏ
+                </button>
+                <button onclick="closeConfirmModal(true)"
+                    class="w-full py-3.5 rounded-2xl bg-red-500 text-white font-bold shadow-lg shadow-red-500/30 hover:bg-red-600 transition-all">
+                    Đồng ý xóa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        let cachedComponents = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchComponents();
+            fetchSettings();
+
+            // Auto generate code from Name
+            document.getElementById('modal-comp-name').addEventListener('input', (e) => {
+                const name = e.target.value;
+                const codeInput = document.getElementById('modal-comp-code');
+                // Only auto-fill if code is empty or looks like it was auto-generated (simple heuristic or just check if user touched it - simple for now)
+                // Better UX: Only if code is empty
+                if (codeInput.value === '' || codeInput.dataset.touched !== 'true') {
+                    codeInput.value = generateCode(name);
+                }
+            });
+
+            document.getElementById('modal-comp-code').addEventListener('input', (e) => {
+                e.target.dataset.touched = 'true';
+            });
+        });
+
+        function generateCode(str) {
+            return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd').replace(/Đ/g, 'D')
+                .replace(/[^a-zA-Z0-9 ]/g, '')
+                .trim().replace(/\s+/g, '_').toUpperCase();
+        }
+
+        async function fetchComponents() {
+            try {
+                const resp = await fetch('/api/payroll/components');
+                const result = await resp.json();
+                if (result.success) {
+                    cachedComponents = result.data;
+                    renderComponents();
+                }
+            } catch (e) { App.toast('Lỗi tải danh mục phụ cấp', 'error'); }
+        }
+
+        function renderComponents() {
+            const tbody = document.querySelector('table tbody');
+            tbody.innerHTML = cachedComponents.map(comp => {
+                const isDeduction = comp.component_type === 'deduction';
+                return `
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors group">
+                    <td class="px-6 py-4 font-mono text-[10px] font-bold text-sky-500 group-hover:scale-110 transition-transform origin-left inline-block">${comp.component_code}</td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm font-black text-slate-700 dark:text-slate-300">${comp.component_name}</div>
+                        <div class="text-[9px] text-slate-400 font-bold uppercase">${comp.component_name_zh || ''}</div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <span class="px-2 py-0.5 text-[9px] font-black rounded-lg ${comp.calculation_type === 'fixed' ? 'bg-emerald-50 text-emerald-600' : 'bg-amber-50 text-amber-600'} uppercase tracking-widest border">
+                            ${comp.calculation_type === 'fixed' ? 'Cố định' : 'Phần trăm'}
+                        </span>
+                        <div class="text-[8px] mt-1 font-bold ${isDeduction ? 'text-red-400' : 'text-emerald-400'}">${isDeduction ? 'KHẤU TRỪ' : 'PHỤ CẤP'}</div>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                         <div class="text-sm font-black text-slate-900 dark:text-white">
+                            ${comp.calculation_type === 'fixed' ? App.formatCurrency(comp.default_value).replace('₫', '') : comp.default_value + '%'}
+                         </div>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex justify-center">
+                            <span class="material-icons-round text-sm ${comp.is_taxable ? 'text-sky-500' : 'text-slate-200'}">
+                                ${comp.is_taxable ? 'check_circle' : 'cancel'}
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-center">
+                        <div class="flex items-center justify-center gap-2">
+                            <button onclick="openEditComponentModal(${comp.id})" class="p-2 text-slate-300 hover:text-sky-500 hover:bg-sky-50 rounded-lg transition-all">
+                                <span class="material-icons-round text-sm">edit</span>
+                            </button>
+                            <button onclick="deleteComponent(${comp.id})" class="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all">
+                                <span class="material-icons-round text-sm">delete_outline</span>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `;
+            }).join('');
+
+            // Also render for Test Tool
+            renderTestComponents();
+        }
+
+        function renderTestComponents() {
+            const container = document.getElementById('test-components-list');
+            if (!container) return;
+
+            container.innerHTML = cachedComponents.map(comp => {
+                const isDeduction = comp.component_type === 'deduction';
+                const colorClass = isDeduction ? 'text-red-400 border-red-500/30 peer-checked:bg-red-500/20' : 'text-emerald-400 border-emerald-500/30 peer-checked:bg-emerald-500/20';
+
+                return `
+                <label class="cursor-pointer">
+                    <input type="checkbox" class="peer sr-only test-comp-checkbox" 
+                        data-code="${comp.component_code}" 
+                        data-type="${comp.component_type}"
+                        data-val="${comp.default_value}"
+                        data-calc="${comp.calculation_type}"
+                        ${!isDeduction ? 'checked' : ''}>
+                    <div class="px-3 py-1.5 rounded-lg border bg-white/5 hover:bg-white/10 transition-all ${colorClass} peer-checked:border-current border-transparent">
+                        <span class="text-[9px] font-black uppercase">${comp.component_name}</span>
+                    </div>
+                </label>
+                `;
+            }).join('');
+        }
+
+        function runTestCalculation() {
+            // 1. Get Variable Values
+            const baseSalary = parseFloat(document.getElementById('test-base').value) || 0;
+            const workingDays = parseFloat(document.getElementById('test-work-days').value) || 0;
+            const standardDays = parseFloat(document.getElementById('test-std-days').value) || 22;
+            const otHours = parseFloat(document.getElementById('test-ot').value) || 0;
+
+            // 2. Calculate Dynamic Allowances & Deductions
+            let totalAllowance = 0;
+            let insuranceDeduction = 0;
+
+            const checkboxes = document.querySelectorAll('.test-comp-checkbox:checked');
+            checkboxes.forEach(cb => {
+                const type = cb.dataset.type; // allowance or deduction
+                const val = parseFloat(cb.dataset.val) || 0;
+                const calc = cb.dataset.calc; // fixed or percentage
+
+                let amount = 0;
+                if (calc === 'percentage') {
+                    // Percentage is usually based on Base Salary for insurance
+                    amount = (baseSalary * val) / 100;
+                } else {
+                    amount = val;
+                }
+
+                if (type === 'allowance') {
+                    totalAllowance += amount;
+                } else if (type === 'deduction') {
+                    // Specifically looking for insurance or generalized deductions
+                    if (calc === 'percentage') insuranceDeduction += amount;
+                    // If fixed deduction, we might need another variable or subtract from gross. 
+                    // For simple formula {Insurance_Deduction} usually implies the calculated insurance amount
+                }
+            });
+
+            // 3. Get Formula & Replace
+            let formula = document.getElementById('formula-editor').innerText;
+
+            // Clean formula of HTML artifacts if any
+            formula = formula.replace(/\n/g, '').trim();
+
+            // Replace Variables
+            // We use a safe replacement strategy
+            let evalString = formula
+                .replace(/{Base_Salary}/g, baseSalary)
+                .replace(/{Working_Days}/g, workingDays)
+                .replace(/{Standard_Days}/g, standardDays)
+                .replace(/{OT_Hours}/g, otHours)
+                .replace(/{Total_Allowance}/g, totalAllowance)
+                .replace(/{Insurance_Deduction}/g, insuranceDeduction);
+
+            // 4. Calculate
+            try {
+                // Determine OT Rate if needed (Usually built into logic or user adds 1.5 multiplier in formula)
+                // If formula is: ({Base_Salary} / {Standard_Days} / 8) * {OT_Hours} * 1.5 ...
+                // The replacement handle the variables.
+
+                // Using Function constructor for safer eval
+                const result = new Function('return ' + evalString)();
+
+                document.getElementById('test-result').textContent = App.formatCurrency(result).replace('₫', '').trim();
+
+                // Visual feedback
+                const btn = document.querySelector('button[onclick="runTestCalculation()"]');
+                btn.classList.add('ring-4', 'ring-sky-500/30');
+                setTimeout(() => btn.classList.remove('ring-4', 'ring-sky-500/30'), 300);
+
+            } catch (err) {
+                console.error(err);
+                App.toast('Công thức lỗi cú pháp!', 'error');
+                document.getElementById('test-result').textContent = 'ERROR';
+            }
+        }
+
+        async function fetchSettings() {
+            try {
+                const resp = await fetch('/api/system/settings');
+                const result = await resp.json();
+                if (result.success) {
+                    const formula = result.data.find(s => s.setting_key === 'payroll_formula');
+                    if (formula) {
+                        document.getElementById('formula-editor').innerText = formula.setting_value;
+                    }
+                }
+            } catch (e) { console.error(e); }
+        }
+
+        async function handleSaveConfig() {
+            const formula = document.getElementById('formula-editor').innerText;
+            try {
+                const resp = await fetch('/api/payroll/settings', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 'payroll_formula': formula })
+                });
+                const result = await resp.json();
+                if (result.success) {
+                    App.toast('Đã lưu cấu hình công thức tổng thành công!', 'success');
+                }
+            } catch (e) { App.toast('Lỗi lưu cấu hình', 'error'); }
+        }
+
+        function openAddComponentModal() {
+            document.getElementById('modal-title').innerText = 'Thêm Khoản Mới';
+            document.getElementById('component-form').reset();
+            document.getElementById('modal-comp-id').value = '';
+            document.getElementById('modal-comp-code').dataset.touched = 'false'; // Reset touch state for auto-fill
+            showModal('component-modal');
+        }
+
+        function openEditComponentModal(id) {
+            const comp = cachedComponents.find(c => c.id === id);
+            if (!comp) return;
+
+            document.getElementById('modal-title').innerText = 'Chỉnh Sửa Khoản';
+            document.getElementById('modal-comp-id').value = comp.id;
+            document.getElementById('modal-comp-code').value = comp.component_code;
+            document.getElementById('modal-comp-name').value = comp.component_name;
+            document.getElementById('modal-comp-name-zh').value = comp.component_name_zh || '';
+            document.getElementById('modal-comp-type').value = comp.component_type;
+            document.getElementById('modal-comp-calc').value = comp.calculation_type;
+            document.getElementById('modal-comp-val').value = comp.default_value;
+            document.getElementById('modal-comp-tax').checked = comp.is_taxable;
+
+            showModal('component-modal');
+        }
+
+        async function handleSaveComponent(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+            data.is_taxable = formData.get('is_taxable') === 'on';
+
+            try {
+                const resp = await fetch('/api/payroll/components', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    App.toast('Đã cập nhật danh mục lương thành công!');
+                    closeModal('component-modal');
+                    fetchComponents();
+                } else {
+                    App.toast(result.message || 'Lỗi lưu dữ liệu', 'error');
+                }
+            } catch (e) {
+                App.toast('Lỗi kết nối máy chủ', 'error');
+            }
+        }
+
+        function insertVariable(variable) {
+            const editor = document.getElementById('formula-editor');
+            const selection = window.getSelection();
+            if (selection.rangeCount > 0 && editor.contains(selection.anchorNode)) {
+                const range = selection.getRangeAt(0);
+                range.deleteContents();
+                range.insertNode(document.createTextNode(' ' + variable + ' '));
+            } else {
+                editor.innerText += ' ' + variable + ' ';
+            }
+            editor.focus();
+        }
+
+        function showModal(id) {
+            const m = document.getElementById(id);
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+
+        let confirmResolve = null;
+
+        function showConfirmModal(title, message) {
+            return new Promise((resolve) => {
+                document.getElementById('confirm-title').textContent = title;
+                document.getElementById('confirm-message').textContent = message;
+                document.getElementById('confirm-modal').classList.remove('hidden');
+                document.getElementById('confirm-modal').classList.add('flex');
+                confirmResolve = resolve;
+            });
+        }
+
+        function closeConfirmModal(result) {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            document.getElementById('confirm-modal').classList.remove('flex');
+            if (confirmResolve) confirmResolve(result);
+            confirmResolve = null;
+        }
+
+        async function deleteComponent(id, force = false) {
+            if (!force) {
+                const confirmed = await showConfirmModal(
+                    'Xóa khoản lương?',
+                    'Bạn có chắc chắn muốn xóa thành phần lương này không?'
+                );
+                if (!confirmed) return;
+            }
+
+            try {
+                const url = `/api/payroll/components/${id}` + (force ? '?force=true' : '');
+                const resp = await fetch(url, { method: 'DELETE' });
+                const result = await resp.json();
+
+                if (result.success) {
+                    App.toast('Đã xóa thành phần lương thành công', 'success');
+                    fetchComponents();
+                } else {
+                    if (result.code === 'USED_IN_HISTORY') {
+                        // Ask for force delete
+                        const confirmedForce = await showConfirmModal(
+                            'CẢNH BÁO CAO ĐỘ',
+                            result.message
+                        );
+
+                        if (confirmedForce) {
+                            deleteComponent(id, true);
+                        }
+                    } else {
+                        App.toast(result.message || 'Lỗi xóa dữ liệu', 'error');
+                    }
+                }
+            } catch (e) {
+                console.error(e);
+                App.toast('Lỗi kết nối máy chủ', 'error');
+            }
+        }
+    </script>
+</body>
+
+</html>
+
+</html>

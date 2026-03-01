@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản Lý Phân Quyền Chi Tiết (RBAC) - HR System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#137fec",
+              "background-light": "#f6f7f8",
+              "background-dark": "#101922",
+              "border-light": "#e2e8f0",
+              "neutral-subtle": "#f8fafc",
+            },
+            fontFamily: {
+              "display": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #137fec; }
+        .toggle-checkbox:checked + .toggle-label:after { transform: translateX(100%); }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200 min-h-screen flex flex-col">
+<!-- Header Navigation -->
+<header class="bg-white dark:bg-slate-900 border-b border-border-light dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-[1600px] mx-auto px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-primary p-2 rounded-lg">
+<span class="material-icons text-white">security</span>
+</div>
+<div>
+<h1 class="text-xl font-bold">Quản Lý Phân Quyền <span class="text-slate-400 font-normal">/ 权限管理</span></h1>
+<p class="text-xs text-slate-500">Thiết lập quyền truy cập hệ thống chi tiết</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<!-- Language Toggle -->
+<div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-full p-1 border border-slate-200 dark:border-slate-700">
+<button class="px-4 py-1.5 rounded-full text-xs font-semibold bg-white dark:bg-slate-700 shadow-sm text-primary">VN</button>
+<button class="px-4 py-1.5 rounded-full text-xs font-semibold text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">ZH</button>
+</div>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
+<button class="flex items-center gap-2 bg-primary hover:bg-blue-600 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm">
+<span class="material-icons text-sm">save</span>
+                    Lưu thay đổi <span class="text-[10px] opacity-80">(保存)</span>
+</button>
+</div>
+</div>
+</header>
+<main class="flex-1 max-w-[1600px] mx-auto w-full flex overflow-hidden">
+<!-- Sidebar: Roles Selection -->
+<aside class="w-72 bg-white dark:bg-slate-900 border-r border-border-light dark:border-slate-800 flex flex-col">
+<div class="p-6">
+<h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">Vai Trò Người Dùng <span class="block">用户角色</span></h3>
+<div class="space-y-2">
+<button class="w-full flex items-center justify-between px-4 py-3 rounded-xl bg-primary/10 text-primary border border-primary/20 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-icons text-xl">admin_panel_settings</span>
+<div class="text-left">
+<div class="text-sm font-semibold">Quản trị viên</div>
+<div class="text-[10px] opacity-70">Super Admin / 超级管理员</div>
+</div>
+</div>
+<span class="material-icons text-sm">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-icons text-xl">badge</span>
+<div class="text-left">
+<div class="text-sm font-semibold">Nhân sự</div>
+<div class="text-[10px] opacity-70">HR Admin / 人事管理员</div>
+</div>
+</div>
+</button>
+<button class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-icons text-xl">psychology</span>
+<div class="text-left">
+<div class="text-sm font-semibold">Giám đốc</div>
+<div class="text-[10px] opacity-70">Boss / 老板</div>
+</div>
+</div>
+</button>
+<button class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">
+<div class="flex items-center gap-3">
+<span class="material-icons text-xl">person</span>
+<div class="text-left">
+<div class="text-sm font-semibold">Nhân viên</div>
+<div class="text-[10px] opacity-70">Employee / 员工</div>
+</div>
+</div>
+</button>
+</div>
+</div>
+<div class="mt-auto p-6 border-t border-slate-100 dark:border-slate-800">
+<div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl">
+<p class="text-xs text-blue-700 dark:text-blue-300 font-medium">
+<span class="material-icons text-sm align-middle mr-1">info</span>
+                        Đang chỉnh sửa quyền cho: <br/>
+<strong>Quản trị viên (Super Admin)</strong>
+</p>
+</div>
+</div>
+</aside>
+<!-- Main Matrix Area -->
+<section class="flex-1 flex flex-col min-w-0 overflow-y-auto custom-scrollbar">
+<div class="p-8">
+<!-- Search and Filters -->
+<div class="flex items-center justify-between mb-8">
+<div class="relative w-96">
+<span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none text-sm" placeholder="Tìm kiếm tính năng... (搜索功能)" type="text"/>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-sm text-slate-500">Mặc định:</span>
+<button class="text-sm text-primary hover:underline font-medium">Khôi phục (恢复默认)</button>
+</div>
+</div>
+<!-- Permission Categories -->
+<div class="space-y-10">
+<!-- Category: HR Management -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-icons text-primary">groups</span>
+<h2 class="font-bold text-slate-800 dark:text-slate-100">Quản lý nhân sự <span class="font-normal text-slate-400">/ 人事管理</span></h2>
+</div>
+<label class="flex items-center cursor-pointer">
+<span class="text-xs text-slate-500 mr-3">Cho phép tất cả</span>
+<div class="relative inline-block w-10 h-5">
+<input checked="" class="sr-only toggle-checkbox" type="checkbox"/>
+<div class="toggle-label block bg-slate-300 dark:bg-slate-700 w-10 h-5 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+</div>
+</label>
+</div>
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="text-slate-400 font-medium border-b border-slate-100 dark:border-slate-800">
+<th class="px-6 py-4 font-medium w-1/3">Tính năng (功能)</th>
+<th class="px-4 py-4 text-center">Xem (看)</th>
+<th class="px-4 py-4 text-center">Tạo (创)</th>
+<th class="px-4 py-4 text-center">Sửa (改)</th>
+<th class="px-4 py-4 text-center">Xóa (删)</th>
+<th class="px-4 py-4 text-center">Duyệt (批)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium">Hồ sơ nhân viên</div>
+<div class="text-[10px] text-slate-400">Employee Profiles / 员工档案</div>
+</td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input class="w-5 h-5 rounded text-red-500 focus:ring-red-500 border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><span class="text-slate-300">—</span></td>
+</tr>
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium">Hợp đồng lao động</div>
+<div class="text-[10px] text-slate-400">Labor Contracts / 劳动合同</div>
+</td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input class="w-5 h-5 rounded text-red-500 focus:ring-red-500 border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Category: Attendance -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-icons text-primary">pending_actions</span>
+<h2 class="font-bold text-slate-800 dark:text-slate-100">Chấm công &amp; Nghỉ phép <span class="font-normal text-slate-400">/ 考勤与休假</span></h2>
+</div>
+<label class="flex items-center cursor-pointer">
+<span class="text-xs text-slate-500 mr-3">Cho phép tất cả</span>
+<div class="relative inline-block w-10 h-5">
+<input checked="" class="sr-only toggle-checkbox" type="checkbox"/>
+<div class="toggle-label block bg-slate-300 dark:bg-slate-700 w-10 h-5 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+</div>
+</label>
+</div>
+<table class="w-full text-left text-sm">
+<thead>
+<tr class="text-slate-400 font-medium border-b border-slate-100 dark:border-slate-800">
+<th class="px-6 py-4 font-medium w-1/3">Tính năng (功能)</th>
+<th class="px-4 py-4 text-center">Xem (看)</th>
+<th class="px-4 py-4 text-center">Tạo (创)</th>
+<th class="px-4 py-4 text-center">Sửa (改)</th>
+<th class="px-4 py-4 text-center">Xóa (删)</th>
+<th class="px-4 py-4 text-center">Duyệt (批)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium">Bảng công tháng</div>
+<div class="text-[10px] text-slate-400">Monthly Timesheets / 月度考勤表</div>
+</td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-red-500 focus:ring-red-500 border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+</tr>
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4">
+<div class="font-medium">Đơn xin nghỉ phép</div>
+<div class="text-[10px] text-slate-400">Leave Requests / 请假申请</div>
+</td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-red-500 focus:ring-red-500 border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Category: Payroll -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden shadow-sm">
+<div class="px-6 py-4 bg-slate-50 dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-icons text-primary">payments</span>
+<h2 class="font-bold text-slate-800 dark:text-slate-100">Tính lương &amp; Thưởng <span class="font-normal text-slate-400">/ 薪资与奖金</span></h2>
+</div>
+<label class="flex items-center cursor-pointer">
+<span class="text-xs text-slate-500 mr-3">Cho phép tất cả</span>
+<div class="relative inline-block w-10 h-5">
+<input checked="" class="sr-only toggle-checkbox" type="checkbox"/>
+<div class="toggle-label block bg-slate-300 dark:bg-slate-700 w-10 h-5 rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all"></div>
+</div>
+</label>
+</div>
+<table class="w-full text-left text-sm">
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-6 py-4 w-1/3">
+<div class="font-medium">Bảng lương chi tiết</div>
+<div class="text-[10px] text-slate-400">Detailed Payroll / 薪资明细</div>
+</td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-red-500 focus:ring-red-500 border-slate-300" type="checkbox"/></td>
+<td class="px-4 py-4 text-center"><input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary border-slate-300" type="checkbox"/></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Audit Log Preview -->
+<div class="mt-12 mb-8">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-icons text-slate-400">history</span>
+<h3 class="font-bold text-slate-700 dark:text-slate-300">Nhật ký thay đổi gần đây <span class="font-normal text-slate-400">/ 最近更改日志</span></h3>
+</div>
+<button class="text-xs text-primary font-semibold hover:underline">Xem tất cả (查看全部)</button>
+</div>
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm">
+<table class="w-full text-left text-sm">
+<thead class="bg-slate-50 dark:bg-slate-800 text-slate-500 text-xs">
+<tr>
+<th class="px-6 py-3 font-medium">Thời gian (时间)</th>
+<th class="px-6 py-3 font-medium">Người thực hiện (执行人)</th>
+<th class="px-6 py-3 font-medium">Hành động (动作)</th>
+<th class="px-6 py-3 font-medium">Đối tượng (对象)</th>
+<th class="px-6 py-3 font-medium">Trạng thái (状态)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr>
+<td class="px-6 py-4 text-slate-500 font-mono text-[11px]">2023-10-27 14:32:10</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold">AD</div>
+<span class="font-medium">Admin_Root</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 rounded text-[10px] font-bold uppercase">Cập nhật quyền</span>
+</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">HR Admin (Nhân sự)</td>
+<td class="px-6 py-4 text-green-600 font-medium">Thành công</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-slate-500 font-mono text-[11px]">2023-10-27 09:15:44</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold">AD</div>
+<span class="font-medium">Admin_Root</span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 rounded text-[10px] font-bold uppercase">Thêm vai trò</span>
+</td>
+<td class="px-6 py-4 text-slate-600 dark:text-slate-400">Accountant (Kế toán)</td>
+<td class="px-6 py-4 text-green-600 font-medium">Thành công</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Success Toast (Floating Mockup) -->
+<div class="fixed bottom-6 right-6 flex items-center gap-3 bg-slate-900 text-white px-6 py-4 rounded-xl shadow-2xl border border-white/10 max-w-sm pointer-events-none opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+<span class="material-icons text-green-400">check_circle</span>
+<div>
+<div class="text-sm font-semibold">Cập nhật thành công!</div>
+<div class="text-xs text-slate-400">Các thay đổi đã được áp dụng ngay lập tức.</div>
+</div>
+</div>
+</body></html>

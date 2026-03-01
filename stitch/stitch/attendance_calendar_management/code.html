@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản Lý Chấm Công Chi Tiết</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#137fec",
+                "background-light": "#f8fafc",
+                "background-dark": "#0f172a",
+                "status-work": "#22c55e",
+                "status-leave": "#eab308",
+                "status-absent": "#ef4444",
+                "secure": "#10b981"
+              },
+              fontFamily: {
+                "display": ["Inter", "sans-serif"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer base {
+            body { font-family: 'Inter', sans-serif; }
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .sticky-col-1 {
+            position: sticky;
+            left: 0;
+            z-index: 30;
+        }
+        .sticky-col-2 {
+            position: sticky;
+            left: 80px;
+            z-index: 30;
+        }
+        .grid-cell {
+            min-width: 40px;
+            height: 38px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200 antialiased">
+<div class="min-h-screen flex flex-col">
+<div class="bg-slate-900 text-white px-6 py-1.5 flex justify-between items-center text-xs">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-1.5 text-secure font-medium">
+<span class="material-symbols-outlined text-[14px]">verified_user</span>
+                Phiên làm việc bảo mật (Secure Session)
+            </div>
+<div class="h-3 w-[1px] bg-slate-700"></div>
+<div class="text-slate-400">ID Quản trị: #ADM-8821</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center bg-slate-800 rounded px-1 py-0.5 border border-slate-700">
+<button class="px-2 py-0.5 rounded bg-primary text-[10px] font-bold uppercase">VN</button>
+<button class="px-2 py-0.5 rounded text-slate-400 hover:text-white text-[10px] font-bold uppercase transition-colors">ZH</button>
+</div>
+<div class="flex items-center gap-2 text-slate-300">
+<span class="material-symbols-outlined text-[16px]">account_circle</span>
+<span>Admin User</span>
+</div>
+</div>
+</div>
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">calendar_month</span>
+                    Quản Lý Chấm Công Chi Tiết
+                </h1>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-0.5">
+                    Theo dõi và cập nhật bảng công tháng của nhân viên
+                </p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700">
+<button class="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-md transition-colors shadow-sm">
+<span class="material-symbols-outlined text-lg leading-none">chevron_left</span>
+</button>
+<div class="px-4 py-1 text-sm font-bold text-center">
+                        Tháng 10, 2023
+                    </div>
+<button class="p-1.5 hover:bg-white dark:hover:bg-slate-700 rounded-md transition-colors shadow-sm">
+<span class="material-symbols-outlined text-lg leading-none">chevron_right</span>
+</button>
+</div>
+<button class="bg-primary hover:bg-blue-600 text-white px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all shadow-sm font-semibold text-sm">
+<span class="material-symbols-outlined text-[20px]">save</span>
+                    Lưu thay đổi
+                </button>
+<button class="border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 px-4 py-2.5 rounded-lg flex items-center gap-2 hover:bg-slate-50 transition-all font-semibold text-sm">
+<span class="material-symbols-outlined text-[20px]">download</span>
+                    Xuất báo cáo
+                </button>
+</div>
+</div>
+</header>
+<div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4 flex flex-wrap items-center justify-between gap-6">
+<div class="flex flex-wrap items-center gap-4">
+<div class="flex flex-col">
+<label class="text-[11px] font-bold text-slate-500 uppercase mb-1.5">Phòng ban</label>
+<select class="form-select text-sm rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-2 pl-3 pr-10 focus:ring-primary focus:border-primary min-w-[160px]">
+<option>Tất cả phòng ban</option>
+<option>Sản xuất</option>
+<option>Công nghệ thông tin</option>
+<option>Nhân sự</option>
+<option>Kế toán</option>
+</select>
+</div>
+<div class="flex flex-col">
+<label class="text-[11px] font-bold text-slate-500 uppercase mb-1.5">Loại ca</label>
+<select class="form-select text-sm rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-2 pl-3 pr-10 focus:ring-primary focus:border-primary min-w-[140px]">
+<option>Tất cả ca</option>
+<option>Ca ngày</option>
+<option>Ca đêm</option>
+<option>Ca hành chính</option>
+</select>
+</div>
+<div class="flex flex-col">
+<label class="text-[11px] font-bold text-slate-500 uppercase mb-1.5">Tìm kiếm</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+<input class="form-input text-sm rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-2 pl-10 pr-4 focus:ring-primary focus:border-primary w-64" placeholder="Nhập tên hoặc mã nhân viên..." type="text"/>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-5 bg-slate-50 dark:bg-slate-800/50 px-4 py-2.5 rounded-lg border border-slate-100 dark:border-slate-800">
+<div class="flex items-center gap-2">
+<div class="w-3.5 h-3.5 rounded-sm bg-status-work"></div>
+<span class="text-xs font-semibold">1.0 Công</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3.5 h-3.5 rounded-sm bg-status-leave"></div>
+<span class="text-xs font-semibold">0.5 Nghỉ phép</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3.5 h-3.5 rounded-sm bg-status-absent"></div>
+<span class="text-xs font-semibold">0.0 Nghỉ (Không phép)</span>
+</div>
+<div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-700"></div>
+<div class="flex items-center gap-2 text-slate-500">
+<div class="w-3.5 h-3.5 rounded-sm bg-slate-200 dark:bg-slate-700"></div>
+<span class="text-xs font-semibold italic">Cuối tuần</span>
+</div>
+</div>
+</div>
+<main class="flex-1 overflow-auto bg-[#f1f5f9] dark:bg-slate-950 p-6">
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-md border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col h-full max-h-[calc(100vh-280px)]">
+<div class="flex-1 overflow-auto custom-scrollbar">
+<table class="w-full border-collapse text-[13px] table-fixed">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800 sticky top-0 z-40">
+<th class="sticky-col-1 bg-slate-50 dark:bg-slate-800 border-r border-b border-slate-200 dark:border-slate-700 px-4 py-3 text-left w-[80px]">
+<div class="font-bold text-slate-500 uppercase text-[10px]">Mã NV</div>
+</th>
+<th class="sticky-col-2 bg-slate-50 dark:bg-slate-800 border-r border-b border-slate-200 dark:border-slate-700 px-4 py-3 text-left w-[220px]">
+<div class="font-bold text-slate-500 uppercase text-[10px]">Họ và Tên</div>
+</th>
+<script>
+                                const daysVN = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+                                for (let i = 1; i <= 31; i++) {
+                                    const dayName = daysVN[(i + 0) % 7]; // Adjusted for typical Oct 2023 start
+                                    const isWeekend = dayName === "T7" || dayName === "CN";
+                                    document.write(`
+                                        <th class="border-r border-b border-slate-200 dark:border-slate-700 px-1 py-2 text-center w-[45px] ${isWeekend ? 'bg-slate-100/80 dark:bg-slate-700/40' : ''}">
+                                            <div class="font-bold text-slate-900 dark:text-white">${i}</div>
+                                            <div class="text-[9px] font-bold ${isWeekend ? 'text-rose-500' : 'text-slate-400'}">${dayName}</div>
+                                        </th>
+                                    `);
+                                }
+                            </script>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<script>
+                            const names = [
+                                "Nguyễn Văn An", "Trần Thị Bình", "Lê Văn Cường", "Phạm Minh Đức", "Vũ Hoàng Em", 
+                                "Đặng Thu Giang", "Hoàng Hải", "Bùi Khánh Linh", "Ngô Quốc Nam", "Đỗ Phương Oanh",
+                                "Trương Công Phượng", "Lý Thanh Quý", "Mai Xuân Sơn", "Võ Diệu Thảo", "Trịnh Anh Uy"
+                            ];
+                            for (let r = 0; r < names.length; r++) {
+                                document.write(`
+                                    <tr class="hover:bg-blue-50/30 dark:hover:bg-slate-800/40 transition-colors group">
+                                        <td class="sticky-col-1 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 px-4 py-2 font-mono text-primary font-semibold text-xs">NV-${10234 + r}</td>
+                                        <td class="sticky-col-2 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-700 px-4 py-2 font-medium truncate">${names[r]}</td>
+                                        ${Array(31).fill(0).map((_, i) => {
+                                            const dayNum = i + 1;
+                                            const dayName = daysVN[(i + 0) % 7];
+                                            const isWeekend = dayName === "T7" || dayName === "CN";
+                                            let statusClass = "bg-status-work/10 text-status-work border-status-work/30";
+                                            let val = "1.0";
+                                            if (isWeekend) {
+                                                statusClass = "bg-slate-50 dark:bg-slate-800/50 text-slate-300 border-transparent";
+                                                val = "-";
+                                            } else if (r === 0 && dayNum === 5) {
+                                                statusClass = "bg-status-leave/10 text-status-leave border-status-leave/30";
+                                                val = "0.5";
+                                            } else if (r === 2 && dayNum === 20) {
+                                                statusClass = "bg-status-absent/10 text-status-absent border-status-absent/30";
+                                                val = "0";
+                                            }
+                                            return `
+                                                <td class="border-r border-slate-200 dark:border-slate-700 p-0.5 text-center cursor-pointer">
+                                                    <div class="grid-cell flex items-center justify-center rounded-[4px] border transition-all group-hover:border-slate-300 ${statusClass}">
+                                                        <span class="font-bold text-[11px]">${val}</span>
+                                                    </div>
+                                                </td>
+                                            `;
+                                        }).join('')}
+                                    </tr>
+                                `);
+                            }
+                        </script>
+</tbody>
+</table>
+</div>
+<div class="bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Tổng nhân sự</span>
+<span class="font-bold text-lg leading-tight">150 <span class="text-xs text-slate-400 font-normal">nhân viên</span></span>
+</div>
+<div class="w-[1px] h-8 bg-slate-200 dark:bg-slate-700"></div>
+<div class="flex flex-col">
+<span class="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Tỷ lệ chuyên cần</span>
+<span class="font-bold text-lg leading-tight text-status-work">94.2%</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xs text-slate-500 font-medium mr-2">Trang 1 / 10</span>
+<div class="flex items-center gap-1">
+<button class="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">first_page</span>
+</button>
+<button class="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_left</span>
+</button>
+<button class="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">chevron_right</span>
+</button>
+<button class="w-9 h-9 rounded-lg border border-slate-200 dark:border-slate-700 flex items-center justify-center bg-white dark:bg-slate-800 hover:bg-slate-50 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">last_page</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+<div class="fixed right-8 bottom-8 flex flex-col gap-4">
+<button class="bg-white dark:bg-slate-800 w-12 h-12 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:scale-110 transition-transform flex items-center justify-center" title="Trợ giúp">
+<span class="material-symbols-outlined">help</span>
+</button>
+<button class="bg-primary text-white w-14 h-14 rounded-full shadow-xl hover:scale-110 transition-transform flex items-center justify-center" title="Thêm mới">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</div>
+
+</body></html>

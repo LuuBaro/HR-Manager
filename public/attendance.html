@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Quản Lý Chấm Công - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .grid-cell {
+            min-width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .grid-cell:hover {
+            transform: scale(1.1);
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            z-index: 20;
+            background: inherit;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100">
+    <div class="flex h-screen overflow-hidden pt-8">
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <div id="header-root"></div>
+
+            <div class="p-8 w-full max-w-full space-y-8">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Chi tiết chấm
+                            công</h1>
+                        <p class="text-slate-500 text-sm mt-1">Quản lý bảng công và hiện diện của toàn bộ nhân sự.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div
+                            class="flex items-center bg-white dark:bg-slate-900 rounded-xl p-1 border border-slate-200 dark:border-slate-800 shadow-sm">
+                            <button onclick="changeMonth(-1)"
+                                class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all">
+                                <span class="material-icons-round text-sm">chevron_left</span>
+                            </button>
+                            <div id="current-month-display" class="px-6 text-sm font-bold tracking-tight">Tháng 05, 2024
+                            </div>
+                            <button onclick="changeMonth(1)"
+                                class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-all">
+                                <span class="material-icons-round text-sm">chevron_right</span>
+                            </button>
+                        </div>
+                        <button class="btn-primary">
+                            <span class="material-icons-round text-sm">save_as</span> Chốt bảng công
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Legend -->
+                <div class="flex flex-wrap gap-4 text-[10px] font-bold uppercase tracking-widest text-slate-400">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded bg-green-100 border border-green-200"></div>
+                        <span>P: Đủ công (Work)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded bg-amber-100 border border-amber-200"></div>
+                        <span>1/2: Nửa công (Half Day)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded bg-sky-100 border border-sky-200"></div>
+                        <span>N: Nghỉ phép (Leave)</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded bg-red-100 border border-red-200"></div>
+                        <span>V: Vắng mặt (Absent)</span>
+                    </div>
+                </div>
+
+                <!-- Attendance Table Card -->
+                <div class="card overflow-hidden">
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 dark:bg-slate-900/50">
+                                <tr id="attendance-header">
+                                    <th
+                                        class="sticky-col px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800">
+                                        Nhân viên / ID</th>
+                                    <!-- Days injected here -->
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Grid row injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        let currentMonth = 5;
+        let currentYear = 2024;
+
+        async function loadAttendance() {
+            try {
+                const resp = await fetch(`/api/attendance/monthly-grid?month=${currentMonth}&year=${currentYear}`);
+                const data = await resp.json();
+                if (data.success) {
+                    renderAttendance(data.data);
+                }
+            } catch (err) {
+                console.error('Attendance load fail:', err);
+            }
+        }
+
+        function renderAttendance(data) {
+            const header = document.getElementById('attendance-header');
+            const body = document.getElementById('attendance-body');
+            const display = document.getElementById('current-month-display');
+
+            display.textContent = `Tháng ${String(currentMonth).padStart(2, '0')}, ${currentYear}`;
+
+            const daysInMonth = data.daysInMonth;
+
+            // Header
+            let headerHtml = `<th class="sticky-col px-8 py-5 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800 w-64">Nhân viên / ID</th>`;
+            for (let i = 1; i <= daysInMonth; i++) {
+                headerHtml += `<th class="px-2 py-4 text-center text-[10px] font-bold text-slate-400 border-l border-slate-100 dark:border-slate-800 min-w-[50px]">${i}</th>`;
+            }
+            header.innerHTML = headerHtml;
+
+            // Rows
+            body.innerHTML = data.employees.map(emp => {
+                let rowHtml = `
+                    <tr class="hover:bg-slate-50/30 dark:hover:bg-slate-800/30 transition-all">
+                        <td class="sticky-col px-8 py-4 bg-white dark:bg-slate-950 border-r border-slate-100 dark:border-slate-800">
+                            <div class="flex items-center gap-3">
+                                <div class="w-8 h-8 rounded-lg bg-sky-500/10 flex items-center justify-center text-[10px] font-bold text-sky-500">${emp.full_name?.substring(0, 2).toUpperCase()}</div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate max-w-[120px]">${emp.full_name}</p>
+                                    <p class="text-[9px] text-slate-400 font-medium">#${emp.employee_code}</p>
+                                </div>
+                            </div>
+                        </td>`;
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const status = emp.attendance[i] || 'none';
+                    let cellClass = '';
+                    let char = '';
+
+                    if (status === 'full') { cellClass = 'bg-green-100 text-green-700 border-green-200'; char = 'P'; }
+                    else if (status === 'half') { cellClass = 'bg-amber-100 text-amber-700 border-amber-200'; char = '1/2'; }
+                    else if (status === 'leave') { cellClass = 'bg-sky-100 text-sky-700 border-sky-200'; char = 'N'; }
+                    else if (status === 'absent') { cellClass = 'bg-red-100 text-red-700 border-red-200'; char = 'V'; }
+                    else { cellClass = 'bg-slate-50 dark:bg-slate-900/50 border-transparent'; char = ''; }
+
+                    rowHtml += `<td class="px-1 py-1 border-l border-slate-100 dark:border-slate-800">
+                                    <div class="grid-cell ${cellClass} border text-[10px] font-extrabold shadow-sm">${char}</div>
+                                </td>`;
+                }
+                rowHtml += `</tr>`;
+                return rowHtml;
+            }).join('');
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth > 12) { currentMonth = 1; currentYear++; }
+            if (currentMonth < 1) { currentMonth = 12; currentYear--; }
+            loadAttendance();
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAttendance);
+    </script>
+</body>
+
+</html>

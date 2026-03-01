@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Nhật Ký Hệ Thống - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100">
+    <!-- Layout Container -->
+    <div class="flex h-screen overflow-hidden pt-8">
+        <!-- Sidebar injected here -->
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <!-- Header injected here -->
+            <div id="header-root"></div>
+
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-8">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Nhật ký hệ
+                            thống</h1>
+                        <p class="text-slate-500 text-sm mt-1">Lịch sử toàn bộ các thao tác tác động đến dữ liệu và cấu
+                            hình.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="btn-secondary h-12 px-6">
+                            <span class="material-icons-round text-sm">filter_alt</span> Lọc dữ liệu
+                        </button>
+                        <button class="btn-primary h-12 px-6">
+                            <span class="material-icons-round text-sm">cloud_download</span> Xuất báo cáo (CSV)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Summary -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div
+                        class="card p-6 shadow-lg border-l-4 border-l-sky-500 bg-white dark:bg-slate-900 flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tổng bản ghi
+                            </p>
+                            <h3 class="text-2xl font-black text-slate-900 dark:text-white">12,482</h3>
+                        </div>
+                        <span class="material-icons-round text-sky-500/20 text-4xl">history</span>
+                    </div>
+                    <div
+                        class="card p-6 shadow-lg border-l-4 border-l-emerald-500 bg-white dark:bg-slate-900 flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tạo mới
+                                (24h)</p>
+                            <h3 class="text-2xl font-black text-emerald-600">84</h3>
+                        </div>
+                        <span class="material-icons-round text-emerald-500/20 text-4xl">add_circle</span>
+                    </div>
+                    <div
+                        class="card p-6 shadow-lg border-l-4 border-l-amber-500 bg-white dark:bg-slate-900 flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Cập nhật
+                                (24h)</p>
+                            <h3 class="text-2xl font-black text-amber-600">156</h3>
+                        </div>
+                        <span class="material-icons-round text-amber-500/20 text-4xl">edit_note</span>
+                    </div>
+                    <div
+                        class="card p-6 shadow-lg border-l-4 border-l-red-500 bg-white dark:bg-slate-900 flex justify-between items-center">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Xóa dữ liệu
+                            </p>
+                            <h3 class="text-2xl font-black text-red-600">12</h3>
+                        </div>
+                        <span class="material-icons-round text-red-500/20 text-4xl">delete_sweep</span>
+                    </div>
+                </div>
+
+                <!-- Logs List -->
+                <div class="card shadow-2xl overflow-hidden bg-white dark:bg-slate-900 border-none">
+                    <div
+                        class="p-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex flex-wrap gap-4 justify-between items-center">
+                        <div
+                            class="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-2xl shadow-sm w-full md:w-96">
+                            <span class="material-icons-round text-slate-400 text-sm">search</span>
+                            <input type="text" placeholder="Tìm kiếm theo người dùng, hành động..."
+                                class="bg-transparent border-none text-sm focus:ring-0 w-full font-medium" />
+                        </div>
+                        <div class="flex gap-4">
+                            <select
+                                class="form-select rounded-xl text-xs font-black border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                <option>Mọi mô đun</option>
+                                <option>Nhân sự</option>
+                                <option>Lương</option>
+                                <option>Bảo mật</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead
+                                class="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                <tr>
+                                    <th class="px-8 py-5">Thời gian</th>
+                                    <th class="px-8 py-5">Người thực hiện</th>
+                                    <th class="px-8 py-5">Hành động</th>
+                                    <th class="px-8 py-5">Mô đun</th>
+                                    <th class="px-8 py-5">Chi tiết</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logs-list" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Loading skeleton or dummy data until JS loads -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination Mockup -->
+                    <div
+                        class="p-6 border-t border-slate-100 dark:border-slate-800 bg-slate-50/30 dark:bg-slate-800/10 flex justify-between items-center">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Hiển thị 20 / 12,482
+                            bản ghi</p>
+                        <div class="flex gap-2">
+                            <button
+                                class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 disabled:opacity-30"><span
+                                    class="material-icons-round text-sm">chevron_left</span></button>
+                            <button
+                                class="p-2 rounded-xl bg-sky-500 text-white shadow-lg shadow-sky-500/20 px-4 text-xs font-black">1</button>
+                            <button
+                                class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100 px-4 text-xs font-bold">2</button>
+                            <button
+                                class="p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:bg-slate-100"><span
+                                    class="material-icons-round text-sm">chevron_right</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        async function loadLogs() {
+            try {
+                const resp = await fetch('/api/audit?limit=20');
+                const data = await resp.json();
+                if (data.success) {
+                    const tbody = document.getElementById('logs-list');
+                    tbody.innerHTML = data.data.logs.map(log => `
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all font-display">
+                            <td class="px-8 py-5">
+                                <p class="text-xs font-black text-slate-700 dark:text-slate-300 tracking-tight">${new Date(log.created_at).toLocaleTimeString('vi-VN')}</p>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase">${new Date(log.created_at).toLocaleDateString('vi-VN')}</p>
+                            </td>
+                            <td class="px-8 py-5">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-8 w-8 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-2 border-white dark:border-slate-700 shadow-sm">
+                                        <span class="text-[10px] font-black text-sky-500">${log.full_name?.substring(0, 2).toUpperCase() || 'AD'}</span>
+                                    </div>
+                                    <p class="text-xs font-black text-slate-900 dark:text-white">${log.full_name || 'Hệ thống'}</p>
+                                </div>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${getActionStyle(log.action)}">
+                                    ${log.action}
+                                </span>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="text-[10px] font-black text-slate-500 uppercase bg-slate-100 dark:bg-slate-800 px-2 py-1 rounded-lg">${log.module}</span>
+                            </td>
+                            <td class="px-8 py-5">
+                                <p class="text-xs font-medium text-slate-500 truncate max-w-xs" title="${log.details || ''}">
+                                    ${log.details || '-'}
+                                </p>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error('Failed to load logs', e);
+            }
+        }
+
+        function getActionStyle(action) {
+            if (action.includes('CREATE')) return 'bg-green-50 text-green-700 border-green-200';
+            if (action.includes('UPDATE')) return 'bg-amber-50 text-amber-700 border-amber-200';
+            if (action.includes('DELETE')) return 'bg-red-50 text-red-700 border-red-200';
+            if (action.includes('LOGIN')) return 'bg-blue-50 text-blue-700 border-blue-200';
+            return 'bg-slate-50 text-slate-400 border-slate-200';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadLogs);
+    </script>
+</body>
+
+</html>

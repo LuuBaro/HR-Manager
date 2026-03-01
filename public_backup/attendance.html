@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Quản Lý Chấm Công - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .grid-cell {
+            min-width: 40px;
+            height: 38px;
+        }
+
+        .sticky-col {
+            position: sticky;
+            left: 0;
+            z-index: 20;
+            background: inherit;
+        }
+    </style>
+</head>
+
+<body>
+    <div
+        class="security-gradient text-white px-6 py-2 flex justify-between items-center text-[11px] uppercase tracking-widest font-bold fixed top-0 w-full z-50">
+        <div class="flex items-center gap-2">
+            <span class="material-icons-round text-sm text-red-500">gpp_maybe</span>
+            <span>Truy cập nội bộ nghiêm ngặt | 内部访问</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="opacity-70">Lần đăng nhập cuối: 24/05/2024 08:30 AM</span>
+            <span class="bg-red-500/20 text-red-500 px-2 py-0.5 rounded border border-red-500/30">Mã hóa SSL: Hoạt
+                động</span>
+        </div>
+    </div>
+
+    <!-- Layout Container -->
+    <div class="flex pt-8">
+        <!-- Sidebar will be injected here -->
+        <div id="sidebar-root"></div>
+
+        <div class="flex-1 ml-64 min-h-screen flex flex-col">
+            <!-- Header will be injected here -->
+            <div id="header-root"></div>
+
+            <main class="p-8 max-w-full mx-auto w-full">
+                <!-- Attendance Header -->
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Chi tiết chấm công
+                        </h1>
+                        <p class="text-slate-500 text-sm mt-1">Quản lý bảng công và hiện diện của nhân sự.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <div
+                            class="flex items-center bg-white dark:bg-slate-800 rounded-lg p-1 border border-slate-200 dark:border-slate-700">
+                            <button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md transition-all">
+                                <span class="material-icons-round text-lg leading-none">chevron_left</span>
+                            </button>
+                            <div id="current-month" class="px-4 py-1 text-sm font-bold">Tháng 05, 2024</div>
+                            <button class="p-1.5 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-md transition-all">
+                                <span class="material-icons-round text-lg leading-none">chevron_right</span>
+                            </button>
+                        </div>
+                        <button class="btn-primary">
+                            <span class="material-icons-round text-sm">save</span> Lưu bảng công
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card p-4 mb-6 flex flex-wrap items-center gap-6">
+                    <div class="flex flex-col">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase mb-1">Phòng ban</label>
+                        <select
+                            class="form-select text-xs rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-2 pl-3 pr-10 min-w-[160px]">
+                            <option>Tất cả phòng ban</option>
+                            <option>Kỹ thuật</option>
+                            <option>Kinh doanh</option>
+                            <option>Nhân sự</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase mb-1">Trạng thái</label>
+                        <select
+                            class="form-select text-xs rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-2 pl-3 pr-10 min-w-[140px]">
+                            <option>Tất cả</option>
+                            <option>Đi làm</option>
+                            <option>Nghỉ phép</option>
+                            <option>Vắng mặt</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Attendance Grid Card -->
+                <div class="card overflow-hidden">
+                    <div class="overflow-x-auto custom-scrollbar">
+                        <table class="w-full text-left border-collapse">
+                            <thead class="bg-slate-50 dark:bg-slate-800/50">
+                                <tr id="grid-header">
+                                    <th
+                                        class="sticky-col px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800">
+                                        Nhân viên</th>
+                                    <!-- Days will be injected here -->
+                                </tr>
+                            </thead>
+                            <tbody id="attendance-grid" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Data rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        async function loadAttendance() {
+            try {
+                const resp = await fetch('/api/attendance/monthly-grid?month=5&year=2024');
+                const data = await resp.json();
+                if (data.success) {
+                    renderGrid(data.data);
+                }
+            } catch (e) {
+                console.error('Failed to load attendance', e);
+            }
+        }
+
+        function renderGrid(data) {
+            const header = document.getElementById('grid-header');
+            const tbody = document.getElementById('attendance-grid');
+
+            const daysInMonth = data.daysInMonth;
+
+            // Render Header Days
+            let headerHtml = `<th class="sticky-col px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest bg-slate-50 dark:bg-slate-800">Nhân viên</th>`;
+            for (let i = 1; i <= daysInMonth; i++) {
+                headerHtml += `<th class="text-center text-[10px] font-bold text-slate-400 min-w-[40px] border-l border-slate-100 dark:border-slate-800">${i}</th>`;
+            }
+            header.innerHTML = headerHtml;
+
+            // Render Rows
+            tbody.innerHTML = data.employees.map(emp => {
+                let rowHtml = `
+                    <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                        <td class="sticky-col px-6 py-4 bg-white dark:bg-slate-900 border-r border-slate-100 dark:border-slate-800">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-slate-900 dark:text-white">${emp.full_name}</span>
+                            </div>
+                        </td>`;
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                    const status = emp.attendance[i] || 'none';
+                    let bgColor = '';
+                    let char = '';
+                    if (status === 'full') { bgColor = 'bg-green-100 text-green-700'; char = 'P'; }
+                    else if (status === 'half') { bgColor = 'bg-amber-100 text-amber-700'; char = '1/2'; }
+                    else if (status === 'absent') { bgColor = 'bg-red-100 text-red-700'; char = 'V'; }
+                    else if (status === 'leave') { bgColor = 'bg-sky-100 text-sky-700'; char = 'N'; }
+
+                    rowHtml += `<td class="text-center p-0 border-l border-slate-100 dark:border-slate-800">
+                                    <div class="grid-cell flex items-center justify-center text-[10px] font-bold ${bgColor}">${char}</div>
+                                </td>`;
+                }
+                rowHtml += `</tr>`;
+                return rowHtml;
+            }).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAttendance);
+    </script>
+</body>
+
+</html>

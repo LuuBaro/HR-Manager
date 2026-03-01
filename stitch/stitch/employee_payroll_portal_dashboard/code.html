@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Đăng Nhập Hệ Thống Nội Bộ | 内部系统登录</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "security-red": "#991b1b",
+                        "background-neutral": "#f8fafc",
+                        "panel-border": "#e2e8f0",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.125rem",
+                        "lg": "0.25rem"
+                    },
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body { font-family: 'Inter', sans-serif; }
+        .login-container {
+            max-width: 440px;
+        }
+        .security-banner {
+            border-left: 4px solid theme('colors.security-red');
+        }
+    </style>
+</head>
+<body class="bg-background-neutral text-slate-900 min-h-screen flex flex-col">
+<div class="fixed top-6 right-6 z-50">
+<div class="flex bg-white border border-panel-border rounded shadow-sm p-1">
+<button class="px-3 py-1 text-xs font-bold bg-slate-100 text-slate-800 rounded">VN</button>
+<button class="px-3 py-1 text-xs font-medium text-slate-400 hover:text-slate-600">ZH</button>
+</div>
+</div>
+<main class="flex-grow flex items-center justify-center p-4">
+<div class="login-container w-full">
+<div class="mb-8 text-center">
+<div class="inline-flex items-center justify-center w-12 h-12 bg-primary text-white mb-4">
+<span class="material-icons text-2xl">shield</span>
+</div>
+<h1 class="text-xl font-bold uppercase tracking-wider text-slate-800">HR &amp; Payroll System</h1>
+<p class="text-sm text-slate-500 font-medium">Hệ thống Quản lý Nhân sự &amp; Lương nội bộ</p>
+</div>
+<div class="bg-white border border-panel-border shadow-xl">
+<div class="security-banner bg-red-50 p-4 border-b border-panel-border">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-security-red">warning</span>
+<div>
+<h2 class="text-sm font-bold text-security-red uppercase tracking-tight">Internal Personnel Only</h2>
+<p class="text-[11px] text-red-800 font-medium leading-relaxed">
+                                Chỉ dành cho nhân sự nội bộ. Mọi hành vi truy cập trái phép đều bị nghiêm cấm và sẽ bị xử lý theo quy định pháp luật.
+                                <br/>
+                                仅限内部人员访问。严禁未经授权的进入，违者将依法处理。
+                            </p>
+</div>
+</div>
+</div>
+<div class="p-8">
+<form class="space-y-6">
+<div>
+<label class="block text-[11px] font-bold text-slate-500 uppercase mb-1.5 tracking-wider" for="email">
+                                Work Email / Email Công việc / 工作邮箱
+                            </label>
+<div class="relative">
+<span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">alternate_email</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm" id="email" name="email" placeholder="name@company.com" required="" type="email"/>
+</div>
+</div>
+<div>
+<div class="flex justify-between mb-1.5">
+<label class="block text-[11px] font-bold text-slate-500 uppercase tracking-wider" for="password">
+                                    Password / Mật khẩu / 密码
+                                </label>
+<a class="text-[10px] text-slate-400 hover:text-primary transition-colors font-semibold uppercase" href="#">Forgot?</a>
+</div>
+<div class="relative">
+<span class="material-icons absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">lock</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all text-sm" id="password" name="password" placeholder="••••••••" required="" type="password"/>
+</div>
+</div>
+<div class="pt-2">
+<button class="w-full bg-primary text-white font-bold py-3 text-sm uppercase tracking-widest hover:bg-slate-800 transition-colors flex items-center justify-center gap-2" type="submit">
+<span class="material-icons text-sm">login</span>
+                                Sign In / Đăng Nhập
+                            </button>
+</div>
+</form>
+<div class="mt-8 pt-6 border-t border-slate-100">
+<div class="flex items-start gap-2 text-slate-400">
+<span class="material-icons text-sm mt-0.5">info</span>
+<p class="text-[10px] leading-relaxed">
+<strong>System Audit:</strong> All access attempts are logged with IP address and timestamp. Unauthorized access is prohibited by IT Security Policy.
+                                <br/>
+<strong>Kiểm toán hệ thống:</strong> Mọi lượt truy cập đều được ghi lại. Hành vi xâm nhập trái phép bị nghiêm cấm theo chính sách bảo mật CNTT.
+                            </p>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-6 text-center space-y-1">
+<p class="text-[10px] text-slate-400 uppercase font-semibold">Version 2.4.0 (Stable)</p>
+<p class="text-[10px] text-slate-400">© 2024 Corporate Internal Systems. All rights reserved.</p>
+</div>
+</div>
+</main>
+<footer class="p-6 flex justify-between items-center text-slate-400">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span class="text-[10px] font-bold uppercase tracking-widest">System Operational</span>
+</div>
+<div class="flex gap-4 text-[10px] font-bold uppercase tracking-tighter">
+<span class="cursor-pointer text-slate-900 border-b border-primary">Tiếng Việt</span>
+<span class="cursor-pointer hover:text-slate-600">中文 (简体)</span>
+</div>
+</footer>
+
+</body></html>

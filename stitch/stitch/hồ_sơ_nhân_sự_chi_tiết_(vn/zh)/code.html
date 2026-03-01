@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hồ Sơ Nhân Sự Chi Tiết (VN/ZH)</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200 min-h-screen">
+<!-- Header / Navigation -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<a class="flex items-center gap-2 text-primary font-bold text-xl" href="#">
+<span class="material-icons">badge</span>
+<span>HRPortal</span>
+</a>
+<nav class="hidden md:flex items-center gap-6 ml-10">
+<a class="text-primary border-b-2 border-primary px-1 py-4 text-sm font-medium" href="#">Nhân sự / 人事</a>
+<a class="text-slate-500 hover:text-primary px-1 py-4 text-sm font-medium transition-colors" href="#">Bảng lương / 工资表</a>
+<a class="text-slate-500 hover:text-primary px-1 py-4 text-sm font-medium transition-colors" href="#">Báo cáo / 报告</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<!-- Language Toggle -->
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="px-3 py-1 text-xs font-bold rounded-md bg-white dark:bg-slate-700 shadow-sm text-primary">VN</button>
+<button class="px-3 py-1 text-xs font-bold rounded-md text-slate-500">ZH</button>
+</div>
+<div class="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-icons text-sm">notifications</span>
+</div>
+<div class="flex items-center gap-2 border-l border-slate-200 dark:border-slate-800 pl-4 ml-2">
+<img alt="Admin Profile" class="w-8 h-8 rounded-full" data-alt="Small round professional male headshot avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYJm2idRrIw3A9xtGk04ONkiBeOSJYLcYZmvnwV0fj7g95xJQ8Coue8rDtuRyymAZ1H7tbAIwoAl9rqyvdqIya3veIHkTaKiMdVA4OpiIsXF7bGTEAiq3la2zmftWXddXOFqJnAUr-dp2V-iJsEfND2R69-PlwNinSxdqkboBrxAb_9DK46W4FHCKKo-g8G6e9e4DBKRaZAcxKngQR9xl8gjWQdFMOIiqb7aVWVC9M8jUBWlg8zLdBbrxOO2E_j-9pgIfVefrux6k"/>
+<div class="hidden lg:block">
+<p class="text-xs font-semibold">Admin HR</p>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Profile Header Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6 mb-6">
+<div class="flex flex-col md:flex-row gap-6 items-start md:items-center">
+<div class="relative">
+<div class="w-32 h-32 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center border-4 border-white dark:border-slate-800 shadow-sm overflow-hidden">
+<img alt="Employee Photo" class="w-full h-full object-cover" data-alt="Professional male employee studio portrait placeholder" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBjU9cn3b23bu13vE_HYrphPDSjH_P0uKXV7C5qOBByadbHZs-Nu19fxjfQtl6i94NX0vdY63pPayLaOgqvd2bHVEAXvVuCRcXsxSHpVFDhYguEOiWuv_VzgAacX9irx9tnHoHr-5A31u91eIADSKyS05xC4HJJD4H-YgFJa_h0xj2hpVvRd82kruqBSJUwHDBqIKJGyyg-1DIsKp-UvBJTxJ2V5PPAg0fJ_ZT33ozBG3kNCGAd38lxKYE6iwL9D0DKWmgehYiRuCc"/>
+</div>
+<button class="absolute -bottom-2 -right-2 bg-primary text-white p-2 rounded-full shadow-lg hover:bg-primary/90 transition-all">
+<span class="material-icons text-sm">edit</span>
+</button>
+</div>
+<div class="flex-1 space-y-2">
+<div class="flex flex-wrap items-center gap-3">
+<h1 class="text-2xl font-bold text-slate-900 dark:text-white">NGUYỄN VĂN A / 阮文安</h1>
+<span class="px-3 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400 text-xs font-bold uppercase tracking-wider">
+                            Đang làm việc / 在职
+                        </span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-sm text-slate-500 dark:text-slate-400">
+<div class="flex items-center gap-2">
+<span class="material-icons text-base">badge</span>
+<span>ID: EMP-2023-084</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-icons text-base">corporate_fare</span>
+<span>Bộ phận: Kế toán / 财务部</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-icons text-base">translate</span>
+<span>English Name: Andrew Nguyen</span>
+</div>
+<div class="flex items-center gap-2 text-primary font-medium">
+<span class="material-icons text-base">calendar_today</span>
+<span>Tham gia: 12/05/2021</span>
+</div>
+</div>
+</div>
+<div class="flex gap-2">
+<button class="px-4 py-2 border border-slate-200 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-sm font-medium transition-colors flex items-center gap-2">
+<span class="material-icons text-sm">download</span>
+                        Xuất file / 导出
+                    </button>
+<button class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 text-sm font-medium shadow-sm transition-colors flex items-center gap-2">
+<span class="material-icons text-sm">save</span>
+                        Lưu hồ sơ / 保存
+                    </button>
+</div>
+</div>
+</div>
+<!-- Tab Navigation -->
+<div class="flex flex-col gap-6">
+<div class="border-b border-slate-200 dark:border-slate-800 flex overflow-x-auto no-scrollbar">
+<button class="px-6 py-4 border-b-2 border-primary text-primary font-semibold text-sm whitespace-nowrap flex items-center gap-2">
+<span class="material-icons text-sm">person</span>
+                    Thông tin cá nhân / 个人信息
+                </button>
+<button class="px-6 py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-all">
+<span class="material-icons text-sm">description</span>
+                    Hợp đồng / 合同
+                </button>
+<button class="px-6 py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-all">
+<span class="material-icons text-sm">health_and_safety</span>
+                    Bảo hiểm &amp; Phúc lợi / 保险与福利
+                </button>
+<button class="px-6 py-4 border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 font-medium text-sm whitespace-nowrap flex items-center gap-2 transition-all">
+<span class="material-icons text-sm">history</span>
+                    Lịch sử thay đổi / 变更历史
+                </button>
+</div>
+<!-- Content Area: Personal Info -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Main Info Form -->
+<div class="lg:col-span-2 space-y-6">
+<section class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800">
+<h3 class="text-lg font-bold mb-6 flex items-center gap-2 border-l-4 border-primary pl-3">
+                            Thông tin cơ bản / 基本信息
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-semibold text-slate-500 uppercase">Họ và tên / 姓名</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary" type="text" value="Nguyễn Văn A"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold text-slate-500 uppercase">Tên tiếng Anh / 英文名</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary" type="text" value="Andrew Nguyen"/>
+</div>
+<div class="space-y-2 relative">
+<label class="text-xs font-semibold text-slate-500 uppercase">Số CCCD / 身份证号</label>
+<div class="relative">
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm pr-10" readonly="" type="text" value="034098******"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary">
+<span class="material-icons text-sm">visibility_off</span>
+</button>
+</div>
+</div>
+<div class="space-y-2 relative">
+<label class="text-xs font-semibold text-slate-500 uppercase">Số điện thoại / 电话号码</label>
+<div class="relative">
+<input class="w-full bg-slate-100 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm pr-10" readonly="" type="text" value="0905***678"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary">
+<span class="material-icons text-sm">visibility_off</span>
+</button>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold text-slate-500 uppercase">Email cá nhân / 个人邮箱</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary" type="email" value="andrew.ng@gmail.com"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-semibold text-slate-500 uppercase">Ngày sinh / 出生日期</label>
+<input class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary" type="date" value="1995-10-25"/>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="text-xs font-semibold text-slate-500 uppercase">Địa chỉ thường trú / 户口地址</label>
+<textarea class="w-full bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-lg text-sm focus:ring-primary focus:border-primary" rows="2">123 Đường Lê Lợi, Phường 1, Quận 1, TP. Hồ Chí Minh</textarea>
+</div>
+</div>
+</section>
+<!-- Contracts Preview (Simplified) -->
+<section class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-lg font-bold flex items-center gap-2 border-l-4 border-primary pl-3">
+                                Hợp đồng gần đây / 最近合同
+                            </h3>
+<button class="text-primary text-sm font-medium hover:underline">Xem tất cả / 查看全部</button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="bg-slate-50 dark:bg-slate-800 text-slate-500 uppercase text-[10px] font-bold">
+<tr>
+<th class="px-4 py-3">Loại HĐ / 类型</th>
+<th class="px-4 py-3">Ngày bắt đầu / 开始日期</th>
+<th class="px-4 py-3">Ngày kết thúc / 结束日期</th>
+<th class="px-4 py-3">Lương cơ bản / 基本工资</th>
+<th class="px-4 py-3 text-right">Trạng thái / 状态</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr>
+<td class="px-4 py-4 font-medium">HĐ Không xác định thời hạn</td>
+<td class="px-4 py-4">01/01/2023</td>
+<td class="px-4 py-4">-</td>
+<td class="px-4 py-4">15,000,000 VNĐ</td>
+<td class="px-4 py-4 text-right">
+<span class="px-2 py-1 rounded-md bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400 text-[10px] font-bold">HIỆU LỰC</span>
+</td>
+</tr>
+<tr class="opacity-60">
+<td class="px-4 py-4">HĐ Xác định thời hạn (1 năm)</td>
+<td class="px-4 py-4">01/01/2022</td>
+<td class="px-4 py-4">31/12/2022</td>
+<td class="px-4 py-4">12,500,000 VNĐ</td>
+<td class="px-4 py-4 text-right">
+<span class="px-2 py-1 rounded-md bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 text-[10px] font-bold">HẾT HẠN</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</div>
+<!-- Sidebar Content -->
+<div class="space-y-6">
+<!-- Insurance Info -->
+<section class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800">
+<h3 class="text-sm font-bold mb-4 uppercase text-slate-400 flex items-center gap-2">
+<span class="material-icons text-base">health_and_safety</span>
+                            Bảo hiểm / 保险
+                        </h3>
+<div class="space-y-4">
+<div class="p-3 bg-primary/5 border border-primary/10 rounded-lg">
+<p class="text-[10px] text-primary font-bold uppercase mb-1">Số sổ BHXH / 社保卡号</p>
+<p class="text-lg font-mono font-bold text-primary">7916239450</p>
+</div>
+<div class="flex items-center justify-between text-sm py-2 border-b border-slate-100 dark:border-slate-800">
+<span class="text-slate-500">BH Y tế / 医疗保险:</span>
+<span class="text-green-600 font-semibold flex items-center gap-1">
+<span class="material-icons text-xs">check_circle</span> Đã đóng
+                                </span>
+</div>
+<div class="flex items-center justify-between text-sm py-2 border-b border-slate-100 dark:border-slate-800">
+<span class="text-slate-500">Phúc lợi thêm / 额外福利:</span>
+<span class="text-slate-900 dark:text-white font-medium">Bảo hiểm PVI</span>
+</div>
+</div>
+</section>
+<!-- Audit Timeline -->
+<section class="bg-white dark:bg-slate-900 rounded-xl p-6 border border-slate-200 dark:border-slate-800">
+<h3 class="text-sm font-bold mb-6 uppercase text-slate-400 flex items-center gap-2">
+<span class="material-icons text-base">history</span>
+                            Lịch sử thay đổi / 变更历史
+                        </h3>
+<div class="relative space-y-6 before:absolute before:inset-0 before:ml-2 before:-translate-x-px before:h-full before:w-0.5 before:bg-gradient-to-b before:from-primary before:to-transparent">
+<!-- Timeline Item -->
+<div class="relative pl-8">
+<span class="absolute left-0 top-1.5 h-4 w-4 rounded-full bg-primary border-2 border-white dark:border-slate-900 shadow-sm"></span>
+<time class="text-[10px] font-bold text-primary block mb-1">HÔM NAY - 14:20</time>
+<p class="text-xs font-semibold text-slate-800 dark:text-slate-200">Cập nhật Lương cơ bản</p>
+<p class="text-[10px] text-slate-500">Thực hiện bởi: Admin HR</p>
+</div>
+<!-- Timeline Item -->
+<div class="relative pl-8">
+<span class="absolute left-0 top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 border-2 border-white dark:border-slate-900 shadow-sm"></span>
+<time class="text-[10px] font-bold text-slate-400 block mb-1">12/08/2023 - 09:15</time>
+<p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Thay đổi Địa chỉ thường trú</p>
+<p class="text-[10px] text-slate-500">Thực hiện bởi: Andrew Nguyen (Self)</p>
+</div>
+<!-- Timeline Item -->
+<div class="relative pl-8">
+<span class="absolute left-0 top-1.5 h-4 w-4 rounded-full bg-slate-300 dark:bg-slate-700 border-2 border-white dark:border-slate-900 shadow-sm"></span>
+<time class="text-[10px] font-bold text-slate-400 block mb-1">12/05/2021 - 08:00</time>
+<p class="text-xs font-semibold text-slate-600 dark:text-slate-400">Khởi tạo hồ sơ nhân viên</p>
+<p class="text-[10px] text-slate-500">Thực hiện bởi: System</p>
+</div>
+</div>
+<button class="w-full mt-6 py-2 text-xs font-bold text-slate-400 hover:text-primary transition-colors">XEM TẤT CẢ / 查看更多</button>
+</section>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Action Bar (Mobile Responsive) -->
+<div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 flex gap-3">
+<button class="flex-1 py-3 border border-slate-200 dark:border-slate-700 rounded-lg text-sm font-bold">Hủy / 取消</button>
+<button class="flex-1 py-3 bg-primary text-white rounded-lg text-sm font-bold shadow-lg">Lưu / 保存</button>
+</div>
+</body></html>

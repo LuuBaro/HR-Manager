@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tổng Quan Hệ Thống - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0ea5e9",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100 italic-supported">
+    <div class="flex h-screen overflow-hidden pt-8">
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <div id="header-root"></div>
+
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-10 animate-in">
+                <!-- Welcome Section -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div>
+                        <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Trung
+                            tâm điều hành</h1>
+                        <p class="text-slate-500 font-medium mt-2">Chào mừng quay trở lại, <span
+                                class="u-name text-sky-500 font-black">Admin</span>. Hệ thống đang hoạt động tối ưu.</p>
+                    </div>
+                    <div class="flex gap-3 w-full md:w-auto">
+                        <button onclick="window.location.href='/reports.html'"
+                            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-slate-50 transition-all shadow-sm">
+                            <span class="material-icons-round text-sm opacity-50">analytics</span> Báo cáo
+                        </button>
+                        <button onclick="window.location.href='/employees.html'"
+                            class="bg-primary text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-sky-500/30 hover:bg-primary/90 transition-all active:scale-95">
+                            <span class="material-icons-round text-sm">person_add</span> Thêm mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div
+                        class="card p-8 group hover:scale-[1.02] transition-transform duration-500 bg-white dark:bg-slate-900 border-none shadow-xl">
+                        <div class="flex justify-between items-start mb-6">
+                            <div
+                                class="w-12 h-12 bg-sky-500/10 text-sky-500 rounded-2xl flex items-center justify-center group-hover:bg-sky-500 group-hover:text-white transition-all duration-300 shadow-inner">
+                                <span class="material-icons-round text-2xl">groups</span>
+                            </div>
+                            <span
+                                class="text-[9px] font-black bg-emerald-50 text-emerald-600 px-2 py-1 rounded-lg border border-emerald-100">+12%</span>
+                        </div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Tổng nhân sự
+                        </p>
+                        <h3 id="stat-total-employees"
+                            class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">1,245</h3>
+                    </div>
+
+                    <div
+                        class="card p-8 group hover:scale-[1.02] transition-transform duration-500 bg-white dark:bg-slate-900 border-none shadow-xl">
+                        <div class="flex justify-between items-start mb-6">
+                            <div
+                                class="w-12 h-12 bg-amber-500/10 text-amber-500 rounded-2xl flex items-center justify-center group-hover:bg-amber-500 group-hover:text-white transition-all duration-300 shadow-inner">
+                                <span class="material-icons-round text-2xl">hourglass_empty</span>
+                            </div>
+                            <span
+                                class="text-[9px] font-black bg-amber-50 text-amber-600 px-2 py-1 rounded-lg border border-amber-100">Cần
+                                xử lý</span>
+                        </div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Chờ ứng tuyển
+                        </p>
+                        <h3 id="stat-pending-requests"
+                            class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">48</h3>
+                    </div>
+
+                    <div
+                        class="card p-8 group hover:scale-[1.02] transition-transform duration-500 bg-white dark:bg-slate-900 border-none shadow-xl">
+                        <div class="flex justify-between items-start mb-6">
+                            <div
+                                class="w-12 h-12 bg-indigo-500/10 text-indigo-500 rounded-2xl flex items-center justify-center group-hover:bg-indigo-500 group-hover:text-white transition-all duration-300 shadow-inner">
+                                <span class="material-icons-round text-2xl">payments</span>
+                            </div>
+                            <span
+                                class="text-[9px] font-black bg-indigo-50 text-indigo-600 px-2 py-1 rounded-lg border border-indigo-100">Tháng
+                                05</span>
+                        </div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Quỹ lương dự
+                            kiến</p>
+                        <h3 id="stat-payroll-budget"
+                            class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">1.8B <span
+                                class="text-xs font-normal opacity-50">VND</span></h3>
+                    </div>
+
+                    <div
+                        class="card p-8 group hover:scale-[1.02] transition-transform duration-500 bg-white dark:bg-slate-900 border-none shadow-xl">
+                        <div class="flex justify-between items-start mb-6">
+                            <div
+                                class="w-12 h-12 bg-rose-500/10 text-rose-500 rounded-2xl flex items-center justify-center group-hover:bg-rose-500 group-hover:text-white transition-all duration-300 shadow-inner">
+                                <span class="material-icons-round text-2xl">event_busy</span>
+                            </div>
+                            <span
+                                class="text-[9px] font-black bg-rose-50 text-rose-600 px-2 py-1 rounded-lg border border-rose-100">Vắng
+                                mặt</span>
+                        </div>
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Nghi phép hôm
+                            nay</p>
+                        <h3 id="stat-leave-today"
+                            class="text-3xl font-black text-slate-900 dark:text-white tracking-tighter">14 <span
+                                class="text-xs font-normal opacity-50">Người</span></h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                    <!-- Activity Log -->
+                    <div class="lg:col-span-2 space-y-8">
+                        <div class="card overflow-hidden bg-white dark:bg-slate-900 border-none shadow-2xl">
+                            <div
+                                class="p-8 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex justify-between items-center">
+                                <h3 class="text-xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
+                                    Dòng sự kiện hệ thống</h3>
+                                <button
+                                    class="text-sky-500 text-[10px] font-black uppercase tracking-widest hover:underline">Xem
+                                    lịch sử</button>
+                            </div>
+                            <div id="activity-log-container" class="p-8 space-y-8">
+                                <div class="flex items-center justify-center py-10 opacity-50">
+                                    <p class="text-sm font-bold uppercase tracking-widest">Đang tải dữ liệu...</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Side Panel: Alerts & News -->
+                    <div class="space-y-8">
+                        <div class="card p-8 bg-slate-900 text-white border-none shadow-2xl relative overflow-hidden">
+                            <div
+                                class="absolute top-0 right-0 w-32 h-32 bg-sky-500/10 rounded-full -mr-16 -mt-16 blur-2xl">
+                            </div>
+                            <h3 class="text-lg font-black tracking-tight mb-8 uppercase">Thông báo bảo mật</h3>
+                            <div class="space-y-6">
+                                <div class="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                                    <span class="material-icons-round text-amber-500 text-xl">security</span>
+                                    <div class="flex-1">
+                                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                                            Cảnh báo đăng nhập</p>
+                                        <p class="text-xs font-bold">Phát hiện IP lạ từ Hải Phòng</p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-4 p-4 bg-white/5 rounded-2xl border border-white/10">
+                                    <span class="material-icons-round text-sky-500 text-xl">update</span>
+                                    <div class="flex-1">
+                                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">
+                                            Bản cập nhật v2.6</p>
+                                        <p class="text-xs font-bold text-sky-400">Sẵn sàng vào tối mai 22:00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card p-8 bg-white dark:bg-slate-900 border-none shadow-xl">
+                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Tiến độ
+                                bảng lương</h3>
+                            <div class="space-y-6">
+                                <div>
+                                    <div class="flex justify-between text-[10px] font-black uppercase mb-2">
+                                        <span>Chấm công</span>
+                                        <span class="text-sky-500">92%</span>
+                                    </div>
+                                    <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-sky-500 rounded-full" style="width: 92%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div
+                                        class="flex justify-between text-[10px] font-black uppercase mb-2 text-slate-400">
+                                        <span>Thuế & Bảo hiểm</span>
+                                        <span>45%</span>
+                                    </div>
+                                    <div class="h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                                        <div class="h-full bg-slate-300 dark:bg-slate-700 rounded-full"
+                                            style="width: 45%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchDashboardStats();
+        });
+
+        async function fetchDashboardStats() {
+            try {
+                const response = await fetch('/api/dashboard/stats');
+                const result = await response.json();
+
+                if (result.success) {
+                    const data = result.data;
+
+                    // Update main stats
+                    document.getElementById('stat-total-employees').textContent = data.totalEmployees.toLocaleString();
+                    document.getElementById('stat-pending-requests').textContent = data.pendingRequests;
+
+                    if (data.latestPayroll && data.latestPayroll.total_net) {
+                        const amount = data.latestPayroll.total_net;
+                        let displayAmount = amount;
+                        let unit = 'VND';
+
+                        if (amount >= 1000000000) {
+                            displayAmount = (amount / 1000000000).toFixed(1) + 'B';
+                        } else if (amount >= 1000000) {
+                            displayAmount = (amount / 1000000).toFixed(1) + 'M';
+                        }
+
+                        document.getElementById('stat-payroll-budget').innerHTML = `${displayAmount} <span class="text-xs font-normal opacity-50">${unit}</span>`;
+                    }
+
+                    document.getElementById('stat-leave-today').innerHTML = `${data.leaveToday} <span class="text-xs font-normal opacity-50">Người</span>`;
+
+                    // Update Recent Activities
+                    const container = document.getElementById('activity-log-container');
+                    if (data.recentActivities && data.recentActivities.length > 0) {
+                        container.innerHTML = data.recentActivities.map(log => `
+                            <div class="flex gap-6 items-start relative pb-8 group last:pb-0">
+                                <div class="absolute left-6 top-12 bottom-0 w-0.5 bg-slate-100 dark:bg-slate-800 group-last:hidden"></div>
+                                <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-500 flex items-center justify-center shrink-0 shadow-inner">
+                                    <span class="material-icons-round">${getActivityIcon(log.action)}</span>
+                                </div>
+                                <div class="flex-1 space-y-2">
+                                    <div class="flex justify-between items-center">
+                                        <p class="text-sm font-black text-slate-900 dark:text-white">
+                                            ${log.full_name || 'Hệ thống'} <span class="text-sky-500 font-bold ml-1">${log.action}</span>
+                                        </p>
+                                        <span class="text-[10px] font-bold text-slate-400">${formatRelativeTime(log.created_at)}</span>
+                                    </div>
+                                    <p class="text-xs text-slate-500 leading-relaxed font-medium">
+                                        Thực hiện trên module <b>${log.module || log.resource}</b>
+                                    </p>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        container.innerHTML = '<p class="text-center text-slate-400 py-10 font-bold italic">Không có hoạt động gần đây</p>';
+                    }
+                }
+            } catch (error) {
+                console.error('Fetch dashboard stats error:', error);
+            }
+        }
+
+        function getActivityIcon(action) {
+            action = action.toLowerCase();
+            if (action.includes('create') || action.includes('add')) return 'add_circle';
+            if (action.includes('update') || action.includes('edit')) return 'edit';
+            if (action.includes('delete') || action.includes('remove')) return 'delete';
+            if (action.includes('login')) return 'login';
+            return 'event_note';
+        }
+
+        function formatRelativeTime(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+
+            if (diffInSeconds < 60) return 'Vừa xong';
+            if (diffInSeconds < 3600) return Math.floor(diffInSeconds / 60) + ' phút trước';
+            if (diffInSeconds < 86400) return Math.floor(diffInSeconds / 3600) + ' giờ trước';
+            return date.toLocaleDateString('vi-VN');
+        }
+    </script>
+</body>
+
+</html>

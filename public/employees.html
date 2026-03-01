@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Danh Sách Nhân Sự - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0ea5e9",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100 italic-supported">
+    <div class="flex h-screen overflow-hidden pt-8">
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <div id="header-root"></div>
+
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-10 animate-in">
+                <!-- Header Actions -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                    <div>
+                        <h1 class="text-4xl font-black text-slate-900 dark:text-white tracking-tighter uppercase">Danh
+                            sách hồ sơ</h1>
+                        <p class="text-slate-500 font-medium mt-2">Quản lý toàn diện dữ liệu nhân sự <span
+                                class="text-sky-500 font-black">/ 員工檔案</span></p>
+                    </div>
+                    <div class="flex flex-wrap gap-4 w-full md:w-auto">
+                        <div class="relative flex-1 md:w-80">
+                            <span
+                                class="material-icons-round absolute left-4 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+                            <input id="employee-search"
+                                class="w-full pl-12 pr-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm font-bold focus:ring-4 focus:ring-sky-500/10 transition-all outline-none"
+                                placeholder="Tìm tên, mã, bộ phận..." type="text" />
+                        </div>
+                        <button onclick="openImportModal()"
+                            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 hover:bg-slate-50 shadow-sm border-dashed">
+                            <span class="material-icons-round text-sm opacity-50">cloud_upload</span> IMPORT
+                        </button>
+                        <button onclick="openAddModal()"
+                            class="bg-primary text-white px-8 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-3 shadow-xl shadow-sky-500/30 hover:bg-primary/90 active:scale-95 transition-all">
+                            <span class="material-icons-round text-sm">add_circle</span> THÊM MỚI
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap gap-4 relative">
+                    <button data-status=""
+                        class="filter-btn px-6 py-2.5 rounded-xl bg-slate-900 text-white text-[10px] font-black uppercase tracking-widest shadow-xl transition-all">Tất
+                        cả</button>
+                    <button data-status="active"
+                        class="filter-btn px-6 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-sky-500 transition-all">Chính
+                        thức</button>
+                    <button data-status="probation"
+                        class="filter-btn px-6 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-sky-500 transition-all">Thử
+                        việc</button>
+                    <button data-status="resigned"
+                        class="filter-btn px-6 py-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:border-sky-500 transition-all">Nghỉ
+                        việc</button>
+                </div>
+
+                <!-- Bulk Action Bar -->
+                <div id="bulk-actions"
+                    class="hidden animate-in fade-in slide-in-from-bottom-4 duration-300 fixed bottom-8 left-1/2 -translate-x-1/2 z-40 bg-slate-900 text-white px-6 py-4 rounded-full shadow-2xl flex items-center gap-6 border border-slate-700">
+                    <div class="flex items-center gap-3 pr-6 border-r border-slate-700">
+                        <span class="bg-sky-500 text-white text-xs font-black px-2 py-1 rounded-lg"
+                            id="selected-count">0</span>
+                        <span class="text-xs font-bold uppercase tracking-wide text-slate-300">Đã chọn</span>
+                    </div>
+                    <button onclick="bulkDelete()"
+                        class="flex items-center gap-2 text-red-400 hover:text-red-300 transition-colors">
+                        <span class="material-icons-round text-lg">delete</span>
+                        <span class="text-[10px] font-black uppercase tracking-widest">Xóa đã chọn</span>
+                    </button>
+                    <button onclick="deselectAll()"
+                        class="flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+                        <span class="material-icons-round text-lg">close</span>
+                    </button>
+                </div>
+
+                <div id="employees-grid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+                    <!-- Dynamic cards will be injected here -->
+                    <div class="col-span-full flex items-center justify-center py-20 opacity-50">
+                        <p class="text-sm font-black uppercase tracking-[0.3em]">Đang tải danh sách nhân sự...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Add Employee -->
+    <div id="add-modal"
+        class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+        <div
+            class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <div class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                <h2 class="text-2xl font-black tracking-tighter uppercase">Thêm nhân viên mới</h2>
+                <button onclick="closeModal('add-modal')"
+                    class="w-10 h-10 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 flex items-center justify-center transition-all">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+            <form id="add-form" class="p-8 space-y-6">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Mã nhân
+                            viên</label>
+                        <input name="employee_code" required
+                            class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all outline-none"
+                            placeholder="VD: NV-001">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Họ và
+                            tên</label>
+                        <input name="full_name" required
+                            class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all outline-none"
+                            placeholder="VD: Nguyễn Văn A">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Phòng
+                            ban</label>
+                        <div class="flex gap-2">
+                            <select name="department_id" id="add-dept-select"
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all outline-none appearance-none cursor-pointer">
+                                <!-- Options -->
+                            </select>
+                            <button type="button" onclick="openQuickAddDept()"
+                                class="w-12 rounded-2xl bg-slate-100 dark:bg-slate-800 hover:bg-sky-500 hover:text-white transition-all flex items-center justify-center text-slate-500">
+                                <span class="material-icons-round">add</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Chức
+                            vụ</label>
+                        <select name="position_id" id="add-pos-select"
+                            class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all outline-none appearance-none cursor-pointer">
+                            <!-- Options -->
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Ngày vào
+                            làm</label>
+                        <input type="date" name="hire_date" required
+                            class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all outline-none">
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Lương cơ
+                            bản</label>
+                        <input type="number" name="base_salary"
+                            class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all outline-none font-mono"
+                            placeholder="0">
+                    </div>
+                </div>
+                <div class="pt-4 flex gap-4">
+                    <button type="button" onclick="closeModal('add-modal')"
+                        class="flex-1 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 font-black text-xs uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Hủy
+                        bỏ</button>
+                    <button type="submit"
+                        class="flex-1 py-4 bg-primary text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-sky-500/20 hover:bg-primary/90 transition-all">Thêm
+                        hồ sơ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Employee Details -->
+    <div id="detail-modal"
+        class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+        <div
+            class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300 max-h-[90vh] flex flex-col">
+            <div
+                class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20">
+                <div class="flex items-center gap-6">
+                    <img id="detail-avatar"
+                        class="w-20 h-20 rounded-[24px] object-cover ring-4 ring-white dark:ring-slate-900 shadow-xl"
+                        src="">
+                    <div>
+                        <h2 id="detail-title" class="text-3xl font-black tracking-tighter uppercase">Chi tiết hồ sơ</h2>
+                        <p id="detail-subtitle" class="text-sky-500 text-xs font-black uppercase tracking-widest mt-1">
+                            Hồ sơ nhân viên</p>
+                    </div>
+                </div>
+                <button onclick="closeModal('detail-modal')"
+                    class="w-12 h-12 rounded-2xl border border-slate-200 dark:border-slate-800 hover:bg-white flex items-center justify-center transition-all bg-white dark:bg-slate-900">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+                <form id="detail-form" class="space-y-10">
+                    <input type="hidden" name="id" id="detail-id">
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Mã nhân
+                                viên (Cố định)</label>
+                            <input id="detail-code" readonly
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-800 font-bold text-sm outline-none cursor-not-allowed text-slate-500">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Họ và
+                                tên</label>
+                            <input name="full_name" id="detail-name" required
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label
+                                class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Email</label>
+                            <input name="email" id="detail-email" type="email"
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Số điện
+                                thoại</label>
+                            <input name="phone" id="detail-phone"
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Phòng
+                                ban</label>
+                            <select name="department_id" id="detail-dept-select"
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 outline-none appearance-none cursor-pointer"></select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Chức
+                                vụ</label>
+                            <select name="position_id" id="detail-pos-select"
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 outline-none appearance-none cursor-pointer"></select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Trạng
+                                thái làm việc</label>
+                            <select name="status" id="detail-status"
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 outline-none appearance-none cursor-pointer">
+                                <option value="active">Đang làm việc</option>
+                                <option value="probation">Thử việc</option>
+                                <option value="on_leave">Nghỉ phép</option>
+                                <option value="resigned">Đã nghỉ việc</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Loại hợp
+                                đồng</label>
+                            <select name="contract_type" id="detail-contract"
+                                class="w-full px-5 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 outline-none appearance-none cursor-pointer">
+                                <option value="full_time">Chính thức</option>
+                                <option value="part_time">Bán thời gian</option>
+                                <option value="contract">Hợp đồng</option>
+                                <option value="intern">Thực tập</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Salary Configuration Section -->
+                    <div class="pt-8 border-t border-slate-100 dark:border-slate-800">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="text-lg font-black tracking-tight uppercase">Cấu hình Lương & Chế độ</h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Thiết lập
+                                    lương cơ bản và phụ cấp</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                            <div class="space-y-2">
+                                <label
+                                    class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Lương
+                                    cơ bản (Hợp đồng)</label>
+                                <div class="relative">
+                                    <input type="number" name="base_salary" id="detail-base-salary"
+                                        class="w-full pl-5 pr-12 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 font-black text-sm text-sky-500 focus:ring-4 focus:ring-sky-500/10 transition-all outline-none">
+                                    <span
+                                        class="absolute right-5 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400">VND</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Các
+                                khoản phụ cấp & khấu trừ cố định</label>
+                            <div id="salary-components-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Dynamic salary components checkboxes/inputs -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pt-10 flex gap-4">
+                        <button type="button" onclick="closeModal('detail-modal')"
+                            class="px-8 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 dark:hover:bg-slate-800 transition-all">Đóng
+                            cửa sổ</button>
+                        <button type="submit"
+                            class="flex-1 py-4 bg-sky-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-sky-500/20 hover:bg-sky-600 transition-all">Lưu
+                            các thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal: Quick Payroll (QuickView) -->
+    <div id="quick-payroll-modal"
+        class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+        <div
+            class="bg-white dark:bg-slate-900 w-full max-w-xl rounded-[40px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-300">
+            <div class="p-8 bg-gradient-to-br from-slate-900 to-slate-800 text-white relative">
+                <div class="absolute top-0 right-0 p-8 opacity-10">
+                    <span class="material-icons-round text-8xl">payments</span>
+                </div>
+                <div class="relative z-10 flex justify-between items-start">
+                    <div>
+                        <p class="text-[10px] font-black text-sky-400 uppercase tracking-widest mb-1">Phiếu lương nhanh
+                        </p>
+                        <h2 id="qp-period" class="text-3xl font-black tracking-tighter uppercase">Tháng 05/2024</h2>
+                    </div>
+                    <button onclick="closeModal('quick-payroll-modal')"
+                        class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center hover:bg-white/20 transition-all">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                <div class="mt-8 flex items-center gap-4">
+                    <img id="qp-avatar" class="w-16 h-16 rounded-2xl object-cover border-2 border-white/20" src="">
+                    <div>
+                        <h3 id="qp-name" class="text-xl font-black tracking-tight">Nguyễn Văn A</h3>
+                        <p id="qp-code" class="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">NV-0042
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-8 space-y-8">
+                <!-- Main Amount Area -->
+                <div
+                    class="bg-sky-50 dark:bg-sky-950/20 rounded-[32px] p-8 text-center border border-sky-100 dark:border-sky-900/30">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tổng lương thực nhận
+                        (NET)</p>
+                    <h4 id="qp-net-amount" class="text-5xl font-black text-sky-500 tracking-tighter">18,500,000</h4>
+                    <p class="text-[9px] font-bold text-slate-400 uppercase mt-2 tracking-widest italic">Vui lòng kiểm
+                        tra
+                        kỹ trước khi trả tiền mặt</p>
+                </div>
+
+                <div class="space-y-4">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Chi tiết lương /
+                        工资明细</p>
+                    <div id="qp-details-list" class="space-y-3 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Items like Base Salary, Allowances will go here -->
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Lương cơ bản
+                            </p>
+                            <p id="qp-base-salary" class="text-sm font-black text-slate-700 dark:text-slate-300">
+                                15.000.000</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Công thực tế
+                            </p>
+                            <p id="qp-working-days" class="text-sm font-black text-slate-700 dark:text-slate-300">22/22
+                                ngày</p>
+                        </div>
+                    </div>
+                    <div class="space-y-4 text-right">
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Thưởng & Phụ
+                                cấp</p>
+                            <p id="qp-allowances" class="text-sm font-black text-emerald-500">+ 3.500.000</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Các khoản
+                                trừ
+                            </p>
+                            <p id="qp-deductions" class="text-sm font-black text-red-500">- 0</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-6 border-t border-slate-100 dark:border-slate-800 flex gap-4">
+                    <button onclick="window.print()"
+                        class="flex-1 py-4 rounded-2xl border border-slate-200 dark:border-slate-800 font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-slate-50 transition-all">
+                        <span class="material-icons-round text-sm">print</span> In phiếu
+                    </button>
+                    <button onclick="sendPayrollEmail()"
+                        class="flex-1 py-4 rounded-2xl border border-blue-200 bg-blue-50/50 text-blue-600 font-black text-[10px] uppercase tracking-widest flex items-center justify-center gap-2 hover:bg-blue-100 transition-all">
+                        <span class="material-icons-round text-sm">alternate_email</span> Gửi Email
+                    </button>
+                    <button onclick="markAsPaid()"
+                        class="flex-[2] py-4 bg-slate-900 dark:bg-slate-800 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-2xl flex items-center justify-center gap-2 hover:scale-[1.02] transition-all">
+                        <span class="material-icons-round text-sm">verified</span> CHI TIỀN MẶT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Import -->
+    <div id="import-modal"
+        class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
+        <div
+            class="bg-white dark:bg-slate-900 w-full max-w-lg rounded-[32px] shadow-2xl overflow-hidden animate-in scale-95 duration-300">
+            <div class="p-8 border-b border-slate-100 dark:border-slate-800 text-center">
+                <div
+                    class="w-16 h-16 bg-sky-100 dark:bg-sky-900/40 text-sky-500 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                    <span class="material-icons-round text-3xl">cloud_upload</span>
+                </div>
+                <h2 class="text-2xl font-black tracking-tighter uppercase">Nhập hồ sơ từ Excel</h2>
+                <p class="text-slate-500 text-sm mt-2">Chọn file .xlsx hoặc .csv đúng định dạng hệ thống</p>
+            </div>
+            <div class="p-8 space-y-6">
+                <div
+                    class="border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-3xl p-10 text-center hover:border-sky-500 transition-all cursor-pointer bg-slate-50/30">
+                    <input type="file" id="import-file" class="hidden">
+                    <label for="import-file" class="cursor-pointer">
+                        <span class="material-icons-round text-slate-300 text-5xl mb-4">description</span>
+                        <p class="text-sm font-bold text-slate-600 dark:text-slate-400">Kéo thả file hoặc click để tải
+                            lên</p>
+                    </label>
+                </div>
+                <button onclick="handleImport()"
+                    class="w-full py-4 bg-slate-900 dark:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl hover:bg-black transition-all">Bắt
+                    đầu nhập dữ liệu</button>
+                <div class="text-center">
+                    <a href="#"
+                        class="text-sky-500 text-[10px] font-black uppercase tracking-widest hover:underline">Tải file
+                        mẫu (.xlsx)</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Modal: Confirmation -->
+    <div id="confirm-modal"
+        class="fixed inset-0 z-[150] hidden flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
+        <div
+            class="bg-white dark:bg-slate-900 w-full max-w-md rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div class="p-8 text-center">
+                <div
+                    class="w-20 h-20 bg-red-50 dark:bg-red-900/20 text-red-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span class="material-icons-round text-4xl">warning_amber</span>
+                </div>
+                <h2 id="confirm-title" class="text-2xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+                    Xác nhận xóa?</h2>
+                <p id="confirm-message" class="text-slate-500 font-medium">Hành động này không thể hoàn tác.</p>
+            </div>
+            <div
+                class="p-6 bg-slate-50/50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4">
+                <button onclick="closeConfirmModal(false)"
+                    class="w-full py-3.5 rounded-2xl border border-slate-200 dark:border-slate-800 font-bold text-slate-500 hover:bg-white dark:hover:bg-slate-800 transition-all">
+                    Hủy bỏ
+                </button>
+                <button onclick="closeConfirmModal(true)"
+                    class="w-full py-3.5 rounded-2xl bg-red-500 text-white font-bold shadow-lg shadow-red-500/30 hover:bg-red-600 transition-all">
+                    Đồng ý xóa
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Quick Add Department -->
+    <div id="quick-dept-modal"
+        class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm animate-in fade-in duration-200">
+        <div
+            class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-[32px] shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200">
+            <div class="p-6 text-center border-b border-slate-100 dark:border-slate-800">
+                <h3 class="text-lg font-black tracking-tight uppercase text-slate-900 dark:text-white">Thêm phòng ban
+                    mới</h3>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tên phòng
+                        ban</label>
+                    <input id="quick-dept-name" type="text"
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 font-bold text-sm focus:ring-4 focus:ring-sky-500/10 transition-all outline-none"
+                        placeholder="VD: Phòng Marketing">
+                </div>
+                <button onclick="handleQuickAddDept()"
+                    class="w-full py-3 bg-sky-500 text-white rounded-xl font-black text-xs uppercase tracking-widest shadow-xl shadow-sky-500/20 hover:scale-[1.02] transition-all">
+                    Tạo mới ngay
+                </button>
+                <button onclick="closeModal('quick-dept-modal')"
+                    class="w-full py-3 text-slate-400 font-bold text-xs uppercase tracking-widest hover:text-slate-600 transition-all">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        let currentStatus = '';
+        let searchQuery = '';
+        let departments = [];
+        let positions = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCommonData();
+            fetchEmployees();
+
+            // Search input
+            const searchInput = document.getElementById('employee-search');
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                debounce(() => fetchEmployees(), 500)();
+            });
+
+            // Filter buttons
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update UI
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-slate-900', 'text-white', 'shadow-xl');
+                        b.classList.add('bg-white', 'dark:bg-slate-900', 'text-slate-500');
+                    });
+                    btn.classList.remove('bg-white', 'dark:bg-slate-900', 'text-slate-500');
+                    btn.classList.add('bg-slate-900', 'text-white', 'shadow-xl');
+
+                    // Update State
+                    currentStatus = btn.dataset.status;
+                    fetchEmployees();
+                });
+            });
+
+            // Add form submit
+            document.getElementById('add-form').addEventListener('submit', handleAddEmployee);
+            // Detail form submit
+            document.getElementById('detail-form').addEventListener('submit', handleUpdateEmployee);
+        });
+
+        async function fetchCommonData() {
+            try {
+                const [deptResp, posResp] = await Promise.all([
+                    fetch('/api/departments'),
+                    fetch('/api/positions')
+                ]);
+                const deptResult = await deptResp.json();
+                const posResult = await posResp.json();
+
+                if (deptResult.success) {
+                    departments = deptResult.data;
+                    updateDepartmentSelects();
+                }
+
+                if (posResult.success) {
+                    positions = posResult.data;
+                    updatePositionSelects();
+                }
+            } catch (e) {
+                console.error('Fetch common data failed', e);
+            }
+        }
+
+        function updateDepartmentSelects() {
+            const selects = [document.getElementById('add-dept-select'), document.getElementById('detail-dept-select')];
+            selects.forEach(s => {
+                const currentVal = s.value; // Keep current value if any
+                s.innerHTML = '<option value="">-- Chọn phòng ban --</option>' +
+                    departments.map(d => `<option value="${d.id}">${d.department_name}</option>`).join('');
+                if (currentVal) s.value = currentVal;
+            });
+        }
+
+        function updatePositionSelects() {
+            const selects = [document.getElementById('add-pos-select'), document.getElementById('detail-pos-select')];
+            selects.forEach(s => {
+                s.innerHTML = '<option value="">-- Chọn chức vụ --</option>' +
+                    positions.map(p => `<option value="${p.id}">${p.position_name}</option>`).join('');
+            });
+        }
+
+        async function fetchEmployees() {
+            try {
+                const grid = document.getElementById('employees-grid');
+                let url = `/api/employees?search=${encodeURIComponent(searchQuery)}&status=${currentStatus}&limit=50&sort_by=id&sort_order=DESC`;
+
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success) {
+                    const employees = result.data.employees;
+                    if (employees.length === 0) {
+                        grid.innerHTML = '<div class="col-span-full text-center py-20 text-slate-400 font-bold italic">Không tìm thấy nhân viên nào</div>';
+                        return;
+                    }
+
+                    grid.innerHTML = employees.map(emp => `
+                        <div class="card p-0 overflow-hidden bg-white dark:bg-slate-900 border-none shadow-xl hover:shadow-2xl transition-all duration-500 group animate-in relative">
+                            <!-- Checkbox for Bulk Action -->
+                            <div class="absolute top-4 left-4 z-20">
+                                <input type="checkbox" value="${emp.id}" onchange="toggleSelection(this)" class="emp-checkbox w-5 h-5 rounded-lg border-2 border-slate-200 dark:border-slate-700 text-sky-500 focus:ring-sky-500 cursor-pointer">
+                            </div>
+
+                            <div class="p-8 pb-4">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="relative pl-6"> <!-- Added padding for checkbox -->
+                                        <img class="w-24 h-24 rounded-[30px] object-cover ring-4 ring-slate-50 dark:ring-slate-800 shadow-xl group-hover:scale-105 transition-transform duration-500" 
+                                             src="https://ui-avatars.com/api/?name=${encodeURIComponent(emp.full_name)}&background=0ea5e9&color=fff" />
+                                        <div class="absolute -bottom-1 -right-1 h-6 w-6 ${emp.status === 'active' ? 'bg-emerald-500' : (emp.status === 'resigned' ? 'bg-red-500' : 'bg-amber-400')} border-4 border-white dark:border-slate-900 rounded-full"></div>
+                                    </div>
+                                    <div class="text-right">
+                                        <span class="px-3 py-1 bg-sky-500/10 text-sky-500 text-[9px] font-black rounded-lg uppercase tracking-widest border border-sky-500/20">
+                                            ${emp.department_code || 'N/A'}
+                                        </span>
+                                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-4">Mã NV: <span class="text-slate-900 dark:text-white">${emp.employee_code}</span></p>
+                                    </div>
+                                </div>
+                                <div class="space-y-1">
+                                    <h3 class="text-2xl font-black text-slate-900 dark:text-white tracking-tighter">${emp.full_name}</h3>
+                                    <p class="text-[11px] font-black text-sky-500 uppercase tracking-widest">${emp.position_name || 'Nhân viên'}</p>
+                                </div>
+                            </div>
+                            <div class="px-8 py-6 bg-slate-50/50 dark:bg-slate-800/20 border-t border-slate-100 dark:border-slate-800 grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Ngày gia nhập</p>
+                                    <p class="text-xs font-bold">${App.formatDate(emp.hire_date)}</p>
+                                </div>
+                                <div>
+                                    <p class="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1">Mức lương CB</p>
+                                    <p class="text-xs font-black text-emerald-500">${emp.base_salary ? App.formatCurrency(emp.base_salary) : 'Chưa cấu hình'}</p>
+                                </div>
+                            </div>
+                            <div class="p-4 grid grid-cols-3 gap-2">
+                                <button onclick="openDetailModal(${emp.id})" class="col-span-1 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-50 transition-all flex items-center justify-center gap-1">
+                                    <span class="material-icons-round text-xs">edit</span> SỬA
+                                </button>
+                                <button onclick="openQuickPayroll(${emp.id})" class="col-span-1 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-sky-500 hover:bg-sky-50 transition-all flex items-center justify-center gap-1">
+                                    <span class="material-icons-round text-xs">payments</span> LƯƠNG
+                                </button>
+                                <button onclick="deleteEmployee(${emp.id})" class="col-span-1 bg-white dark:bg-slate-800 border border-slate-100 dark:border-slate-700 py-3 rounded-2xl text-[9px] font-black uppercase tracking-widest text-slate-500 hover:text-red-500 hover:bg-red-50 transition-all flex items-center justify-center gap-1">
+                                    <span class="material-icons-round text-xs">delete</span> XÓA
+                                </button>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (error) {
+                console.error('Fetch employees error:', error);
+            }
+        }
+
+        async function handleAddEmployee(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData.entries());
+
+            try {
+                const resp = await fetch('/api/employees', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    App.toast('Đã tạo hồ sơ nhân viên thành công!');
+                    closeModal('add-modal');
+                    e.target.reset();
+                    fetchEmployees();
+                } else {
+                    App.toast(result.message || 'Lỗi tạo hồ sơ', 'error');
+                }
+            } catch (e) {
+                App.toast('Lỗi kết nối hệ thống', 'error');
+            }
+        }
+
+        async function openDetailModal(id) {
+            try {
+                const resp = await fetch(`/api/employees/${id}`);
+                const result = await resp.json();
+
+                if (result.success) {
+                    const emp = result.data;
+                    document.getElementById('detail-id').value = emp.id;
+                    document.getElementById('detail-code').value = emp.employee_code;
+                    document.getElementById('detail-name').value = emp.full_name;
+                    document.getElementById('detail-email').value = emp.email || '';
+                    document.getElementById('detail-phone').value = emp.phone || '';
+                    document.getElementById('detail-dept-select').value = emp.department_id || '';
+                    document.getElementById('detail-pos-select').value = emp.position_id || '';
+                    document.getElementById('detail-status').value = emp.status || 'active';
+                    document.getElementById('detail-contract').value = emp.contract_type || 'full_time';
+                    document.getElementById('detail-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(emp.full_name)}&background=0ea5e9&color=fff&size=128`;
+
+                    showModal('detail-modal');
+                } else {
+                    App.toast(result.message, 'error');
+                }
+            } catch (e) {
+                App.toast('Không thể tải thông tin nhân viên', 'error');
+            }
+        }
+
+        async function handleUpdateEmployee(e) {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const id = formData.get('id');
+            const data = Object.fromEntries(formData.entries());
+
+            // Collect Salary Components
+            data.salary_components = allSalaryComponents.map(comp => {
+                const check = document.getElementById(`comp-check-${comp.id}`);
+                const val = document.getElementById(`comp-val-${comp.id}`);
+                return {
+                    component_id: comp.id,
+                    amount: val ? parseFloat(val.value) : 0,
+                    active: check ? check.checked : false
+                };
+            });
+
+            try {
+                const resp = await fetch(`/api/employees/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    App.toast('Đã cập nhật hồ sơ thành công!');
+                    closeModal('detail-modal');
+                    fetchEmployees();
+                } else {
+                    App.toast(result.message || 'Lỗi cập nhật', 'error');
+                }
+            } catch (e) {
+                App.toast('Lỗi kết nối hệ thống', 'error');
+            }
+        }
+
+        function openAddModal() { showModal('add-modal'); }
+        function openImportModal() { showModal('import-modal'); }
+
+        async function openQuickPayroll(id) {
+            try {
+                const resp = await fetch(`/api/payroll/employees/${id}/quick-view`);
+                const result = await resp.json();
+
+                if (result.success) {
+                    const data = result.data;
+                    document.getElementById('qp-name').textContent = data.full_name;
+                    document.getElementById('qp-code').textContent = data.employee_code;
+                    document.getElementById('qp-period').textContent = data.period_name || 'Dự kiến';
+                    document.getElementById('qp-base-salary').textContent = App.formatCurrency(data.current_base_salary || data.base_salary);
+                    document.getElementById('qp-net-amount').textContent = App.formatCurrency(data.net_amount).replace('₫', '').trim();
+                    document.getElementById('qp-working-days').textContent = `${data.actual_working_days || 0} / ${data.standard_working_days || 22} ngày`;
+                    document.getElementById('qp-allowances').textContent = `+ ${App.formatCurrency(data.total_allowances || 0)}`;
+                    document.getElementById('qp-deductions').textContent = `- ${App.formatCurrency(data.total_deductions || 0)}`;
+                    document.getElementById('qp-avatar').src = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.full_name)}&background=0ea5e9&color=fff&size=128`;
+
+                    // Render Details Breakdown
+                    const detailsList = document.getElementById('qp-details-list');
+                    detailsList.innerHTML = '';
+
+                    // Always show Base Salary
+                    detailsList.innerHTML += `
+                        <div class="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                            <span class="text-xs font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Lương cơ bản</span>
+                            <span class="text-sm font-black text-slate-900 dark:text-white">${App.formatCurrency(data.current_base_salary || data.base_salary)}</span>
+                        </div>
+                    `;
+
+                    if (data.details && data.details.length > 0) {
+                        data.details.forEach(detail => {
+                            const isDeduction = detail.component_type === 'deduction';
+                            detailsList.innerHTML += `
+                                <div class="flex justify-between items-center p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-100 dark:border-slate-800">
+                                    <span class="text-xs font-bold text-slate-600 dark:text-slate-400">
+                                        ${detail.component_name} <span class="text-[9px] opacity-40 ml-1">(${detail.component_code})</span>
+                                    </span>
+                                    <span class="text-sm font-black ${isDeduction ? 'text-red-500' : 'text-emerald-500'}">
+                                        ${isDeduction ? '-' : '+'} ${App.formatCurrency(detail.amount)}
+                                    </span>
+                                </div>
+                            `;
+                        });
+                    } else if (!data.details || data.details.length === 0) {
+                        detailsList.innerHTML += `<p class="text-center py-4 text-[10px] italic text-slate-400">Không có phụ cấp/khấu trừ riêng</p>`;
+                    }
+
+                    showModal('quick-payroll-modal');
+                    // Store current record ID for email sending
+                    window.currentPayrollRecordId = data.id;
+                    window.isRecordSimulated = result.simulated || false;
+
+                    const emailBtn = document.querySelector('button[onclick="sendPayrollEmail()"]');
+                    if (window.isRecordSimulated) {
+                        emailBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                        emailBtn.title = 'Lương chưa được tính chính thức, không thể gửi email';
+                    } else {
+                        emailBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                        emailBtn.title = '';
+                    }
+                } else {
+                    App.toast(result.message, 'warning');
+                }
+            } catch (e) {
+                console.error(e);
+                App.toast('Không thể kết nối danh sách lương', 'error');
+            }
+        }
+
+        async function sendPayrollEmail() {
+            if (window.isRecordSimulated) {
+                App.toast('Đây là bảng lương dự kiến (mô phỏng), vui lòng thực hiện "Tính lương" chính thức trước khi gửi!', 'warning');
+                return;
+            }
+            const id = window.currentPayrollRecordId;
+            if (!id) return;
+
+            App.toast('Đang chuẩn bị phiếu lương xịn sò...', 'info');
+
+            try {
+                const resp = await fetch(`/api/payroll/records/${id}/send-email`, { method: 'POST' });
+                const result = await resp.json();
+                if (result.success) {
+                    App.toast('Đã gửi phiếu lương chuyên nghiệp về Email nhân viên!', 'success');
+                } else {
+                    App.toast(result.message || 'Lỗi gửi email', 'error');
+                }
+            } catch (e) {
+                App.toast('Lỗi hệ thống gửi email', 'error');
+            }
+        }
+
+        function markAsPaid() {
+            App.toast('Đã xác nhận thanh toán tiền mặt thành công!', 'success');
+            setTimeout(() => closeModal('quick-payroll-modal'), 1000);
+        }
+
+        function handleImport() {
+            App.toast('Tính năng Import đang được xử lý hậu cần...', 'info');
+            setTimeout(() => {
+                closeModal('import-modal');
+                App.toast('Mô phỏng: Đã nhập 12 bản ghi mới!', 'success');
+                fetchEmployees();
+            }, 1500);
+        }
+
+        function showModal(id) {
+            const m = document.getElementById(id);
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeModal(id) {
+            const m = document.getElementById(id);
+            if (m) {
+                m.classList.add('hidden');
+                m.classList.remove('flex');
+            }
+        }
+
+        // --- BULK ACTION & DELETE LOGIC ---
+        let selectedIds = new Set();
+        let confirmResolve = null;
+
+        function showConfirmModal(title, message) {
+            return new Promise((resolve) => {
+                document.getElementById('confirm-title').textContent = title;
+                document.getElementById('confirm-message').textContent = message;
+                document.getElementById('confirm-modal').classList.remove('hidden');
+                document.getElementById('confirm-modal').classList.add('flex');
+                confirmResolve = resolve;
+            });
+        }
+
+        function closeConfirmModal(result) {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            document.getElementById('confirm-modal').classList.remove('flex');
+            if (confirmResolve) confirmResolve(result);
+        }
+
+        function toggleSelection(checkbox) {
+            if (checkbox.checked) {
+                selectedIds.add(checkbox.value);
+            } else {
+                selectedIds.delete(checkbox.value);
+            }
+            updateBulkToolbar();
+        }
+
+        function updateBulkToolbar() {
+            const toolbar = document.getElementById('bulk-actions');
+            const countEl = document.getElementById('selected-count');
+
+            countEl.textContent = selectedIds.size;
+
+            if (selectedIds.size > 0) {
+                toolbar.classList.remove('hidden');
+            } else {
+                toolbar.classList.add('hidden');
+            }
+        }
+
+        function deselectAll() {
+            selectedIds.clear();
+            document.querySelectorAll('.emp-checkbox').forEach(cb => cb.checked = false);
+            updateBulkToolbar();
+        }
+
+        async function deleteEmployee(id) {
+            const confirmed = await showConfirmModal(
+                'Cảnh báo xóa dữ liệu',
+                'Xóa hồ sơ này sẽ xóa toàn bộ lịch sử lương, ngày phép và công tác. Bạn chắc chắn chứ?'
+            );
+
+            if (confirmed) {
+                performDelete([id]);
+            }
+        }
+
+        async function bulkDelete() {
+            if (selectedIds.size === 0) return;
+
+            const confirmed = await showConfirmModal(
+                'Xóa nhiều hồ sơ',
+                `Bạn đang yêu cầu xóa ${selectedIds.size} nhân viên. Dữ liệu sẽ mất vĩnh viễn.`
+            );
+
+            if (confirmed) {
+                performDelete(Array.from(selectedIds));
+            }
+        }
+
+        // --- QUICK ADD DEPT ---
+        function openQuickAddDept() {
+            document.getElementById('quick-dept-name').value = '';
+            showModal('quick-dept-modal');
+        }
+
+        async function handleQuickAddDept() {
+            const name = document.getElementById('quick-dept-name').value;
+            if (!name) return App.toast('Vui lòng nhập tên phòng ban', 'warning');
+
+            try {
+                const resp = await fetch('/api/departments', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ department_name: name })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    App.toast('Tạo phòng ban mới thành công!', 'success');
+                    closeModal('quick-dept-modal');
+
+                    // Refresh departments list
+                    const deptResp = await fetch('/api/departments');
+                    const deptResult = await deptResp.json();
+                    if (deptResult.success) {
+                        departments = deptResult.data;
+                        updateDepartmentSelects();
+                        // Auto select the new one in Add Form
+                        document.getElementById('add-dept-select').value = result.data.id;
+                    }
+                } else {
+                    App.toast(result.message || 'Lỗi tạo phòng ban', 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                App.toast('Lỗi kết nối', 'error');
+            }
+        }
+        async function performDelete(ids) {
+            App.toast('Đang xử lý yêu cầu xóa...', 'info');
+            try {
+                // We'll delete one by one for now as we don't have a bulk API yet, or we can add one.
+                // Assuming standard REST delete /api/employees/:id
+                // Using Promise.all for parallel deletion
+
+                const deletePromises = ids.map(id =>
+                    fetch(`/api/employees/${id}`, { method: 'DELETE' })
+                        .then(res => res.json())
+                );
+
+                const results = await Promise.all(deletePromises);
+                const failures = results.filter(r => !r.success);
+
+                if (failures.length === 0) {
+                    App.toast(`Đã xóa thành công ${ids.length} hồ sơ`, 'success');
+                    deselectAll();
+                    fetchEmployees();
+                } else {
+                    App.toast(`Có ${failures.length} hồ sơ không thể xóa. Vui lòng thử lại.`, 'warning');
+                    fetchEmployees(); // Refresh anyway
+                }
+            } catch (err) {
+                console.error(err);
+                App.toast('Lỗi kết nối khi xóa dữ liệu', 'error');
+            }
+        }
+
+        // --- SALARY CONFIGURATION INTEGRATION ---
+        let allSalaryComponents = [];
+        async function loadAllSalaryComponents() {
+            try {
+                const resp = await fetch('/api/payroll/components');
+                const result = await resp.json();
+                if (result.success) {
+                    allSalaryComponents = result.data;
+                    renderSalaryComponentsList();
+                }
+            } catch (e) { console.error('Load components error', e); }
+        }
+
+        function renderSalaryComponentsList() {
+            const grid = document.getElementById('salary-components-grid');
+            if (!grid) return;
+            grid.innerHTML = allSalaryComponents.map(comp => {
+                if (comp.calculation_type !== 'fixed') return '';
+                return `
+                    <div class="p-5 rounded-[24px] bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex flex-col gap-3 group hover:border-sky-200 transition-all">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest group-hover:text-sky-500 transition-colors">${comp.component_name}</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="comp_active_${comp.id}" id="comp-check-${comp.id}" class="sr-only peer">
+                                <div class="w-10 h-6 bg-slate-200 dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[4px] after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-sky-500"></div>
+                            </label>
+                        </div>
+                        <div class="relative">
+                            <input type="number" name="comp_val_${comp.id}" id="comp-val-${comp.id}" value="${comp.default_value}"
+                                class="w-full px-5 py-3 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 font-black text-xs text-slate-700 dark:text-slate-200 outline-none focus:ring-4 focus:ring-sky-500/10 transition-all">
+                            <span class="absolute right-4 top-1/2 -translate-y-1/2 text-[9px] font-black text-slate-400">VND</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Enhance openDetailModal to fill salary components
+        const originalOpenDetailModal = openDetailModal;
+        openDetailModal = async function (id) {
+            await originalOpenDetailModal(id);
+            // Fetch personal salary settings
+            try {
+                const resp = await fetch(`/api/employees/${id}/salary`);
+                const result = await resp.json();
+                if (result.success && result.data) {
+                    document.getElementById('detail-base-salary').value = result.data.base_salary;
+
+                    // Reset all inputs first
+                    allSalaryComponents.forEach(c => {
+                        const check = document.getElementById(`comp-check-${c.id}`);
+                        const val = document.getElementById(`comp-val-${c.id}`);
+                        if (check) check.checked = false;
+                        if (val) val.value = c.default_value;
+                    });
+
+                    // Fill assigned values
+                    if (result.data.components) {
+                        result.data.components.forEach(c => {
+                            const check = document.getElementById(`comp-check-${c.component_id}`);
+                            const val = document.getElementById(`comp-val-${c.component_id}`);
+                            if (check) {
+                                check.checked = true;
+                                val.value = c.amount;
+                            }
+                        });
+                    }
+                }
+            } catch (e) {
+                console.error('Load personal salary error', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllSalaryComponents();
+        });
+
+        let timeout = null;
+        function debounce(func, wait) {
+            return function () {
+                const context = this, args = arguments;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+    </script>
+</body>
+
+</html>

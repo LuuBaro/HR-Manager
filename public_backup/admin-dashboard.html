@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Bảng Điều Khiển Quản Trị - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body>
+    <div
+        class="security-gradient text-white px-6 py-2 flex justify-between items-center text-[11px] uppercase tracking-widest font-bold fixed top-0 w-full z-50">
+        <div class="flex items-center gap-2">
+            <span class="material-icons-round text-sm text-red-500">gpp_maybe</span>
+            <span>Truy cập nội bộ nghiêm ngặt | 内部访问</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="opacity-70">Lần đăng nhập cuối: 24/05/2024 08:30 AM</span>
+            <span class="bg-red-500/20 text-red-500 px-2 py-0.5 rounded border border-red-500/30">Mã hóa SSL: Hoạt
+                động</span>
+        </div>
+    </div>
+
+    <!-- Layout Container -->
+    <div class="flex pt-8">
+        <!-- Sidebar will be injected here -->
+        <div id="sidebar-root"></div>
+
+        <div class="flex-1 ml-64 min-h-screen flex flex-col">
+            <!-- Header will be injected here -->
+            <div id="header-root"></div>
+
+            <main class="p-8 max-w-7xl mx-auto w-full">
+                <!-- Dashboard Content -->
+                <div class="flex justify-between items-start mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Tổng quan quản trị
+                        </h1>
+                        <p class="text-slate-500 text-sm mt-1">Chào mừng trở lại. Mọi hệ thống đang hoạt động bình
+                            thường.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="btn-secondary">
+                            <span class="material-icons-round text-sm">print</span> Xuất báo cáo
+                        </button>
+                        <button class="btn-primary">
+                            <span class="material-icons-round text-sm">add</span> Thêm nhân viên mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Tổng nhân sự</p>
+                            <span class="p-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 rounded">
+                                <span class="material-icons-round text-lg">groups</span>
+                            </span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <h3 id="total-employees" class="text-3xl font-bold">...</h3>
+                            <span class="text-xs font-bold text-green-500">+3 tháng này</span>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Đang chờ duyệt</p>
+                            <span class="p-1.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 rounded">
+                                <span class="material-icons-round text-lg">pending_actions</span>
+                            </span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <h3 id="pending-leave" class="text-3xl font-bold">...</h3>
+                            <span class="text-xs font-bold text-slate-400">Yêu cầu nghỉ</span>
+                        </div>
+                    </div>
+                    <div class="card p-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Quỹ lương tháng
+                            </p>
+                            <span class="p-1.5 bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 rounded">
+                                <span class="material-icons-round text-lg">account_balance</span>
+                            </span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <h3 id="total-payroll" class="text-3xl font-bold">...</h3>
+                            <span class="text-xs font-bold text-slate-400">Tạm tính</span>
+                        </div>
+                    </div>
+                    <div class="card p-6 border-l-4 border-l-sky-500">
+                        <div class="flex justify-between items-center mb-4">
+                            <p class="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Tỉ lệ chuyên cần
+                            </p>
+                            <span class="p-1.5 bg-sky-50 dark:bg-sky-900/20 text-sky-600 rounded">
+                                <span class="material-icons-round text-lg">fact_check</span>
+                            </span>
+                        </div>
+                        <div class="flex items-baseline gap-2">
+                            <h3 class="text-3xl font-bold">98.2%</h3>
+                            <span class="text-xs font-bold text-sky-500">Xuất sắc</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Payroll Progress -->
+                    <div class="lg:col-span-2 card p-6">
+                        <div class="flex justify-between items-center mb-10">
+                            <div>
+                                <h2 id="payroll-period-title" class="text-lg font-bold">Chu kỳ thanh toán lương</h2>
+                                <p class="text-xs text-slate-500">Tiến trình xử lý lương nội bộ</p>
+                            </div>
+                            <span id="payroll-status-text"
+                                class="text-[10px] font-bold text-sky-500 bg-sky-500/10 px-2 py-1 rounded">ĐANG XỬ
+                                LÝ</span>
+                        </div>
+                        <div class="relative flex justify-between items-center max-w-2xl mx-auto py-4">
+                            <div
+                                class="absolute left-0 top-1/2 w-full h-0.5 bg-slate-100 dark:bg-slate-800 -translate-y-1/2">
+                            </div>
+                            <div id="payroll-progress-bar"
+                                class="absolute left-0 top-1/2 w-[0%] h-0.5 bg-sky-500 transition-all duration-500 -translate-y-1/2">
+                            </div>
+                            <div class="relative z-10 flex flex-col items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full flex items-center justify-center bg-sky-500 text-white border-4 border-white dark:border-slate-900 shadow-md">
+                                    <span class="material-icons-round text-xl">description</span>
+                                </div>
+                                <span class="text-xs font-bold">Bản nháp</span>
+                            </div>
+                            <div class="relative z-10 flex flex-col items-center gap-3">
+                                <div
+                                    class="w-10 h-10 rounded-full flex items-center justify-center bg-sky-500 text-white border-4 border-white dark:border-slate-900 shadow-md">
+                                    <span class="material-icons-round text-xl">fact_check</span>
+                                </div>
+                                <span class="text-xs font-bold">Đã gửi duyệt</span>
+                            </div>
+                            <div class="relative z-10 flex flex-col items-center gap-3 opacity-30">
+                                <div
+                                    class="w-10 h-10 rounded-full flex items-center justify-center bg-slate-200 dark:bg-slate-800 text-slate-500 border-4 border-white dark:border-slate-900">
+                                    <span class="material-icons-round text-xl">task_alt</span>
+                                </div>
+                                <span class="text-xs font-bold">Hoàn tất</span>
+                            </div>
+                        </div>
+                        <div
+                            class="mt-10 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg flex items-center gap-4 border border-dashed border-slate-200 dark:border-slate-700">
+                            <span class="material-icons-round text-sky-500">info</span>
+                            <p class="text-xs text-slate-600 dark:text-slate-400">
+                                <span class="font-bold">Nhắc nhở:</span> Yêu cầu duyệt lần cuối từ Phòng Tài chính trước
+                                ngày 05/06.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Audit Logs -->
+                    <div class="lg:col-span-1 card flex flex-col">
+                        <div
+                            class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                            <h2 class="text-lg font-bold">Nhật ký hệ thống</h2>
+                            <span class="material-icons-round text-slate-300">security</span>
+                        </div>
+                        <div id="audit-log-container"
+                            class="p-6 space-y-6 flex-1 overflow-y-auto max-h-[350px] custom-scrollbar">
+                            <!-- Logs will be loaded here -->
+                        </div>
+                        <button onclick="window.location.href='/logs.html'"
+                            class="w-full py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest hover:text-sky-500 transition-colors bg-slate-50/50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800">
+                            Xem toàn bộ nhật ký
+                        </button>
+                    </div>
+
+                    <!-- Employee List -->
+                    <div class="lg:col-span-3 card overflow-hidden">
+                        <div
+                            class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                            <h2 class="text-lg font-bold">Danh sách nhân sự đang hoạt động</h2>
+                            <div class="flex items-center bg-slate-100 dark:bg-slate-800 rounded-lg px-4 py-2">
+                                <span class="material-icons-round text-sm text-slate-400 mr-2">search</span>
+                                <input class="bg-transparent border-none p-0 text-xs focus:ring-0 w-48"
+                                    placeholder="Tìm kiếm nhân sự..." type="text" />
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 dark:bg-slate-800/50">
+                                    <tr>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Nhân viên</th>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Phòng ban</th>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Tình trạng</th>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
+                                            Tùy chọn</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="employee-list" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                    <!-- Employees will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        /** Dashboard Logic **/
+        async function loadDashboard() {
+            try {
+                // Load Stats
+                const statsResp = await fetch('/api/employees/stats/dashboard');
+                const statsData = await statsResp.json();
+                if (statsData.success) {
+                    const stats = statsData.data;
+                    document.getElementById('total-employees').textContent = stats.total_employees;
+                    document.getElementById('pending-leave').textContent = stats.pending_leave_requests;
+                    document.getElementById('total-payroll').textContent = App.formatCurrency(stats.total_payroll_month);
+                }
+
+                // Load Recent Employees
+                const empResp = await fetch('/api/employees?limit=5');
+                const empData = await empResp.json();
+                if (empData.success) {
+                    const tbody = document.getElementById('employee-list');
+                    tbody.innerHTML = empData.data.employees.map(emp => `
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer" onclick="window.location.href='/employees.html?id=${emp.id}'">
+                            <td class="px-8 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-full bg-sky-500/10 flex items-center justify-center font-bold text-xs text-sky-500">
+                                        ${emp.full_name.substring(0, 2).toUpperCase()}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-slate-900 dark:text-white">${emp.full_name}</p>
+                                        <p class="text-[11px] text-slate-400">ID: ${emp.employee_code}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-8 py-4">
+                                <span class="text-xs font-medium px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded">${emp.department_name || 'N/A'}</span>
+                            </td>
+                            <td class="px-8 py-4">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold ${emp.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                                    <span class="w-1.5 h-1.5 rounded-full ${emp.status === 'active' ? 'bg-green-500' : 'bg-red-500'}"></span>
+                                    ${emp.status === 'active' ? 'Đang làm việc' : 'Đã nghỉ'}
+                                </span>
+                            </td>
+                            <td class="px-8 py-4 text-right">
+                                <button class="p-2 text-slate-400 hover:text-sky-500 transition-colors"><span class="material-icons-round">more_horiz</span></button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+
+                // Load Audit Logs
+                const auditResp = await fetch('/api/audit?limit=5');
+                const auditData = await auditResp.json();
+                if (auditData.success) {
+                    const container = document.getElementById('audit-log-container');
+                    container.innerHTML = auditData.data.logs.map(log => {
+                        let icon = 'history';
+                        let colorClass = 'text-sky-500 bg-sky-50';
+                        if (log.action.includes('LOGIN')) { icon = 'login'; colorClass = 'text-green-600 bg-green-50'; }
+                        if (log.action.includes('CREATE')) { icon = 'person_add'; colorClass = 'text-green-600 bg-green-50'; }
+                        if (log.action.includes('DELETE')) { icon = 'delete'; colorClass = 'text-red-500 bg-red-50'; }
+                        if (log.action.includes('UPDATE')) { icon = 'edit_note'; colorClass = 'text-amber-500 bg-amber-50'; }
+
+                        return `
+                            <div class="flex gap-4">
+                                <div class="relative">
+                                    <div class="w-8 h-8 rounded-full ${colorClass} dark:bg-opacity-10 flex items-center justify-center">
+                                        <span class="material-icons-round text-sm">${icon}</span>
+                                    </div>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <p class="text-xs font-bold truncate">${log.action}</p>
+                                    <p class="text-[11px] text-slate-500 mt-0.5 truncate">${log.full_name}: ${log.module}</p>
+                                    <p class="text-[10px] text-slate-400 mt-1 uppercase">${new Date(log.created_at).toLocaleString('vi-VN')}</p>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+
+                // Load Payroll Progress
+                const payrollResp = await fetch('/api/payroll/periods?limit=1');
+                const payrollData = await payrollResp.json();
+                if (payrollData.success && payrollData.data.length > 0) {
+                    const period = payrollData.data[0];
+                    const progressBar = document.getElementById('payroll-progress-bar');
+                    const statusText = document.getElementById('payroll-status-text');
+                    const periodTitle = document.getElementById('payroll-period-title');
+
+                    periodTitle.textContent = `Chu kỳ thanh toán lương (Tháng ${period.period_month}/${period.period_year})`;
+
+                    if (period.status === 'draft') {
+                        progressBar.style.width = '33%';
+                        statusText.textContent = 'BẢN NHÁP';
+                    } else if (period.status === 'approved') {
+                        progressBar.style.width = '66%';
+                        statusText.textContent = 'ĐÃ DUYỆT';
+                    } else if (period.status === 'locked') {
+                        progressBar.style.width = '100%';
+                        statusText.textContent = 'HOÀN TẤT';
+                    }
+                }
+
+            } catch (e) {
+                console.error('Failed to load dashboard data', e);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadDashboard);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Quản Lý Nghỉ Phép - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100">
+    <div class="flex h-screen overflow-hidden pt-8">
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <div id="header-root"></div>
+
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-8">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Quản lý nghỉ
+                            phép</h1>
+                        <p class="text-slate-500 text-sm mt-1">Phê duyệt và theo dõi quỹ phép của nhân sự.</p>
+                    </div>
+                    <button onclick="openLeaveModal()" class="btn-primary">
+                        <span class="material-icons-round text-sm">add</span> Đăng ký nghỉ
+                    </button>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="card p-6 border-l-4 border-l-amber-500 shadow-lg">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Chờ phê duyệt</p>
+                        <h3 id="stat-pending" class="text-3xl font-black text-amber-600">--</h3>
+                    </div>
+                    <div class="card p-6 border-l-4 border-l-sky-500 shadow-lg">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Nghỉ hôm nay</p>
+                        <h3 id="stat-today" class="text-3xl font-black text-sky-600">--</h3>
+                    </div>
+                    <div class="card p-6 border-l-4 border-l-emerald-500 shadow-lg">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Đã phê duyệt
+                            (Tháng)</p>
+                        <h3 id="stat-approved" class="text-3xl font-black text-emerald-600">--</h3>
+                    </div>
+                    <div class="card p-6 border-l-4 border-l-red-500 shadow-lg">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Vắng mặt không
+                            phép</p>
+                        <h3 id="stat-absent" class="text-3xl font-black text-red-600">--</h3>
+                    </div>
+                </div>
+
+                <!-- Request Table -->
+                <div class="card overflow-hidden shadow-2xl">
+                    <div
+                        class="p-8 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20">
+                        <h2 class="text-xl font-extrabold text-slate-900 dark:text-white tracking-tight">Yêu cầu mới
+                            nhất</h2>
+                        <div class="flex gap-4">
+                            <select id="filter-status" onchange="loadLeaveRequests()"
+                                class="form-select text-xs font-bold rounded-xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                <option value="">Tất cả trạng thái</option>
+                                <option value="pending">Chờ duyệt</option>
+                                <option value="approved">Đã duyệt</option>
+                                <option value="rejected">Từ chối</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead
+                                class="bg-slate-50/50 dark:bg-slate-800/50 text-slate-400 text-[10px] uppercase tracking-widest font-bold">
+                                <tr>
+                                    <th class="px-8 py-5">Nhân viên</th>
+                                    <th class="px-8 py-5">Loại hình</th>
+                                    <th class="px-8 py-5">Thời gian</th>
+                                    <th class="px-8 py-5 text-center">Số ngày</th>
+                                    <th class="px-8 py-5">Trạng thái</th>
+                                    <th class="px-8 py-5 text-right">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leave-requests-list" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- JS items here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Leave Request Modal -->
+    <div id="leave-modal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
+            onclick="document.getElementById('leave-modal').classList.add('hidden')"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg p-1">
+            <div
+                class="bg-white dark:bg-slate-900 rounded-[32px] shadow-2xl overflow-hidden p-8 border border-white/20">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Đăng ký nghỉ phép</h3>
+                    <button onclick="document.getElementById('leave-modal').classList.add('hidden')"
+                        class="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all">
+                        <span class="material-icons-round">close</span>
+                    </button>
+                </div>
+                <form onsubmit="submitLeave(event)" class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Loại nghỉ
+                            phép</label>
+                        <select id="leave-type-id" required
+                            class="w-full h-12 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-4 text-sm font-bold focus:ring-2 focus:ring-sky-500 transition-all"></select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Từ
+                                ngày</label>
+                            <input type="date" id="start-date" required
+                                class="w-full h-12 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-4 text-sm font-bold focus:ring-2 focus:ring-sky-500 transition-all" />
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Đến
+                                ngày</label>
+                            <input type="date" id="end-date" required
+                                class="w-full h-12 bg-slate-50 dark:bg-slate-800 border-none rounded-2xl px-4 text-sm font-bold focus:ring-2 focus:ring-sky-500 transition-all" />
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Lý do
+                            nghỉ</label>
+                        <textarea id="reason" rows="3"
+                            class="w-full bg-slate-50 dark:bg-slate-800 border-none rounded-2xl p-4 text-sm font-bold focus:ring-2 focus:ring-sky-500 transition-all"
+                            placeholder="Nhập lý do chi tiết..."></textarea>
+                    </div>
+                    <button type="submit"
+                        class="w-full h-14 bg-sky-500 text-white rounded-2xl font-black uppercase tracking-widest shadow-lg shadow-sky-500/20 hover:bg-sky-600 transition-all">GỬI
+                        YÊU CẦU</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/js/app.js"></script>
+    <script>
+        async function loadLeaveStats() {
+            try {
+                const resp = await fetch('/api/leave/stats');
+                const data = await resp.json();
+                if (data.success) {
+                    const stats = data.data;
+                    document.getElementById('stat-pending').innerText = stats.pending.toString().padStart(2, '0');
+                    document.getElementById('stat-today').innerText = stats.todayLeave.toString().padStart(2, '0');
+                    document.getElementById('stat-approved').innerText = stats.monthApproved.toString().padStart(2, '0');
+                    document.getElementById('stat-absent').innerText = stats.absent.toString().padStart(2, '0');
+                }
+            } catch (e) { console.error('Load stats fail:', e); }
+        }
+
+        async function loadLeaveRequests() {
+            const status = document.getElementById('filter-status').value;
+            let url = '/api/leave/requests';
+            if (status) url += `?status=${status}`;
+
+            try {
+                const resp = await fetch(url);
+                const data = await resp.json();
+                if (data.success) {
+                    const tbody = document.getElementById('leave-requests-list');
+                    if (data.data.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="6" class="px-8 py-10 text-center text-slate-400 italic">Không có yêu cầu nào.</td></tr>`;
+                        return;
+                    }
+
+                    tbody.innerHTML = data.data.map(r => `
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all">
+                            <td class="px-8 py-5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-sky-500 flex items-center justify-center text-white font-bold text-xs shadow-lg shadow-sky-500/20">
+                                        ${r.full_name.charAt(0)}
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-extrabold text-slate-900 dark:text-white">${r.full_name}</p>
+                                        <p class="text-[10px] text-slate-400 font-medium">${r.department_name || 'N/A'}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="px-3 py-1 bg-sky-50 dark:bg-sky-900/20 text-sky-600 rounded-lg text-[10px] font-bold uppercase ring-1 ring-sky-100 dark:ring-sky-900/40">
+                                    ${r.leave_name}
+                                </span>
+                            </td>
+                            <td class="px-8 py-5 text-xs font-bold text-slate-600 dark:text-slate-400">
+                                ${App.formatDate(r.start_date)} - ${App.formatDate(r.end_date)}
+                            </td>
+                            <td class="px-8 py-5 text-center text-sm font-black text-slate-900 dark:text-white">
+                                ${r.total_days}
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="px-3 py-1 rounded-full text-[9px] font-extrabold uppercase ${getStatusStyle(r.status)}">
+                                    ${getStatusLabel(r.status)}
+                                </span>
+                            </td>
+                            <td class="px-8 py-5 text-right space-x-2">
+                                ${r.status === 'pending' ? `
+                                    <button onclick="approveRequest(${r.id})" class="p-2 bg-emerald-50 text-emerald-600 rounded-xl hover:bg-emerald-100 transition-all">
+                                        <span class="material-icons-round text-sm">check</span>
+                                    </button>
+                                    <button onclick="rejectRequest(${r.id})" class="p-2 bg-red-50 text-red-600 rounded-xl hover:bg-red-100 transition-all">
+                                        <span class="material-icons-round text-sm">close</span>
+                                    </button>
+                                ` : '-'}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (e) { console.error('Load requests fail:', e); }
+        }
+
+        function getStatusStyle(status) {
+            switch (status) {
+                case 'pending': return 'bg-amber-100 text-amber-700';
+                case 'approved': return 'bg-emerald-100 text-emerald-700';
+                case 'rejected': return 'bg-red-100 text-red-700';
+                default: return 'bg-slate-100 text-slate-700';
+            }
+        }
+
+        function getStatusLabel(status) {
+            switch (status) {
+                case 'pending': return 'Đang chờ';
+                case 'approved': return 'Đã duyệt';
+                case 'rejected': return 'Từ chối';
+                default: return status;
+            }
+        }
+
+        async function approveRequest(id) {
+            if (!confirm('Bạn có chắc chắn muốn phê duyệt đơn này?')) return;
+            try {
+                const resp = await fetch(`/api/leave/requests/${id}/approve`, { method: 'PUT' });
+                const data = await resp.json();
+                if (data.success) {
+                    App.toast(data.message);
+                    loadLeaveStats();
+                    loadLeaveRequests();
+                } else {
+                    App.toast(data.message, 'error');
+                }
+            } catch (e) { App.toast('Lỗi khi phê duyệt', 'error'); }
+        }
+
+        async function rejectRequest(id) {
+            const reason = prompt('Lý do từ chối:');
+            if (reason === null) return;
+            try {
+                const resp = await fetch(`/api/leave/requests/${id}/reject`, {
+                    method: 'PUT',
+                    body: JSON.stringify({ reason })
+                });
+                const data = await resp.json();
+                if (data.success) {
+                    App.toast(data.message);
+                    loadLeaveStats();
+                    loadLeaveRequests();
+                } else {
+                    App.toast(data.message, 'error');
+                }
+            } catch (e) { App.toast('Lỗi khi từ chối', 'error'); }
+        }
+
+        function openLeaveModal() {
+            document.getElementById('leave-modal').classList.remove('hidden');
+            loadLeaveTypes();
+        }
+
+        async function loadLeaveTypes() {
+            const resp = await fetch('/api/leave/types');
+            const data = await resp.json();
+            const select = document.getElementById('leave-type-id');
+            select.innerHTML = data.data.map(t => `<option value="${t.id}">${t.leave_name}</option>`).join('');
+        }
+
+        async function submitLeave(event) {
+            event.preventDefault();
+            const formData = {
+                leave_type_id: document.getElementById('leave-type-id').value,
+                start_date: document.getElementById('start-date').value,
+                end_date: document.getElementById('end-date').value,
+                reason: document.getElementById('reason').value
+            };
+
+            const resp = await fetch('/api/leave/requests', {
+                method: 'POST',
+                body: JSON.stringify(formData)
+            });
+            const result = await resp.json();
+            if (result.success) {
+                App.toast(result.message);
+                document.getElementById('leave-modal').classList.add('hidden');
+                loadLeaveStats();
+                loadLeaveRequests();
+            } else {
+                App.toast(result.message, 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            await App.init();
+            loadLeaveStats();
+            loadLeaveRequests();
+        });
+    </script>
+
+</html>

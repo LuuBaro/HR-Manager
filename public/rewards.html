@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Thưởng & Phạt - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100">
+    <div class="flex h-screen overflow-hidden pt-8">
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <div id="header-root"></div>
+
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-8">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Khen thưởng &
+                            Kỷ luật</h1>
+                        <p class="text-slate-500 text-sm mt-1">Quản lý các khoản điều chỉnh lương ngoài hợp đồng và phúc
+                            lợi đặc biệt.</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button class="btn-secondary" onclick="window.location.href='/import.html'">
+                            <span class="material-icons-round text-sm">cloud_upload</span> Nhập Excel
+                        </button>
+                        <button class="btn-primary">
+                            <span class="material-icons-round text-sm">add</span> Tạo mới
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card p-6 border-l-4 border-l-emerald-500 shadow-lg">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tổng tiền thưởng
+                            (Tháng)</p>
+                        <h3 class="text-3xl font-black text-emerald-600">125.5M <span
+                                class="text-xs font-normal text-slate-400">VND</span></h3>
+                    </div>
+                    <div class="card p-6 border-l-4 border-l-red-500 shadow-lg">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Tổng tiền phạt
+                            (Tháng)</p>
+                        <h3 class="text-3xl font-black text-red-600">8.2M <span
+                                class="text-xs font-normal text-slate-400">VND</span></h3>
+                    </div>
+                    <div class="card p-6 border-l-4 border-l-sky-500 shadow-lg">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Yêu cầu chờ duyệt
+                        </p>
+                        <h3 class="text-3xl font-black text-sky-600">12</h3>
+                    </div>
+                </div>
+
+                <!-- List Table -->
+                <div class="card overflow-hidden shadow-2xl">
+                    <div
+                        class="p-8 border-b border-slate-100 dark:border-slate-800 flex flex-wrap gap-4 justify-between items-center bg-slate-50/50 dark:bg-slate-800/20">
+                        <div
+                            class="flex items-center gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-4 py-2 rounded-2xl shadow-sm w-full md:w-96">
+                            <span class="material-icons-round text-slate-400 text-sm">search</span>
+                            <input type="text" placeholder="Tìm tên nhân viên, ID..."
+                                class="bg-transparent border-none text-sm focus:ring-0 w-full font-medium" />
+                        </div>
+                        <div class="flex gap-4">
+                            <select
+                                class="form-select rounded-xl text-xs font-black border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                <option>Tháng 05/2024</option>
+                                <option>Tháng 04/2024</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead
+                                class="bg-slate-50/50 dark:bg-slate-800/50 p-6 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                <tr>
+                                    <th class="px-8 py-5">Nhân viên / 员工</th>
+                                    <th class="px-8 py-5">Loại hình / 类别</th>
+                                    <th class="px-8 py-5 text-right">Số tiền / 金额</th>
+                                    <th class="px-8 py-5">Lý do / 原因</th>
+                                    <th class="px-8 py-5">Trạng thái / 状态</th>
+                                    <th class="px-8 py-5 text-right">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all">
+                                    <td class="px-8 py-5">
+                                        <div class="flex items-center gap-4">
+                                            <div
+                                                class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-black text-xs">
+                                                NL</div>
+                                            <div>
+                                                <p class="text-sm font-black text-slate-900 dark:text-white">Nguyễn Văn
+                                                    Lợi</p>
+                                                <p
+                                                    class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">
+                                                    ID: EMP-0012</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-5">
+                                        <span
+                                            class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-[9px] font-black uppercase tracking-widest">Khen
+                                            thưởng</span>
+                                    </td>
+                                    <td class="px-8 py-5 text-right font-black text-emerald-600">5,000,000</td>
+                                    <td class="px-8 py-5 text-xs font-bold text-slate-500">Vượt chỉ tiêu KPI Q1</td>
+                                    <td class="px-8 py-5">
+                                        <span
+                                            class="flex items-center gap-2 text-sky-500 font-black text-[10px] uppercase">
+                                            <span class="material-icons-round text-sm">verified</span> Đã duyệt
+                                        </span>
+                                    </td>
+                                    <td class="px-8 py-5 text-right">
+                                        <button class="p-2 text-slate-400 hover:text-sky-500 transition-all"><span
+                                                class="material-icons-round">more_vert</span></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all">
+                                    <td class="px-8 py-5">
+                                        <div class="flex items-center gap-4">
+                                            <div
+                                                class="w-10 h-10 rounded-xl bg-red-500 flex items-center justify-center text-white font-black text-xs">
+                                                TH</div>
+                                            <div>
+                                                <p class="text-sm font-black text-slate-900 dark:text-white">Trần Minh
+                                                    Hiếu</p>
+                                                <p
+                                                    class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">
+                                                    ID: EMP-0045</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="px-8 py-5">
+                                        <span
+                                            class="px-3 py-1 bg-red-100 text-red-700 rounded-full text-[9px] font-black uppercase tracking-widest">Kỷ
+                                            luật</span>
+                                    </td>
+                                    <td class="px-8 py-5 text-right font-black text-red-600">- 500,000</td>
+                                    <td class="px-8 py-5 text-xs font-bold text-slate-500">Đi trễ > 3 lần/tháng</td>
+                                    <td class="px-8 py-5">
+                                        <span
+                                            class="flex items-center gap-2 text-amber-500 font-black text-[10px] uppercase">
+                                            <span class="material-icons-round text-sm">pending</span> Chờ duyệt
+                                        </span>
+                                    </td>
+                                    <td class="px-8 py-5 text-right">
+                                        <button class="p-2 text-slate-400 hover:text-sky-500 transition-all"><span
+                                                class="material-icons-round">more_vert</span></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sync Warning -->
+                <div class="card p-6 bg-sky-500 text-white border-none shadow-xl flex items-start gap-4">
+                    <span class="material-icons-round text-3xl">info</span>
+                    <div>
+                        <h4 class="font-black text-lg uppercase tracking-tight">Đồng bộ tự động</h4>
+                        <p class="text-sm font-medium opacity-90 mt-1">
+                            Tất cả các mục đã phê duyệt sẽ được tự động cộng/trừ vào bảng lương chu kỳ hiện tại.
+                            Các dữ liệu nhập sau khi chốt bảng lương sẽ được chuyển sang tháng kế tiếp.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/js/app.js"></script>
+</body>
+
+</html>

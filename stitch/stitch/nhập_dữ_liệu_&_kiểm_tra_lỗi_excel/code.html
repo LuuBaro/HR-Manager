@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Excel Import Wizard - HR &amp; Payroll System</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .step-active { color: #137fec; border-bottom: 2px solid #137fec; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Header / Navigation -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<span class="material-icons text-primary text-3xl">upload_file</span>
+<div>
+<h1 class="text-lg font-bold">Nhập dữ liệu từ Excel</h1>
+<p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">Import Data / 导入数据</p>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<!-- Language Toggle -->
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="px-3 py-1 text-xs font-bold rounded bg-white dark:bg-slate-700 shadow-sm text-primary">VN</button>
+<button class="px-3 py-1 text-xs font-bold rounded text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">ZH</button>
+</div>
+<button class="text-slate-400 hover:text-slate-600">
+<span class="material-icons">help_outline</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">AD</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 py-8">
+<!-- Stepper -->
+<div class="mb-10 max-w-3xl mx-auto">
+<div class="flex items-center justify-between relative">
+<div class="absolute top-1/2 left-0 w-full h-0.5 bg-slate-200 dark:bg-slate-800 -translate-y-1/2 -z-10"></div>
+<!-- Step 1 Done -->
+<div class="flex flex-col items-center bg-background-light dark:bg-background-dark px-4">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold mb-2">
+<span class="material-icons text-sm">check</span>
+</div>
+<span class="text-sm font-medium">Tải lên tệp</span>
+</div>
+<!-- Step 2 Active -->
+<div class="flex flex-col items-center bg-background-light dark:bg-background-dark px-4">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold mb-2 ring-4 ring-primary/20">2</div>
+<span class="text-sm font-bold text-primary">Kiểm tra &amp; So khớp</span>
+</div>
+<!-- Step 3 Inactive -->
+<div class="flex flex-col items-center bg-background-light dark:bg-background-dark px-4">
+<div class="w-10 h-10 rounded-full bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 text-slate-400 flex items-center justify-center font-bold mb-2">3</div>
+<span class="text-sm font-medium text-slate-400">Xác nhận nhập</span>
+</div>
+</div>
+</div>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Left: Validation Data Grid (The meat of the UI) -->
+<div class="col-span-12 lg:col-span-9 space-y-4">
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden flex flex-col h-[600px]">
+<div class="p-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/50">
+<div class="flex items-center space-x-2">
+<span class="material-icons text-slate-400">table_view</span>
+<span class="text-sm font-semibold">Bản xem trước dữ liệu (Preview Data)</span>
+<span class="bg-red-100 text-red-600 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ml-2">5 Lỗi được tìm thấy</span>
+</div>
+<div class="flex items-center space-x-2">
+<button class="flex items-center px-3 py-1.5 text-xs font-medium text-slate-600 bg-white border border-slate-200 rounded-lg hover:bg-slate-50">
+<span class="material-icons text-sm mr-1">filter_list</span>
+                                Chỉ xem lỗi
+                            </button>
+<button class="flex items-center px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 rounded-lg hover:bg-primary/20">
+<span class="material-icons text-sm mr-1">file_download</span>
+                                Xuất báo cáo lỗi
+                            </button>
+</div>
+</div>
+<div class="flex-1 overflow-auto">
+<table class="w-full text-left text-sm border-collapse">
+<thead class="sticky top-0 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 z-10">
+<tr>
+<th class="px-4 py-3 font-semibold text-slate-500 whitespace-nowrap">#</th>
+<th class="px-4 py-3 font-semibold text-slate-500 whitespace-nowrap">Mã nhân viên (Employee ID)</th>
+<th class="px-4 py-3 font-semibold text-slate-500 whitespace-nowrap">Họ và tên (Full Name)</th>
+<th class="px-4 py-3 font-semibold text-slate-500 whitespace-nowrap">Ngày bắt đầu (Start Date)</th>
+<th class="px-4 py-3 font-semibold text-slate-500 whitespace-nowrap text-right">Lương cơ bản (Base Salary)</th>
+<th class="px-4 py-3 font-semibold text-slate-500 whitespace-nowrap">Phòng ban (Department)</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<td class="px-4 py-3 text-slate-400">1</td>
+<td class="px-4 py-3 font-medium">EMP001</td>
+<td class="px-4 py-3">Nguyễn Văn A</td>
+<td class="px-4 py-3">2023-01-15</td>
+<td class="px-4 py-3 text-right">15.000.000</td>
+<td class="px-4 py-3">Kế toán</td>
+</tr>
+<!-- Error Row: Missing ID -->
+<tr class="bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/20 transition-colors">
+<td class="px-4 py-3 text-slate-400">2</td>
+<td class="px-4 py-3">
+<div class="flex items-center text-red-600 font-bold">
+<span class="material-icons text-sm mr-1">error_outline</span>
+                                            [Trống]
+                                        </div>
+</td>
+<td class="px-4 py-3">Trần Thị B</td>
+<td class="px-4 py-3">2023-02-10</td>
+<td class="px-4 py-3 text-right">18.500.000</td>
+<td class="px-4 py-3">Nhân sự</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="px-4 py-3 text-slate-400">3</td>
+<td class="px-4 py-3 font-medium">EMP003</td>
+<td class="px-4 py-3">Lê Văn C</td>
+<td class="px-4 py-3">2023-03-01</td>
+<td class="px-4 py-3 text-right">12.000.000</td>
+<td class="px-4 py-3">Kinh doanh</td>
+</tr>
+<!-- Error Row: Invalid Date -->
+<tr class="bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/20 transition-colors">
+<td class="px-4 py-3 text-slate-400">4</td>
+<td class="px-4 py-3 font-medium">EMP004</td>
+<td class="px-4 py-3">Phạm Minh D</td>
+<td class="px-4 py-3 text-red-600 font-medium">
+<span class="flex items-center">
+<span class="material-icons text-sm mr-1">warning</span>
+                                            31/02/2023
+                                        </span>
+</td>
+<td class="px-4 py-3 text-right">22.000.000</td>
+<td class="px-4 py-3">IT</td>
+</tr>
+<!-- Error Row: Duplicate ID -->
+<tr class="bg-red-50 dark:bg-red-900/10 hover:bg-red-100 dark:hover:bg-red-900/20 transition-colors">
+<td class="px-4 py-3 text-slate-400">5</td>
+<td class="px-4 py-3 text-red-600 font-bold underline decoration-dotted">EMP001</td>
+<td class="px-4 py-3">Vương Lan E</td>
+<td class="px-4 py-3">2023-04-12</td>
+<td class="px-4 py-3 text-right">16.000.000</td>
+<td class="px-4 py-3">Kế toán</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="px-4 py-3 text-slate-400">6</td>
+<td class="px-4 py-3 font-medium">EMP006</td>
+<td class="px-4 py-3">Hoàng Gia F</td>
+<td class="px-4 py-3">2023-05-20</td>
+<td class="px-4 py-3 text-right">14.000.000</td>
+<td class="px-4 py-3">Sản xuất</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+<td class="px-4 py-3 text-slate-400">7</td>
+<td class="px-4 py-3 font-medium">EMP007</td>
+<td class="px-4 py-3">Phan Thanh G</td>
+<td class="px-4 py-3 text-red-600 font-medium">
+<span class="flex items-center">
+<span class="material-icons text-sm mr-1">error</span>
+                                            01-13-2023
+                                        </span>
+</td>
+<td class="px-4 py-3 text-right">19.000.000</td>
+<td class="px-4 py-3">Marketing</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right: Sidebar Information -->
+<div class="col-span-12 lg:col-span-3 space-y-6">
+<!-- Validation Summary Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-5">
+<h3 class="text-sm font-bold mb-4 uppercase tracking-wider text-slate-500">Tóm tắt kiểm tra</h3>
+<div class="space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-sm">Tổng số dòng</span>
+<span class="font-bold">150</span>
+</div>
+<div class="flex justify-between items-center text-green-600">
+<span class="text-sm">Hợp lệ</span>
+<span class="font-bold">145</span>
+</div>
+<div class="flex justify-between items-center text-red-600">
+<span class="text-sm">Có lỗi</span>
+<span class="font-bold">5</span>
+</div>
+<div class="pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+<div class="bg-primary h-full" style="width: 96%"></div>
+</div>
+<p class="text-[10px] mt-2 text-slate-400 italic">96% dữ liệu sẵn sàng để nhập</p>
+</div>
+</div>
+</div>
+<!-- Error Explanations -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-5">
+<h3 class="text-sm font-bold mb-4 uppercase tracking-wider text-slate-500">Loại lỗi (Error Types)</h3>
+<div class="space-y-4">
+<div class="flex items-start space-x-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-red-500 flex-shrink-0"></div>
+<div>
+<h4 class="text-xs font-bold text-slate-700 dark:text-slate-200">Mã NV bị trùng</h4>
+<p class="text-[11px] text-slate-500">Duplicate Employee ID. Mã này đã tồn tại trong hệ thống hoặc bị lặp lại trong tệp.</p>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-red-400 flex-shrink-0"></div>
+<div>
+<h4 class="text-xs font-bold text-slate-700 dark:text-slate-200">Sai định dạng ngày</h4>
+<p class="text-[11px] text-slate-500">Invalid Date. Yêu cầu định dạng YYYY-MM-DD (Ví dụ: 2023-12-31).</p>
+</div>
+</div>
+<div class="flex items-start space-x-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-red-300 flex-shrink-0"></div>
+<div>
+<h4 class="text-xs font-bold text-slate-700 dark:text-slate-200">Dữ liệu bắt buộc</h4>
+<p class="text-[11px] text-slate-500">Required Field. Các ô này không được để trống.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Download Sample -->
+<div class="bg-primary/5 rounded-xl border border-primary/20 p-5">
+<h4 class="text-xs font-bold text-primary mb-2">Cần giúp đỡ?</h4>
+<p class="text-[11px] text-slate-600 dark:text-slate-400 mb-4">Vui lòng sử dụng tệp mẫu chuẩn để tránh lỗi định dạng.</p>
+<button class="w-full flex items-center justify-center space-x-2 py-2 bg-white dark:bg-slate-800 border border-primary text-primary rounded-lg text-xs font-bold hover:bg-primary hover:text-white transition-all">
+<span class="material-icons text-sm">cloud_download</span>
+<span>Tải tệp mẫu chuẩn (.xlsx)</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Sticky Footer Actions -->
+<div class="mt-8 flex items-center justify-between bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 p-4 rounded-xl shadow-lg">
+<button class="flex items-center px-6 py-2.5 font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
+<span class="material-icons mr-2">arrow_back</span>
+                Quay lại
+            </button>
+<div class="flex items-center space-x-4">
+<div class="flex flex-col items-end mr-4">
+<span class="text-xs text-slate-400 font-medium">Sẵn sàng nhập: 145/150 dòng</span>
+<span class="text-xs text-red-500 font-bold">Vẫn còn 5 lỗi cần xử lý</span>
+</div>
+<button class="flex items-center px-6 py-2.5 font-bold text-white bg-primary hover:bg-primary/90 rounded-lg shadow-md shadow-primary/20 transition-colors">
+                    Tiếp tục xác nhận
+                    <span class="material-icons ml-2 text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</main>
+<!-- Upload Overlay (Simulated Step 1 state as background reference) -->
+<!-- This would normally be visible only in Step 1 -->
+<div class="hidden fixed inset-0 bg-black/50 z-[100] flex items-center justify-center p-4">
+<div class="bg-white dark:bg-slate-900 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+<h2 class="text-xl font-bold">Tải lên tệp Excel</h2>
+<button class="text-slate-400 hover:text-slate-600">
+<span class="material-icons">close</span>
+</button>
+</div>
+<div class="p-10">
+<div class="border-2 border-dashed border-primary/30 bg-primary/5 rounded-2xl p-12 text-center flex flex-col items-center group cursor-pointer hover:border-primary transition-colors">
+<div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
+<span class="material-icons text-4xl">cloud_upload</span>
+</div>
+<h3 class="text-lg font-bold mb-1">Kéo và thả tệp vào đây</h3>
+<p class="text-slate-500 text-sm mb-6">Hỗ trợ các định dạng .xlsx, .xls, .csv</p>
+<button class="px-8 py-3 bg-primary text-white font-bold rounded-xl shadow-lg shadow-primary/30">
+                        Chọn tệp từ máy tính
+                    </button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

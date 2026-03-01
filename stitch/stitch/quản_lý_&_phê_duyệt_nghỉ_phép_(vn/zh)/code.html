@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Quản Lý &amp; Phê Duyệt Nghỉ Phép | 休暇管理</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation / Header -->
+<header class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-3 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-primary/10 p-2 rounded-lg">
+<span class="material-icons text-primary">event_available</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight">Quản Lý Nghỉ Phép <span class="text-slate-400 font-normal">/ 休暇管理</span></h1>
+<p class="text-xs text-slate-500">Hệ thống quản lý nhân sự chuyên nghiệp</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<!-- Language Toggle -->
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="px-3 py-1 text-xs font-semibold bg-white dark:bg-slate-700 shadow-sm rounded-md text-primary">VN</button>
+<button class="px-3 py-1 text-xs font-semibold text-slate-500 hover:text-slate-700">ZH</button>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 text-sm font-medium transition-colors">
+<span class="material-icons text-sm">add_circle_outline</span>
+<span>Tạo đơn hộ <span class="opacity-70 text-xs">/ 代申请</span></span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="HR Manager" data-alt="Avatar profile picture of an HR manager" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiIbNoYzIyWaJAM-n5XGzw9cuAGI6lo9wEqk-n0KMWD2ukX1gAKyaZX7zdmeCuYZbe1S9w1nRE7O1xFUZmMoi_dPnfHS2gh9sQKDkXKORGVFKYO_DPNU0vDgyLhWE8OEbWatb8PEmm8SaVM6mCbHr63wFeumr7cAQzq6SYTs_hB2mEzBjhluKVOggsDhVsyvLsHgEfSbw0xXKRb20BhG7_TGsNUs0wl8OGAz9g8l4sYrDzJNEC4FP3WhVY2WYh6C4HswERO3T5Cho"/>
+</div>
+</div>
+</header>
+<main class="max-w-[1400px] mx-auto p-6 space-y-6">
+<!-- Leave Balance Widget -->
+<section>
+<div class="flex items-center justify-between mb-4">
+<h2 class="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+<span class="material-icons text-sm">assessment</span>
+                    Báo cáo số dư phép <span class="text-slate-400 font-normal text-xs">/ 假期余额报告</span>
+</h2>
+<button class="text-primary text-xs font-medium hover:underline">Xem tất cả</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<!-- Balance Cards -->
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-8 h-8 rounded-full" data-alt="Employee profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAXcoQx2DqsEzkovU15TnbwInsipdn4ygfh2WB2kFMDda_Dg0knDEpHFidhZA6wbZeT6dia0QkvP86tx-zikIRvmkOcRBsOR4b991Ki4aBYOzFD3_S5Ua1Dd959Bb2lcYqRcz6gvTDpxFj_IUyISd13PhiNH965dn3N2v89vF4PlRdjAmGFBvo42ugaMxRGv02lOrUtPbGBWtI1ctvXWW1VeKbAdJ0XMAhO5OnSdkz5b7462vRkFmG9IldfsH8MUeTfU5lFMh2rTnU"/>
+<div>
+<p class="text-sm font-bold">Nguyễn Văn A</p>
+<p class="text-[10px] text-slate-500">Kỹ thuật / 技术</p>
+</div>
+</div>
+<span class="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">8/12</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-[66%]"></div>
+</div>
+<p class="text-[10px] mt-2 text-slate-400">Còn lại 4 ngày phép năm</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-8 h-8 rounded-full" data-alt="Employee profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqY8R9P_vBoCdkEWn_AXDde0KpXR95fPfkW7HWLnPe-CyGdO11ysODB2MlKfQ6bu5OxGx_KnpwO8kM-EDaIoLxoXRvaoHLvi77vb2OTHLskyb5yGs5gj84yJ0fHbkV5Rpm-jX9WN0TANOPh76iYV1BljIS04o2Z6Tloa4Eh4Bufz5j0c5tFn1FitWmvoIT-G2XORxHzEI5x7VhXQwXttFld0LnLhSx1AeqgWmKE2RDmGVMuDywn-WgbRQxJvxmAPxq2g_VOzUxv1M"/>
+<div>
+<p class="text-sm font-bold">Trần Thị B</p>
+<p class="text-[10px] text-slate-500">Nhân sự / 人事部</p>
+</div>
+</div>
+<span class="text-[10px] font-bold bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded-full">11/12</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-yellow-500 h-full w-[91%]"></div>
+</div>
+<p class="text-[10px] mt-2 text-slate-400">Còn lại 1 ngày phép năm</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-8 h-8 rounded-full" data-alt="Employee profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBUpQlD39tupaLuBEypKlBE203b6x3PXU3__Lljd2_JNk65w1vJIMHBisr-0tAMeqejDKhaNxNWfLtPch5e5BfVnyjC-KQpcwLzFLqcgBpSCuxU7C0KZ8Z-gw-c7HFj0ZQVpanNFgruZt_Z_dAV_sYlo8l9NMi14I-S3dHvjmzPET9PmzIPwFq-8opMHMDgiaUulNA2W5ehxtPkGEbUpwLg6OkJGy-YBmoc1vGVDP7B99k6PARcNFw1wozjgejqxoXj9sHVHYsVwEA"/>
+<div>
+<p class="text-sm font-bold">Lê Văn C</p>
+<p class="text-[10px] text-slate-500">Kế toán / 会计部</p>
+</div>
+</div>
+<span class="text-[10px] font-bold bg-green-100 text-green-700 px-2 py-0.5 rounded-full">2/12</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-[16%]"></div>
+</div>
+<p class="text-[10px] mt-2 text-slate-400">Còn lại 10 ngày phép năm</p>
+</div>
+<div class="bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm hover:border-primary/50 transition-colors">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-3">
+<img alt="User" class="w-8 h-8 rounded-full" data-alt="Employee profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAfXNXjjApy5nRrVszRJynySYe0LiNfbzZt20YDeLGyN-Mc0ea6GU-s9u1s_N_3RtSXqIc7KcZZ4qgf0p1l50jCpYrb2dW-P6GlCTSYj0phvS4-f_pEmw2khxkH-LggTQk3JziTy5vPE7AZoFM9M9aICIwSbBbYLPKM9dyUBoQLflOS0xsnJJiHIfSTLfuRyumlu7YQyYPzfIIax_6JUBAd3RPbw4LBONqqBCWvxkeeSYrAb7ivwsoJwhGMvVRH6V5FcMbtdG-ZH8"/>
+<div>
+<p class="text-sm font-bold">Phạm Minh D</p>
+<p class="text-[10px] text-slate-500">Sản xuất / 生产部</p>
+</div>
+</div>
+<span class="text-[10px] font-bold bg-red-100 text-red-700 px-2 py-0.5 rounded-full">12/12</span>
+</div>
+<div class="w-full bg-slate-100 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden">
+<div class="bg-red-500 h-full w-full"></div>
+</div>
+<p class="text-[10px] mt-2 text-slate-400">Đã hết ngày phép năm</p>
+</div>
+</div>
+</section>
+<!-- Main Content Tabs -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="border-b border-slate-200 dark:border-slate-800 flex items-center p-1 bg-slate-50/50 dark:bg-slate-900">
+<button class="flex items-center gap-2 px-6 py-3 text-sm font-semibold border-b-2 border-primary text-primary">
+<span class="material-icons text-base">pending_actions</span>
+                    Danh sách chờ duyệt <span class="text-[10px] font-normal opacity-70">/ 待审批列表</span>
+</button>
+<button class="flex items-center gap-2 px-6 py-3 text-sm font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100/50 dark:hover:bg-slate-800 transition-all">
+<span class="material-icons text-base">calendar_view_month</span>
+                    Lịch nghỉ phép bộ phận <span class="text-[10px] font-normal opacity-70">/ 部门请假日历</span>
+</button>
+</div>
+<!-- Pending Approval Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/50 dark:bg-slate-800/50 text-slate-500 text-[11px] uppercase tracking-wider">
+<th class="px-6 py-3 font-semibold">Nhân viên / 员工</th>
+<th class="px-6 py-3 font-semibold">Loại nghỉ / 类型</th>
+<th class="px-6 py-3 font-semibold">Thời gian / 时间</th>
+<th class="px-6 py-3 font-semibold">Lý do / 原因</th>
+<th class="px-6 py-3 font-semibold">Đính kèm / 附件</th>
+<th class="px-6 py-3 font-semibold text-right">Thao tác / 操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Table Row 1 -->
+<tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">
+                                        NH
+                                    </div>
+<div>
+<p class="text-sm font-medium">Nguyễn Hoàng</p>
+<p class="text-[10px] text-slate-400">ID: EMP024</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded text-xs font-medium border border-blue-100 dark:border-blue-800">
+                                    Cả ngày / 全天
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="text-xs">
+<p class="font-medium text-slate-700 dark:text-slate-300">20/05/2024 - 22/05/2024</p>
+<p class="text-slate-400 italic">2.0 ngày</p>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-slate-600 dark:text-slate-400 max-w-[200px] truncate" title="Giải quyết việc gia đình">Giải quyết việc gia đình / 办理家事</p>
+</td>
+<td class="px-6 py-4">
+<button class="p-1.5 text-slate-400 hover:text-primary transition-colors">
+<span class="material-icons text-base">description</span>
+</button>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="bg-red-50 hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors" title="Từ chối">
+<span class="material-icons text-sm">close</span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+                                        Duyệt / 批准
+                                    </button>
+</div>
+</td>
+</tr>
+<!-- Table Row 2 -->
+<tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-xs">
+                                        LV
+                                    </div>
+<div>
+<p class="text-sm font-medium">Lâm Vy</p>
+<p class="text-[10px] text-slate-400">ID: EMP056</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 rounded text-xs font-medium border border-purple-100 dark:border-purple-800">
+                                    Sáng / 上午
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="text-xs">
+<p class="font-medium text-slate-700 dark:text-slate-300">18/05/2024</p>
+<p class="text-slate-400 italic">0.5 ngày</p>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-slate-600 dark:text-slate-400 max-w-[200px] truncate" title="Khám sức khỏe định kỳ">Khám sức khỏe / 健康检查</p>
+</td>
+<td class="px-6 py-4">
+<button class="p-1.5 text-primary bg-primary/5 rounded-lg border border-primary/20 hover:bg-primary/10 transition-colors">
+<span class="material-icons text-base">attach_file</span>
+</button>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="bg-red-50 hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors" title="Từ chối">
+<span class="material-icons text-sm">close</span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+                                        Duyệt / 批准
+                                    </button>
+</div>
+</td>
+</tr>
+<!-- Table Row 3 -->
+<tr class="hover:bg-slate-50/80 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs">
+                                        TQ
+                                    </div>
+<div>
+<p class="text-sm font-medium">Trần Quốc</p>
+<p class="text-[10px] text-slate-400">ID: EMP012</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-2 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded text-xs font-medium border border-amber-100 dark:border-amber-800">
+                                    Chiều / 下午
+                                </span>
+</td>
+<td class="px-6 py-4">
+<div class="text-xs">
+<p class="font-medium text-slate-700 dark:text-slate-300">19/05/2024</p>
+<p class="text-slate-400 italic">0.5 ngày</p>
+</div>
+</td>
+<td class="px-6 py-4">
+<p class="text-xs text-slate-600 dark:text-slate-400 max-w-[200px] truncate">Họp phụ huynh / 家长会</p>
+</td>
+<td class="px-6 py-4">
+<span class="text-[10px] text-slate-300 italic">N/A</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex items-center justify-end gap-2">
+<button class="bg-red-50 hover:bg-red-100 text-red-600 p-2 rounded-lg transition-colors" title="Từ chối">
+<span class="material-icons text-sm">close</span>
+</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg text-xs font-medium transition-colors">
+                                        Duyệt / 批准
+                                    </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination/Footer -->
+<div class="px-6 py-4 border-t border-slate-200 dark:border-slate-800 bg-slate-50/30 flex items-center justify-between text-xs text-slate-500">
+<p>Hiển thị 1-3 trong tổng số 12 yêu cầu</p>
+<div class="flex gap-2">
+<button class="p-1 hover:bg-slate-100 rounded disabled:opacity-30" disabled=""><span class="material-icons text-sm">chevron_left</span></button>
+<button class="px-2 bg-primary text-white rounded">1</button>
+<button class="px-2 hover:bg-slate-100 rounded">2</button>
+<button class="px-2 hover:bg-slate-100 rounded">3</button>
+<button class="p-1 hover:bg-slate-100 rounded"><span class="material-icons text-sm">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Team Calendar Section (Preview Mode) -->
+<section class="space-y-4">
+<div class="flex items-center justify-between">
+<h2 class="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
+<span class="material-icons text-sm">event</span>
+                    Lịch nghỉ phép tháng 05/2024 <span class="text-slate-400 font-normal text-xs">/ 五月请假表</span>
+</h2>
+<div class="flex gap-2">
+<div class="flex items-center gap-1.5 px-2 py-1 bg-white border border-slate-200 rounded text-[10px]">
+<span class="w-2 h-2 rounded-full bg-blue-500"></span>
+<span>Đã duyệt / 已批准</span>
+</div>
+<div class="flex items-center gap-1.5 px-2 py-1 bg-white border border-slate-200 rounded text-[10px]">
+<span class="w-2 h-2 rounded-full bg-yellow-400"></span>
+<span>Đang chờ / 待处理</span>
+</div>
+</div>
+</div>
+<!-- Simple Gantt-ish Grid -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="grid grid-cols-[200px_1fr] border-b border-slate-200 dark:border-slate-800">
+<div class="p-3 bg-slate-50/50 dark:bg-slate-800/50 text-xs font-bold text-slate-500 border-r border-slate-200 dark:border-slate-800 uppercase">Nhân viên / 员工</div>
+<div class="grid grid-cols-7 text-center text-[10px] font-bold text-slate-500 divide-x divide-slate-200 dark:divide-slate-800">
+<div class="py-3">15 T4</div>
+<div class="py-3">16 T5</div>
+<div class="py-3">17 T6</div>
+<div class="py-3 bg-slate-100/50 dark:bg-slate-800">18 T7</div>
+<div class="py-3 bg-slate-100/50 dark:bg-slate-800">19 CN</div>
+<div class="py-3">20 T2</div>
+<div class="py-3">21 T3</div>
+</div>
+</div>
+<!-- Calendar Rows -->
+<div class="grid grid-cols-[200px_1fr] border-b border-slate-100 dark:border-slate-800 last:border-0 h-16">
+<div class="p-3 border-r border-slate-200 dark:border-slate-800 flex items-center gap-2">
+<img alt="User" class="w-6 h-6 rounded-full" data-alt="Employee profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-kyUEPa6Yk5u7Qg6jK1Zv4VAIpKpNotupmeLvJn72cQ3HGS3fqiAdpEfSiXHfWxCWARQMHddTyjk4qeh3jiMi6O4hj68GrwYADIezC-dEsxHmFb9WYznc_A8oEn7H0gbnMRoPEUHdEf8m_HW1-l2XYo4hU5re6wDzZnQLWiD2Do6AzGnnZrfsfzu0939BLxFQhN-ZE73p2PxuoZirM5krQeqWj1aQzi7Dqsb1NbpOe3xSlxNkgBF9YNtqP11seoEhSlYoJCwoU_U"/>
+<span class="text-xs font-medium">Nguyễn Hoàng</span>
+</div>
+<div class="grid grid-cols-7 relative divide-x divide-slate-100 dark:divide-slate-800">
+<div class="p-2"></div>
+<div class="p-2"></div>
+<div class="p-2"></div>
+<div class="p-2 bg-slate-50 dark:bg-slate-800/20"></div>
+<div class="p-2 bg-slate-50 dark:bg-slate-800/20"></div>
+<div class="p-2 flex items-center col-start-6 col-span-2">
+<div class="w-full h-8 bg-yellow-100 dark:bg-yellow-900/30 border-l-4 border-yellow-400 rounded-r-md flex items-center px-2 text-[10px] text-yellow-700 dark:text-yellow-400">
+<b>Chờ duyệt</b>: Việc gia đình
+                            </div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-[200px_1fr] border-b border-slate-100 dark:border-slate-800 last:border-0 h-16">
+<div class="p-3 border-r border-slate-200 dark:border-slate-800 flex items-center gap-2">
+<img alt="User" class="w-6 h-6 rounded-full" data-alt="Employee profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA0uw4dQ0XotnK02BnHNe-yzAdvruGYi-vLnfWKuizQDBdSn6lfsfFKb-hKAzWOiiEofUU7zDnblD-c-Fqp2uxzTT9lcgjk26vSfSmd9i3uPT4YJrkwwDnRB7ADp0kYMZsTxeoEW4iex92x2lpkGIMyhsqTCe5tpj2J9McSHBx5RPJgROixjDdfFKbsv2-45UAuFgHtjDJl19klBFjp2rOgiYLya5h5C3r88WOrSblIof2Rz5rFa9zfIpue4SpNyxXr4ERIuQf53yk"/>
+<span class="text-xs font-medium">Lâm Vy</span>
+</div>
+<div class="grid grid-cols-7 relative divide-x divide-slate-100 dark:divide-slate-800">
+<div class="p-2"></div>
+<div class="p-2"></div>
+<div class="p-2"></div>
+<div class="p-2 bg-slate-50 dark:bg-slate-800/20 flex items-center">
+<div class="w-full h-8 bg-blue-100 dark:bg-blue-900/30 border-l-4 border-blue-500 rounded-md flex items-center px-2 text-[10px] text-blue-700 dark:text-blue-400">
+                                Khám bệnh
+                            </div>
+</div>
+<div class="p-2 bg-slate-50 dark:bg-slate-800/20"></div>
+<div class="p-2"></div>
+<div class="p-2"></div>
+</div>
+</div>
+<div class="grid grid-cols-[200px_1fr] border-b border-slate-100 dark:border-slate-800 last:border-0 h-16">
+<div class="p-3 border-r border-slate-200 dark:border-slate-800 flex items-center gap-2">
+<img alt="User" class="w-6 h-6 rounded-full" data-alt="Employee profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBugseRfTeeCFY--R-9s9sc_UjIn65W62ihCJYie_SO54W15s6jVNtAKf78Sp0vBAp2deVKd7qt5yNyGz9lF5O4FTkXC30vwRJbZGGFr46PhVlDj896AvEo9_5X1iR6zxsXvlu-X5AOPJnH-Y_v_UdKuDVASCiRKxnuQDZ1M6Y2G-u-ae3tmf89TYxA8-ZemJW076ZgHe0WNhSwX9P0WOYibmS0wsbabdu9Wej2YTCsuQAWEcXTSjFlEFdxkeoT4R4nHD90912y-yM"/>
+<span class="text-xs font-medium">Trần Quốc</span>
+</div>
+<div class="grid grid-cols-7 relative divide-x divide-slate-100 dark:divide-slate-800">
+<div class="p-2 flex items-center col-span-2">
+<div class="w-full h-8 bg-blue-100 dark:bg-blue-900/30 border-l-4 border-blue-500 rounded-md flex items-center px-2 text-[10px] text-blue-700 dark:text-blue-400">
+                                Nghỉ phép năm
+                            </div>
+</div>
+<div class="p-2"></div>
+<div class="p-2 bg-slate-50 dark:bg-slate-800/20"></div>
+<div class="p-2 bg-slate-50 dark:bg-slate-800/20"></div>
+<div class="p-2"></div>
+<div class="p-2"></div>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 p-4 rounded-lg border border-primary/20 flex items-center gap-3">
+<span class="material-icons text-primary">info</span>
+<p class="text-xs text-primary font-medium">Cảnh báo: Bộ phận Kỹ thuật có 3 nhân viên cùng nghỉ vào ngày 20/05. Vui lòng cân đối nguồn lực. <span class="text-slate-400 font-normal">/ 资源警报: 5月20日同一部门多人请假</span></p>
+</div>
+</section>
+</main>
+<!-- Simple Bottom Status Bar -->
+<footer class="mt-8 px-6 py-4 border-t border-slate-200 dark:border-slate-800 text-center">
+<p class="text-[10px] text-slate-400 uppercase tracking-[2px]">HRMS Core v2.4.0 • Built for Modern Teams</p>
+</footer>
+</body></html>

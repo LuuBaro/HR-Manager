@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cổng Thông Tin Nhân Viên - Employee Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "primary": "#137fec",
+                "background-light": "#f6f7f8",
+                "background-dark": "#101922",
+              },
+              fontFamily: {
+                "display": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .masked-data { font-family: monospace; letter-spacing: 2px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200 min-h-screen">
+<!-- Top Navigation -->
+<nav class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-50">
+<div class="max-w-6xl mx-auto px-4 sm:px-6">
+<div class="flex justify-between items-center h-16">
+<!-- Branding -->
+<div class="flex items-center gap-2">
+<div class="bg-primary p-1.5 rounded-lg">
+<span class="material-icons-outlined text-white">corporate_fare</span>
+</div>
+<div>
+<h1 class="font-bold text-slate-900 dark:text-white leading-tight">PORTAL</h1>
+<p class="text-[10px] uppercase tracking-wider text-slate-500">Cổng thông tin nhân viên</p>
+</div>
+</div>
+<!-- Right Side Actions -->
+<div class="flex items-center gap-4">
+<!-- Session Timer -->
+<div class="hidden md:flex items-center gap-2 bg-amber-50 dark:bg-amber-900/20 px-3 py-1.5 rounded-full border border-amber-100 dark:border-amber-800">
+<span class="material-icons-outlined text-amber-600 text-sm">timer</span>
+<span class="text-xs font-medium text-amber-700 dark:text-amber-400">Hết hạn sau: 04:59</span>
+</div>
+<!-- Language Toggle -->
+<div class="flex bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="px-3 py-1 text-xs font-semibold rounded bg-white dark:bg-slate-700 shadow-sm text-primary">VN</button>
+<button class="px-3 py-1 text-xs font-semibold text-slate-500 hover:text-slate-700">ZH</button>
+</div>
+<!-- Profile/Logout -->
+<div class="h-8 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
+<button class="flex items-center gap-2 text-slate-600 dark:text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-icons-outlined">logout</span>
+<span class="hidden sm:inline text-sm font-medium">Đăng xuất</span>
+</button>
+</div>
+</div>
+</div>
+</nav>
+<main class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+<!-- Welcome Header -->
+<header class="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h2 class="text-2xl font-bold text-slate-900 dark:text-white">Chào buổi sáng, Nguyễn Văn A</h2>
+<p class="text-slate-500 dark:text-slate-400">Hôm nay là Thứ Tư, ngày 22 tháng 5, 2024</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-4 py-2.5 rounded-lg font-medium shadow-sm transition-all">
+<span class="material-icons-outlined text-lg">add_task</span>
+<span>Gửi đơn nghỉ phép (申请离职)</span>
+</button>
+</div>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Left Column: Payroll & History -->
+<div class="lg:col-span-2 space-y-6">
+<!-- Latest Payslip Hero -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-slate-900 dark:text-white text-lg">Phiếu lương gần nhất</h3>
+<p class="text-sm text-slate-500">Latest Payslip | 最近工资单</p>
+</div>
+<span class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 text-xs font-bold px-3 py-1 rounded-full uppercase">Đã thanh toán</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-xl border border-slate-100 dark:border-slate-800">
+<div>
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Kỳ lương (Period)</p>
+<p class="text-lg font-bold text-slate-900 dark:text-white">Tháng 04/2024</p>
+</div>
+<div class="md:text-right">
+<p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">Lương thực nhận (Net Salary)</p>
+<p class="text-3xl font-black text-primary">18,450,000 <span class="text-sm font-medium">VND</span></p>
+</div>
+</div>
+<div class="mt-6 flex justify-end">
+<button class="flex items-center gap-2 text-primary font-semibold hover:underline">
+<span>Xem chi tiết phiếu lương</span>
+<span class="material-icons-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Payroll History Table -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="p-6 border-b border-slate-100 dark:border-slate-800">
+<h3 class="font-bold text-slate-900 dark:text-white">Lịch sử nhận lương</h3>
+<p class="text-xs text-slate-500">Payroll History | 工资历史</p>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50 dark:bg-slate-800/50">
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Tháng</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Thực nhận</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase">Trạng thái</th>
+<th class="px-6 py-4 text-xs font-bold text-slate-500 uppercase text-right">Hành động</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr>
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">03/2024</td>
+<td class="px-6 py-4 text-sm font-bold">17,200,000</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Hoàn tất
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary"><span class="material-icons-outlined">download</span></button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">02/2024</td>
+<td class="px-6 py-4 text-sm font-bold">17,200,000</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Hoàn tất
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary"><span class="material-icons-outlined">download</span></button>
+</td>
+</tr>
+<tr>
+<td class="px-6 py-4 text-sm font-medium text-slate-900 dark:text-white">01/2024</td>
+<td class="px-6 py-4 text-sm font-bold">19,500,000</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1 text-xs text-green-600 font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Hoàn tất
+                                        </span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-slate-400 hover:text-primary"><span class="material-icons-outlined">download</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Right Column: Profile & Stats -->
+<div class="space-y-6">
+<!-- Personal Profile Card -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+<div class="flex flex-col items-center mb-6">
+<div class="relative mb-3">
+<img alt="Profile" class="w-20 h-20 rounded-full object-cover border-4 border-slate-50 dark:border-slate-800 shadow-sm" data-alt="Professional headshot of a male employee" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8L2WhCQcGzF2UNjMAo4d2aB67O-qCyZLm5IJvroXM02H8s9f1xUCyo3sY31FAdBpnoTHG7F6TlhwKmdAS6OiJseUrUDemf8sM95idkJUJ_b3vkNkKs5dYOx-j_qkQU00bY_QKfRO1WqmBRCuSijNEELDXdIk2hNhkmVc8M1OQISk0rUmFxvu7UIPc_yR-PJ1_UQnLJQ7PixRnKKsaErU1gRkZ2k1weBxR5pwh6zRS1YQIlT2CcqA-30rCsNIuUBzUKhG6_o_h1qw"/>
+<span class="absolute bottom-1 right-1 w-4 h-4 bg-green-500 border-2 border-white dark:border-slate-900 rounded-full"></span>
+</div>
+<h3 class="font-bold text-slate-900 dark:text-white text-lg">Nguyễn Văn A</h3>
+<p class="text-xs text-primary font-bold uppercase tracking-widest">NV-0042</p>
+</div>
+<div class="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-500 uppercase font-semibold">CCCD / ID</span>
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium masked-data text-slate-700 dark:text-slate-300">******890</span>
+<span class="material-icons-outlined text-sm text-slate-400 cursor-pointer hover:text-primary">visibility_off</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-500 uppercase font-semibold">Điện thoại</span>
+<div class="flex items-center gap-2">
+<span class="text-sm font-medium masked-data text-slate-700 dark:text-slate-300">090****123</span>
+<span class="material-icons-outlined text-sm text-slate-400 cursor-pointer hover:text-primary">visibility_off</span>
+</div>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-xs text-slate-500 uppercase font-semibold">Hợp đồng</span>
+<span class="px-2 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold">CHÍNH THỨC</span>
+</div>
+</div>
+</div>
+<!-- Leave Balance -->
+<div class="bg-white dark:bg-slate-900 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 p-6">
+<h3 class="font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+<span class="material-icons-outlined text-primary">event_available</span>
+                        Quản lý nghỉ phép
+                    </h3>
+<div class="flex items-center justify-between p-4 bg-primary/5 rounded-lg border border-primary/10 mb-6">
+<div>
+<p class="text-[10px] text-primary font-bold uppercase">Phép năm còn lại</p>
+<p class="text-2xl font-black text-primary">12.5 <span class="text-xs font-medium">ngày</span></p>
+</div>
+<div class="h-10 w-10 bg-primary/20 rounded-full flex items-center justify-center">
+<span class="material-icons-outlined text-primary">analytics</span>
+</div>
+</div>
+<div class="space-y-3">
+<p class="text-xs font-bold text-slate-400 uppercase">Đơn gần đây</p>
+<div class="flex items-center justify-between text-sm py-2 border-b border-slate-50 dark:border-slate-800">
+<span class="text-slate-600 dark:text-slate-400">Nghỉ bệnh (1 ngày)</span>
+<span class="text-xs font-bold text-amber-500">Đang chờ</span>
+</div>
+<div class="flex items-center justify-between text-sm py-2">
+<span class="text-slate-600 dark:text-slate-400">Nghỉ phép (2 ngày)</span>
+<span class="text-xs font-bold text-green-500">Đã duyệt</span>
+</div>
+</div>
+</div>
+<!-- Security Toast Notification (Fixed bottom right in desktop, relative here) -->
+<div class="bg-slate-900 text-white p-4 rounded-xl shadow-2xl flex items-start gap-3 border border-slate-700">
+<span class="material-icons-outlined text-primary">shield</span>
+<div>
+<p class="text-sm font-bold">Chế độ bảo mật</p>
+<p class="text-[10px] text-slate-400 leading-normal">Dữ liệu nhạy cảm đã được ẩn. Vui lòng không chia sẻ màn hình khi xem thông tin lương.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="max-w-6xl mx-auto px-4 sm:px-6 py-8 border-t border-slate-200 dark:border-slate-800 mt-8">
+<div class="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-400 text-xs">
+<p>© 2024 HR &amp; Payroll System - Secure Employee Portal</p>
+<div class="flex gap-6">
+<a class="hover:text-primary" href="#">Chính sách bảo mật</a>
+<a class="hover:text-primary" href="#">Điều khoản sử dụng</a>
+<a class="hover:text-primary" href="#">Trợ giúp</a>
+</div>
+</div>
+</footer>
+</body></html>

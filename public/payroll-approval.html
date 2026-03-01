@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Phê Duyệt Lương - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100">
+    <div class="flex h-screen overflow-hidden pt-8">
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <div id="header-root"></div>
+
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-8">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Phê duyệt bảng
+                            lương</h1>
+                        <p class="text-slate-500 text-sm mt-1">Quy trình kiểm soát và chốt quỹ lương hàng tháng.</p>
+                    </div>
+                </div>
+
+                <!-- Workflow Stepper -->
+                <div class="card p-8 bg-white dark:bg-slate-900 shadow-xl overflow-hidden relative">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-sky-500 opacity-20"></div>
+                    <div class="flex items-center justify-between relative max-w-4xl mx-auto">
+                        <div
+                            class="absolute top-1/2 left-0 w-full h-0.5 bg-slate-100 dark:bg-slate-800 -translate-y-[20px] z-0">
+                        </div>
+                        <div id="workflow-line"
+                            class="absolute top-1/2 left-0 w-0 h-0.5 bg-sky-500 -translate-y-[20px] z-0 transition-all duration-1000">
+                        </div>
+
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div id="step-1-circle"
+                                class="w-10 h-10 rounded-full bg-sky-500 text-white flex items-center justify-center shadow-lg shadow-sky-500/30">
+                                <span class="material-icons-round text-sm">edit_note</span>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <p class="text-[11px] font-bold text-slate-900 dark:text-white">1. Dự thảo</p>
+                                <p class="text-[9px] text-slate-400 uppercase tracking-widest">Draft / 草稿</p>
+                            </div>
+                        </div>
+
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div id="step-2-circle"
+                                class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center">
+                                <span class="material-icons-round text-sm">fact_check</span>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <p id="step-2-label" class="text-[11px] font-bold text-slate-500">2. Kiểm tra & Duyệt
+                                </p>
+                                <p class="text-[9px] text-slate-400 uppercase tracking-widest">Verification / 审核</p>
+                            </div>
+                        </div>
+
+                        <div class="relative z-10 flex flex-col items-center">
+                            <div id="step-3-circle"
+                                class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center">
+                                <span class="material-icons-round text-sm">lock</span>
+                            </div>
+                            <div class="mt-3 text-center">
+                                <p id="step-3-label" class="text-[11px] font-bold text-slate-400">3. Đã Khóa</p>
+                                <p class="text-[9px] text-slate-400 uppercase tracking-widest">Locked / 已锁定</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="card p-6 border-l-4 border-l-sky-500 shadow-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-2 bg-sky-50 dark:bg-sky-900/20 rounded-xl text-sky-600">
+                                <span class="material-icons-round">account_balance_wallet</span>
+                            </div>
+                            <span
+                                class="text-[10px] font-extrabold text-green-500 bg-green-50 px-2 py-1 rounded-lg flex items-center">
+                                <span class="material-icons-round text-[10px] mr-1">trending_up</span> +4.2%
+                            </span>
+                        </div>
+                        <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest">Tổng Lương Thực Nhận</h3>
+                        <p id="total-net-amount" class="text-2xl font-extrabold mt-2 text-slate-900 dark:text-white">...
+                        </p>
+                        <p class="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-tighter italic">Net
+                            Payroll / 实发工资</p>
+                    </div>
+
+                    <div class="card p-6 border-l-4 border-l-emerald-500 shadow-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-2 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-emerald-600">
+                                <span class="material-icons-round">people_alt</span>
+                            </div>
+                        </div>
+                        <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest">Nhân sự thanh toán</h3>
+                        <p id="total-staff-count" class="text-2xl font-extrabold mt-2 text-slate-900 dark:text-white">
+                            ...</p>
+                        <p class="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-tighter italic">Staff
+                            Count / 人事总计</p>
+                    </div>
+
+                    <div class="card p-6 border-l-4 border-l-amber-500 shadow-lg">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="p-2 bg-amber-50 dark:bg-amber-900/20 rounded-xl text-amber-600">
+                                <span class="material-icons-round">timer</span>
+                            </div>
+                        </div>
+                        <h3 class="text-slate-500 text-xs font-bold uppercase tracking-widest">Tổng giờ tăng ca</h3>
+                        <p id="total-ot-hours" class="text-2xl font-extrabold mt-2 text-slate-900 dark:text-white">...
+                        </p>
+                        <p class="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-tighter italic">Total
+                            Overtime / 加班总计</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Table Section -->
+                <div class="lg:col-span-2 space-y-6">
+                    <div class="card overflow-hidden shadow-xl">
+                        <div
+                            class="px-8 py-5 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20">
+                            <h2 id="period-detail-title"
+                                class="font-extrabold flex items-center gap-3 text-slate-800 dark:text-white tracking-tight">
+                                <span class="material-icons-round text-sky-500 text-lg">list_alt</span>
+                                Chi Tiết Bảng Lương
+                            </h2>
+                            <button onclick="exportToExcel()"
+                                class="btn-secondary h-9 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:bg-slate-50 transition-all text-xs">
+                                <span class="material-icons-round text-sm text-green-600">border_all</span> Xuất
+                                Excel (CSV)
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead
+                                    class="bg-slate-50/50 dark:bg-slate-800/50 text-slate-400 text-[10px] uppercase tracking-widest font-bold">
+                                    <tr>
+                                        <th class="px-8 py-4">Mã NV / Họ Tên</th>
+                                        <th class="px-8 py-4">Bộ Phận</th>
+                                        <th class="px-8 py-4 text-right">Thực Nhận</th>
+                                        <th class="px-8 py-4 text-center">Trạng Thái</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payroll-detail-body" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                    <!-- Rows injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Approval Sidebar -->
+                <div class="space-y-6">
+                    <div class="card p-8 shadow-2xl ring-2 ring-sky-500/10 bg-white dark:bg-slate-900">
+                        <h3
+                            class="font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-3 tracking-tight">
+                            <span class="material-icons-round text-sky-500">verified_user</span>
+                            Phê Duyệt & Chốt Sổ / 批准与结账
+                        </h3>
+                        <div class="space-y-6">
+                            <div class="space-y-2">
+                                <label class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Ghi
+                                    chú phê duyệt / 审批备注</label>
+                                <textarea id="approval-note" class="input-field min-h-[120px] resize-none"
+                                    placeholder="Nhập lời nhắn nội bộ cho bộ phận HR..."></textarea>
+                            </div>
+                            <div class="space-y-3 pt-2">
+                                <button onclick="showConfirmModal()" id="btn-main-action"
+                                    class="w-full btn-primary justify-center py-4 text-sm tracking-widest">
+                                    <span class="material-icons-round">task_alt</span> KIỂM TRA & DUYỆT
+                                </button>
+                                <button onclick="requestAdjustment()" id="btn-secondary-action"
+                                    class="w-full btn-secondary justify-center py-4 text-sm tracking-widest text-red-500 border-red-100 bg-red-50/20 hover:bg-red-50 transition-all shadow-sm">
+                                    <span class="material-icons-round">history</span> YÊU CẦU ĐIỀU CHỈNH
+                                </button>
+                            </div>
+                            <div
+                                class="mt-4 p-4 bg-red-50 dark:bg-red-950/20 border-l-4 border-red-500 rounded-r-xl flex items-start gap-4 shadow-sm">
+                                <span class="material-icons-round text-red-500 text-sm mt-0.5">warning</span>
+                                <div class="text-[10px] text-red-900 dark:text-red-300 font-medium leading-relaxed">
+                                    <p class="font-bold uppercase mb-1">Cảnh báo bảo mật</p>
+                                    <p>Sau khi phê duyệt, dữ liệu bảng lương sẽ bị <span
+                                            class="font-bold underline">KHÓA VĨNH VIỄN</span> để phục vụ báo cáo
+                                        thuế. Kiểm tra kỹ trước khi nhấn nút.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    </main>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detail-modal"
+        class="modal hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
+        <div
+            class="relative bg-white dark:bg-slate-900 rounded-[24px] max-w-2xl w-full shadow-2xl p-0 transform transition-all flex flex-col max-h-[90vh]">
+            <div
+                class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center bg-slate-50/50 dark:bg-slate-800/20 rounded-t-[24px]">
+                <div>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Chi Tiết
+                        Phiếu Lương</h3>
+                    <p id="modal-emp-name" class="text-sm text-sky-500 font-bold uppercase tracking-widest mt-1">...</p>
+                </div>
+                <button onclick="document.getElementById('detail-modal').classList.add('hidden')"
+                    class="w-8 h-8 rounded-full bg-white dark:bg-slate-800 text-slate-400 hover:text-red-500 flex items-center justify-center shadow-sm transition-all focus:outline-none">
+                    <span class="material-icons-round text-sm">close</span>
+                </button>
+            </div>
+
+            <div class="p-8 overflow-y-auto custom-scrollbar flex-1">
+                <div class="border rounded-2xl border-slate-100 dark:border-slate-800 overflow-hidden">
+                    <table class="w-full text-sm">
+                        <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <!-- Income Section -->
+                            <tr class="bg-emerald-50/30 dark:bg-emerald-900/10">
+                                <td
+                                    class="px-6 py-4 font-bold text-slate-500 dark:text-slate-400 uppercase text-[10px] tracking-widest">
+                                    Khoản thu nhập / 收入项</td>
+                                <td
+                                    class="px-6 py-4 text-right font-bold text-emerald-600 uppercase text-[10px] tracking-widest">
+                                    Số tiền (VND) / 金额</td>
+                            </tr>
+                            <tr>
+                                <td class="px-6 py-3 text-slate-600 dark:text-slate-300">Lương cơ bản thực tế</td>
+                                <td id="modal-base-salary"
+                                    class="px-6 py-3 text-right font-bold text-slate-900 dark:text-white">...</td>
+                            </tr>
+                        <tbody id="modal-allowances-body"></tbody>
+                        <tr>
+                            <td class="px-6 py-3 text-slate-600 dark:text-slate-300">Lương làm thêm giờ (OT)</td>
+                            <td id="modal-ot-pay" class="px-6 py-3 text-right font-bold text-slate-900 dark:text-white">
+                                ...</td>
+                        </tr>
+                        <tr class="bg-slate-50 dark:bg-slate-800/50">
+                            <td class="px-6 py-3 font-bold text-slate-900 dark:text-white">Tổng thu nhập (Gross)</td>
+                            <td id="modal-gross"
+                                class="px-6 py-3 text-right font-extrabold text-slate-900 dark:text-white">...</td>
+                        </tr>
+
+                        <!-- Deduction Section -->
+                        <tr class="bg-red-50/30 dark:bg-red-900/10 border-t border-slate-100 dark:border-slate-800">
+                            <td
+                                class="px-6 py-4 font-bold text-slate-500 dark:text-slate-400 uppercase text-[10px] tracking-widest">
+                                Khoản khấu trừ / 扣除项</td>
+                            <td
+                                class="px-6 py-4 text-right font-bold text-red-600 uppercase text-[10px] tracking-widest">
+                                Số tiền (VND) / 金额</td>
+                        </tr>
+                        <tbody id="modal-deductions-body"></tbody>
+                        <tr>
+                            <td class="px-6 py-3 text-slate-600 dark:text-slate-300">Thuế TNCN (Tạm tính)</td>
+                            <td id="modal-tax" class="px-6 py-3 text-right font-bold text-slate-900 dark:text-white">...
+                            </td>
+                        </tr>
+                        <tr class="bg-slate-50 dark:bg-slate-800/50">
+                            <td class="px-6 py-3 font-bold text-slate-900 dark:text-white">Tổng khấu trừ</td>
+                            <td id="modal-total-deductions" class="px-6 py-3 text-right font-extrabold text-red-500">...
+                            </td>
+                        </tr>
+
+                        <!-- Net Section -->
+                        <tr class="bg-sky-500 text-white">
+                            <td class="px-6 py-5 font-black uppercase tracking-widest text-xs">Thực lĩnh (Net Salary)
+                            </td>
+                            <td id="modal-net" class="px-6 py-5 text-right font-black text-xl">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div
+                    class="mt-6 flex justify-between items-center bg-amber-50 dark:bg-amber-900/20 p-4 rounded-xl border border-amber-100 dark:border-amber-900/30">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-round text-amber-500">info</span>
+                        <p class="text-[10px] font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wide">
+                            Lương được chuyển khoản vào ngày 05 hàng tháng / 工资于每月5号发放
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="p-6 border-t border-slate-100 dark:border-slate-800 flex gap-4 bg-slate-50/50 dark:bg-slate-800/20 rounded-b-[24px]">
+                <button onclick="printPayslip()"
+                    class="flex-1 btn-primary py-3 justify-center shadow-lg shadow-sky-500/20">
+                    <span class="material-icons-round text-sm">print</span> IN PHIẾU LƯƠNG
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        let currentPeriodId = null;
+        let currentPeriodStatus = 'draft';
+        let currentRecords = [];
+        let currentPeriodInfo = {};
+
+        // Get ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlId = urlParams.get('id');
+
+        async function initPage() {
+            if (urlId) {
+                await loadPayrollPeriodById(urlId);
+            } else {
+                await loadLatestPayrollPeriod();
+            }
+        }
+
+        async function loadLatestPayrollPeriod() {
+            try {
+                const resp = await fetch('/api/payroll/periods?limit=1');
+                const data = await resp.json();
+                if (data.success && data.data.length > 0) {
+                    // Redirect to specific ID URL for better UX
+                    window.location.search = `?id=${data.data[0].id}`;
+                } else {
+                    App.toast('Chưa có kỳ lương nào được tạo', 'info');
+                }
+            } catch (err) {
+                console.error('Period load fail:', err);
+                App.toast('Lỗi tải dữ liệu kỳ lương', 'error');
+            }
+        }
+
+        async function loadPayrollPeriodById(id) {
+            try {
+                // Show loading state
+                document.getElementById('payroll-detail-body').innerHTML = `<tr><td colspan="4" class="text-center py-8 text-slate-400"><span class="material-icons-round animate-spin">sync</span> Đang tải dữ liệu...</td></tr>`;
+
+                const resp = await fetch(`/api/payroll/periods/${id}`);
+                const result = await resp.json();
+
+                if (result.success) {
+                    const { period, records } = result.data;
+                    currentPeriodId = period.id;
+                    currentPeriodStatus = period.status;
+                    currentRecords = records;
+                    currentPeriodInfo = period;
+
+                    updateSummary(period, records);
+                    renderDetails(records);
+                    updateSteps(period.status);
+                } else {
+                    App.toast(result.message || 'Không tìm thấy kỳ lương', 'error');
+                }
+            } catch (err) {
+                console.error('Detail load fail:', err);
+                App.toast('Lỗi kết nối khi tải chi tiết', 'error');
+            }
+        }
+
+        function updateSummary(period, records) {
+            // Update Title
+            document.getElementById('period-detail-title').innerHTML = `
+                <span class="material-icons-round text-sky-500 text-lg">list_alt</span>
+                Chi Tiết Bảng Lương (${period.period_name || `Tháng ${period.period_month}/${period.period_year}`})
+            `;
+
+            // Update Cards
+            document.getElementById('total-net-amount').textContent = App.formatCurrency(period.total_net || 0);
+            document.getElementById('total-staff-count').textContent = `${records.length} Người`;
+
+            // Calculate total overtime from records
+            const totalOT = records.reduce((sum, r) => sum + (parseFloat(r.overtime_hours) || 0), 0);
+            document.getElementById('total-ot-hours').textContent = `${totalOT.toLocaleString('vi-VN')} Giờ`;
+        }
+
+        function updateSteps(status) {
+            const line = document.getElementById('workflow-line');
+            const step1 = document.getElementById('step-1-circle');
+            const step2 = document.getElementById('step-2-circle');
+            const step3 = document.getElementById('step-3-circle');
+
+            // Reset Default Styles
+            const inactiveCircle = "w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400 flex items-center justify-center z-10 relative";
+            const activeCircle = "w-12 h-12 rounded-full bg-white dark:bg-slate-900 text-sky-500 flex items-center justify-center shadow-lg ring-4 ring-sky-500/20 border-2 border-sky-500 scale-110 transition-all z-10 relative";
+            const checkCircle = "w-10 h-10 rounded-full bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 z-10 relative";
+            const lockedCircle = "w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center z-10 relative";
+
+            step1.className = checkCircle; // Base is always done or active
+            step2.className = inactiveCircle;
+            step2.innerHTML = '<span class="material-icons-round text-sm">fact_check</span>';
+            step3.className = inactiveCircle;
+            step3.innerHTML = '<span class="material-icons-round text-sm">lock</span>';
+
+            line.style.width = '0%';
+
+            if (status === 'draft') {
+                line.style.width = '0%';
+                step1.className = activeCircle;
+                step1.innerHTML = '<span class="material-icons-round">edit_note</span>';
+            }
+            else if (status === 'approved' || status === 'pending_approval') {
+                line.style.width = '50%';
+                step1.className = checkCircle;
+                step1.innerHTML = '<span class="material-icons-round text-sm">check</span>';
+
+                step2.className = activeCircle;
+                step2.innerHTML = '<span class="material-icons-round">playlist_add_check</span>';
+            }
+            else if (status === 'locked') {
+                line.style.width = '100%';
+                step1.className = checkCircle;
+                step1.innerHTML = '<span class="material-icons-round text-sm">check</span>';
+
+                step2.className = checkCircle;
+                step2.innerHTML = '<span class="material-icons-round text-sm">check</span>';
+
+                step3.className = lockedCircle;
+                step3.innerHTML = '<span class="material-icons-round text-sm">lock</span>';
+            }
+
+            // Button States
+            const btnMain = document.getElementById('btn-main-action');
+            const btnSecondary = document.getElementById('btn-secondary-action');
+
+            if (status === 'draft') {
+                btnMain.innerHTML = '<span class="material-icons-round">task_alt</span> KIỂM TRA & DUYỆT';
+                btnMain.className = "w-full btn-primary justify-center py-4 text-sm tracking-widest flex items-center gap-2";
+                btnMain.style.display = 'flex';
+
+                btnSecondary.innerHTML = '<span class="material-icons-round">delete_outline</span> XÓA BẢN NHÁP';
+                btnSecondary.className = "w-full btn-secondary justify-center py-4 text-sm tracking-widest text-red-500 border-red-100 bg-red-50/20 hover:bg-red-50 transition-all shadow-sm flex items-center gap-2";
+            }
+            else if (status === 'approved') {
+                btnMain.innerHTML = '<span class="material-icons-round">lock</span> CHỐT & KHÓA SỔ';
+                btnMain.className = "w-full btn-primary justify-center py-4 text-sm tracking-widest bg-emerald-600 hover:bg-emerald-700 shadow-emerald-500/20 flex items-center gap-2";
+                btnMain.style.display = 'flex';
+
+                btnSecondary.innerHTML = '<span class="material-icons-round">history</span> YÊU CẦU ĐIỀU CHỈNH';
+                btnSecondary.className = "w-full btn-secondary justify-center py-4 text-sm tracking-widest text-amber-600 border-amber-200 bg-amber-50 hover:bg-amber-100 transition-all shadow-sm flex items-center gap-2";
+            }
+            else if (status === 'locked') {
+                btnMain.style.display = 'none';
+
+                btnSecondary.innerHTML = '<span class="material-icons-round">lock_open</span> MỞ KHÓA BẢNG LƯƠNG';
+                btnSecondary.className = "w-full btn-secondary justify-center py-4 text-sm tracking-widest text-amber-600 border-amber-200 bg-amber-50 hover:bg-amber-100 transition-all shadow-sm flex items-center gap-2";
+            }
+        }
+
+
+        function renderDetails(records) {
+            const tbody = document.getElementById('payroll-detail-body');
+
+            if (records.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-slate-400">Chưa có nhân viên nào trong kỳ lương này</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = records.map(rec => `
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all cursor-pointer group" onclick="viewRecordDetail('${rec.employee_id}')">
+                    <td class="px-8 py-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full bg-sky-100 dark:bg-sky-900/30 text-sky-600 flex items-center justify-center text-xs font-black">
+                                ${rec.full_name.charAt(0)}
+                            </div>
+                            <div>
+                                <p class="text-sm font-bold text-slate-800 dark:text-white group-hover:text-sky-500 transition-colors">${rec.full_name}</p>
+                                <p class="text-[10px] text-slate-400 font-medium">${rec.employee_code}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-8 py-5">
+                        <span class="text-[10px] font-bold px-2 py-1 bg-slate-100 dark:bg-slate-800 rounded uppercase text-slate-500">${rec.department_name || 'N/A'}</span>
+                    </td>
+                    <td class="px-8 py-5 text-right">
+                        <p class="text-sm font-extrabold text-slate-800 dark:text-white">${App.formatCurrency(rec.net_salary)}</p>
+                        <p class="text-[10px] text-slate-400">Gross: ${App.formatCurrency(rec.gross_salary)}</p>
+                    </td>
+                    <td class="px-8 py-5 text-center">
+                        <span class="px-2.5 py-1 rounded-full text-[9px] font-extrabold uppercase ${getStatusColor(rec.payment_status)}">
+                            ${getPaymentStatusLabel(rec.payment_status)}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusColor(status) {
+            if (status === 'paid') return 'bg-emerald-100 text-emerald-700';
+            if (status === 'pending') return 'bg-amber-100 text-amber-700';
+            return 'bg-slate-100 text-slate-600';
+        }
+
+        function getPaymentStatusLabel(status) {
+            if (status === 'paid') return 'Đã thanh toán';
+            if (status === 'pending') return 'Chờ thanh toán';
+            return status;
+        }
+
+        // View Record Detail Logic
+        function viewRecordDetail(employeeId) {
+            const record = currentRecords.find(r => r.employee_id == employeeId);
+            if (!record) return;
+
+            document.getElementById('detail-modal').classList.remove('hidden');
+            document.getElementById('detail-modal').classList.add('flex');
+
+            document.getElementById('modal-emp-name').textContent = `${record.full_name} - ${record.employee_code}`;
+
+            // Base Calculation
+            const daysWorked = parseFloat(record.working_days) || 0;
+            const standardDays = parseFloat(record.standard_days) || 22;
+            const baseSalary = parseFloat(record.base_salary) || 0;
+            const actualBase = (baseSalary / standardDays) * daysWorked;
+
+            document.getElementById('modal-base-salary').textContent = App.formatCurrency(actualBase);
+
+            // Overtime
+            // Calculate back based on logic: hourRate * otHours * 1.5
+            // But we don't have exact rate here, let's use gross - allowances - base to estimate or just 0 if complex
+            // Since we don't store OT pay explicitly in record root (only hours), let's rely on gross math or details if available
+            // A better way is to iterate details for OT component if it exists, or just do manual calc
+            const hourlyRate = baseSalary / (standardDays * 8);
+            const otPay = hourlyRate * (parseFloat(record.overtime_hours) || 0) * 1.5;
+            document.getElementById('modal-ot-pay').textContent = App.formatCurrency(otPay);
+
+            // Gross & Net
+            document.getElementById('modal-gross').textContent = App.formatCurrency(record.gross_salary);
+            document.getElementById('modal-net').textContent = App.formatCurrency(record.net_salary);
+            document.getElementById('modal-tax').textContent = App.formatCurrency(record.tax_amount);
+            document.getElementById('modal-total-deductions').textContent = App.formatCurrency((parseFloat(record.total_deductions) || 0) + (parseFloat(record.tax_amount) || 0));
+
+            // Populate Breakdown tables
+            const allowancesBody = document.getElementById('modal-allowances-body');
+            const deductionsBody = document.getElementById('modal-deductions-body');
+            allowancesBody.innerHTML = '';
+            deductionsBody.innerHTML = '';
+
+            if (record.details && record.details.length > 0) {
+                record.details.forEach(d => {
+                    const row = `
+                        <tr>
+                            <td class="px-6 py-2 text-slate-500 text-xs pl-8 border-l-2 border-slate-100 dark:border-slate-800">${d.component_name}</td>
+                            <td class="px-6 py-2 text-right text-slate-700 dark:text-slate-300 text-xs font-medium">${App.formatCurrency(d.amount)}</td>
+                        </tr>
+                    `;
+                    if (d.component_type === 'allowance') allowancesBody.innerHTML += row;
+                    else if (d.component_type === 'deduction') deductionsBody.innerHTML += row;
+                });
+            } else {
+                allowancesBody.innerHTML = `<tr><td colspan="2" class="px-6 py-2 text-xs text-slate-400 italic text-center">Không có phụ cấp</td></tr>`;
+                // Deductions might have auto insurance not in details if not queried correctly, but likely in details
+            }
+        }
+
+        function printPayslip() {
+            const printContent = document.querySelector('#detail-modal > div').innerHTML;
+            const printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>Phiếu Lương</title>');
+            // Add basic styling for print
+            printWindow.document.write(`
+                <style>
+                    body { font-family: 'Inter', sans-serif; padding: 20px; }
+                    table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                    td, th { padding: 8px 12px; border-bottom: 1px solid #eee; }
+                    .text-right { text-align: right; }
+                    .font-bold { font-weight: bold; }
+                    .uppercase { text-transform: uppercase; }
+                    .bg-sky-500 { background-color: #0ea5e9; color: white; }
+                    .text-xl { font-size: 1.25rem; }
+                    /* Hide close buttons and action buttons */
+                    button { display: none !important; }
+                </style>
+             `);
+            printWindow.document.write('</head><body>');
+            printWindow.document.write(printContent);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+        }
+
+        function exportToExcel() {
+            if (!currentRecords || currentRecords.length === 0) {
+                App.toast('Không có dữ liệu để xuất', 'warning');
+                return;
+            }
+
+            // Prepare Data for SheetJS
+            const data = currentRecords.map((r, index) => ({
+                'STT / No.': index + 1,
+                'Mã NV / Emp Code': r.employee_code,
+                'Họ Tên / Full Name': r.full_name,
+                'Phòng Ban / Department': r.department_name || '',
+                'Chức Vụ / Position': r.position_name || '',
+                'Ngày Công / Working Days': parseFloat(r.working_days),
+                'Lương Cơ Bản / Base Salary': parseFloat(r.base_salary),
+                'OT (Giờ) / OT Hours': parseFloat(r.overtime_hours),
+                'Phụ Cấp / Allowances': parseFloat(r.total_allowances) || 0,
+                'Khấu Trừ / Deductions': parseFloat(r.total_deductions) || 0,
+                'Thuế TNCN / PIT': parseFloat(r.tax_amount) || 0,
+                'Tổng Thu Nhập / Gross': parseFloat(r.gross_salary),
+                'Thực Lĩnh / Net Pay': parseFloat(r.net_salary),
+                'Ghi Chú / Note': ''
+            }));
+
+            // Create Worksheet
+            const ws = XLSX.utils.json_to_sheet(data);
+
+            // Auto-width columns logic (simple version)
+            const wscols = [
+                { wch: 5 }, { wch: 15 }, { wch: 25 }, { wch: 20 }, { wch: 20 },
+                { wch: 10 }, { wch: 15 }, { wch: 10 }, { wch: 15 }, { wch: 15 },
+                { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 20 }
+            ];
+            ws['!cols'] = wscols;
+
+            // Create Workbook
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "Payroll Data");
+
+            // Write File
+            XLSX.writeFile(wb, `Bang_Luong_Thang_${currentPeriodInfo.period_month}_${currentPeriodInfo.period_year}.xlsx`);
+
+            App.toast('Đã xuất file Excel (.xlsx)', 'success');
+        }
+
+        // Modal and Confirmation Logic
+        function showConfirmModal() {
+            const modal = document.getElementById('confirm-modal');
+            const title = document.getElementById('confirm-title');
+            const msg = document.getElementById('confirm-msg');
+            const icon = document.getElementById('confirm-icon');
+            const iconBg = document.getElementById('confirm-icon-bg');
+
+            if (currentPeriodStatus === 'draft') {
+                title.innerText = 'Xác nhận phê duyệt';
+                msg.innerText = 'Bạn có chắc chắn muốn phê duyệt bảng lương này? Hành động này sẽ chuyển trạng thái sang "Kiểm tra & Duyệt".';
+                icon.innerText = 'verified_user';
+                iconBg.className = 'w-16 h-16 rounded-full bg-sky-50 dark:bg-sky-950/30 text-sky-500 flex items-center justify-center mb-2';
+            } else if (currentPeriodStatus === 'approved') {
+                title.innerText = 'Xác nhận chốt sổ';
+                msg.innerText = 'CẢNH BÁO: Sau khi chốt & khóa sổ, dữ liệu sẽ không thể chỉnh sửa. Bạn có chắc chắn muốn tiếp tục?';
+                icon.innerText = 'lock';
+                iconBg.className = 'w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/30 text-emerald-500 flex items-center justify-center mb-2';
+            }
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirm-modal').classList.add('hidden');
+            document.getElementById('confirm-modal').classList.remove('flex');
+        }
+
+        async function executeMainAction() {
+            closeConfirmModal();
+            if (currentPeriodStatus === 'draft') {
+                await approvePayroll();
+            } else if (currentPeriodStatus === 'approved') {
+                await lockPayroll();
+            }
+        }
+
+        async function approvePayroll() {
+            if (!currentPeriodId) return;
+
+            const btn = document.getElementById('btn-main-action');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-icons-round animate-spin">sync</span> ĐANG XỬ LÝ...';
+            btn.disabled = true;
+
+            try {
+                const note = document.getElementById('approval-note').value;
+                const resp = await fetch(`/api/payroll/periods/${currentPeriodId}/approve`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ note })
+                });
+                const data = await resp.json();
+
+                if (data.success) {
+                    App.toast('Đã phê duyệt bảng lương thành công!', 'success');
+                    await loadPayrollPeriodById(currentPeriodId);
+                } else {
+                    App.toast(data.message || 'Phê duyệt thất bại', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                App.toast('Lỗi kết nối hệ thống', 'error');
+            } finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
+        }
+
+        async function lockPayroll() {
+            if (!currentPeriodId) return;
+
+            const btn = document.getElementById('btn-main-action');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="material-icons-round animate-spin">sync</span> ĐANG KHÓA...';
+            btn.disabled = true;
+
+            try {
+                const resp = await fetch(`/api/payroll/periods/${currentPeriodId}/lock`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const data = await resp.json();
+
+                if (data.success) {
+                    App.toast('Bảng lương đã được chốt và khóa vĩnh viễn!', 'success');
+                    await loadPayrollPeriodById(currentPeriodId);
+                } else {
+                    App.toast(data.message || 'Khóa bảng lương thất bại', 'error');
+                }
+            } catch (err) {
+                console.error(err);
+                App.toast('Lỗi kết nối hệ thống', 'error');
+            } finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
+        }
+
+        async function requestAdjustment() {
+            if (!currentPeriodId) return;
+
+            // Handle Draft deletion
+            if (currentPeriodStatus === 'draft') {
+                if (!confirm('Bạn có chắc chắn muốn xóa bản nháp này? Dữ liệu sẽ biến mất vĩnh viễn.')) return;
+                try {
+                    const resp = await fetch(`/api/payroll/periods/${currentPeriodId}`, { method: 'DELETE' });
+                    const res = await resp.json();
+                    if (res.success) {
+                        App.toast('Đã xóa bản nháp thành công', 'success');
+                        window.location.href = '/payroll.html';
+                    } else App.toast(res.message, 'error');
+                } catch (e) { console.error(e); }
+                return;
+            }
+
+            const noteFn = () => document.getElementById('approval-note').value;
+            let note = noteFn();
+
+            let confirmMsg = 'XÁC NHẬN: Bạn muốn từ chối bảng lương này và yêu cầu điều chỉnh?';
+            let successMsg = 'Đã gửi yêu cầu điều chỉnh. Bảng lương đã mở lại (Draft).';
+
+            if (currentPeriodStatus === 'locked') {
+                confirmMsg = 'CẢNH BÁO: Bảng lương ĐÃ KHÓA. Bạn có chắc chắn muốn MỞ KHÓA?\nHành động này sẽ được ghi lại trong nhật ký hệ thống.';
+                successMsg = 'Đã MỞ KHÓA bảng lương thành công.';
+                if (!note) note = "Mở khóa bảng lương để điều chỉnh";
+            } else {
+                if (!note) {
+                    App.toast('Vui lòng nhập ghi chú lý do yêu cầu điều chỉnh', 'warning');
+                    document.getElementById('approval-note').focus();
+                    return;
+                }
+            }
+
+            if (!confirm(confirmMsg)) return;
+
+            try {
+                const resp = await fetch(`/api/payroll/periods/${currentPeriodId}/reject`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ note })
+                });
+                const data = await resp.json();
+
+                if (data.success) {
+                    App.toast(successMsg, 'success');
+                    await loadPayrollPeriodById(currentPeriodId);
+                } else {
+                    App.toast(data.message, 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                App.toast('Lỗi kết nối', 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal"
+        class="modal hidden fixed inset-0 z-[60] overflow-auto bg-black bg-opacity-60 flex items-center justify-center p-4">
+        <div
+            class="bg-white dark:bg-slate-900 rounded-[32px] max-w-sm w-full shadow-2xl p-8 transform transition-all border border-slate-100 dark:border-slate-800">
+            <div class="flex flex-col items-center text-center space-y-4">
+                <div id="confirm-icon-bg"
+                    class="w-16 h-16 rounded-full bg-sky-50 dark:bg-sky-950/30 text-sky-500 flex items-center justify-center mb-2">
+                    <span id="confirm-icon" class="material-icons-round text-3xl">verified_user</span>
+                </div>
+                <h3 id="confirm-title"
+                    class="text-xl font-black text-slate-900 dark:text-white uppercase tracking-tight">Xác nhận phê
+                    duyệt</h3>
+                <p id="confirm-msg" class="text-xs text-slate-500 leading-relaxed font-medium">Bạn có chắc chắn muốn phê
+                    duyệt bảng lương này? Hành động này sẽ được ghi lại vào lịch sử hệ thống.</p>
+
+                <div class="flex gap-3 w-full pt-4">
+                    <button onclick="closeConfirmModal()"
+                        class="flex-1 px-6 py-4 rounded-2xl border border-slate-100 dark:border-slate-800 font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all">Hủy
+                        bỏ</button>
+                    <button id="btn-confirm-execute" onclick="executeMainAction()"
+                        class="flex-1 px-6 py-4 bg-sky-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-sky-500/20 hover:bg-sky-600 transition-all">Đồng
+                        ý</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

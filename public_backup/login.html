@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Đăng Nhập Hệ Thống - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50 dark:bg-slate-950 flex items-center justify-center min-h-screen">
+    <div class="w-full max-w-md p-4">
+        <div class="text-center mb-8">
+            <div
+                class="inline-flex items-center justify-center w-16 h-16 bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl shadow-xl mb-4">
+                <span class="material-icons-round text-3xl text-sky-500">shield</span>
+            </div>
+            <h1 class="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">HR SYSTEM</h1>
+            <p class="text-sm text-slate-500 mt-2">Hệ quản trị nhân sự & lương cấp cao</p>
+        </div>
+
+        <div class="card overflow-hidden">
+            <div class="bg-red-50 dark:bg-red-900/10 p-4 border-b border-red-100 dark:border-red-900/20 flex gap-4">
+                <span class="material-icons-round text-red-500">gpp_maybe</span>
+                <div>
+                    <h2 class="text-[10px] font-bold text-red-600 uppercase tracking-widest">Internal Access Only</h2>
+                    <p class="text-[10px] text-red-500 mt-1">Hệ thống chỉ dành cho nhân sự được cấp quyền. Mọi truy cập
+                        trái phép sẽ bị ghi lại.</p>
+                </div>
+            </div>
+
+            <form id="login-form" class="p-8 space-y-6">
+                <div class="space-y-2">
+                    <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Email công
+                        việc</label>
+                    <div class="relative">
+                        <span
+                            class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">alternate_email</span>
+                        <input id="email" class="input-field pl-10" placeholder="admin@hr.com" required type="email" />
+                    </div>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex justify-between items-center">
+                        <label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Mật khẩu</label>
+                        <a href="#" class="text-[10px] font-bold text-sky-500 hover:underline">Quên mật khẩu?</a>
+                    </div>
+                    <div class="relative">
+                        <span
+                            class="material-icons-round absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">lock</span>
+                        <input id="password" class="input-field pl-10" placeholder="••••••••" required
+                            type="password" />
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full btn-primary justify-center py-3">
+                    Bắt đầu làm việc <span class="material-icons-round text-sm">arrow_forward</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="mt-8 text-center">
+            <p class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">© 2024 HR SYSTEM • VERSION 2.5
+                STABLE</p>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('login-form');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    localStorage.setItem('token', data.data.token);
+                    localStorage.setItem('user', JSON.stringify(data.data.user));
+                    window.location.href = '/admin-dashboard.html';
+                } else {
+                    alert(data.message || 'Sai thông tin đăng nhập');
+                }
+            } catch (err) {
+                alert('Lỗi kết nối máy chủ');
+            }
+        });
+
+        // Redirect if already logged in
+        if (localStorage.getItem('token')) {
+            window.location.href = '/admin-dashboard.html';
+        }
+    </script>
+</body>
+
+</html>

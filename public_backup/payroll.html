@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Phê Duyệt Lương - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body>
+    <div
+        class="security-gradient text-white px-6 py-2 flex justify-between items-center text-[11px] uppercase tracking-widest font-bold fixed top-0 w-full z-50">
+        <div class="flex items-center gap-2">
+            <span class="material-icons-round text-sm text-red-500">gpp_maybe</span>
+            <span>Truy cập nội bộ nghiêm ngặt | 内部访问</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="opacity-70">Lần đăng nhập cuối: 24/05/2024 08:30 AM</span>
+            <span class="bg-red-500/20 text-red-500 px-2 py-0.5 rounded border border-red-500/30">Mã hóa SSL: Hoạt
+                động</span>
+        </div>
+    </div>
+
+    <!-- Layout Container -->
+    <div class="flex pt-8">
+        <!-- Sidebar will be injected here -->
+        <div id="sidebar-root"></div>
+
+        <div class="flex-1 ml-64 min-h-screen flex flex-col">
+            <!-- Header will be injected here -->
+            <div id="header-root"></div>
+
+            <main class="p-8 max-w-7xl mx-auto w-full">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Quy trình phê duyệt
+                            lương</h1>
+                        <p class="text-slate-500 text-sm mt-1">Quản lý các chu kỳ thanh toán và phê duyệt bảng lương.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-8">
+                    <!-- Payroll Periods Table -->
+                    <div class="card overflow-hidden">
+                        <div
+                            class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                            <h2 class="text-lg font-bold">Lịch xử lý lương</h2>
+                            <button class="btn-primary">
+                                <span class="material-icons-round text-sm">add</span> Tạo chu kỳ mới
+                            </button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left">
+                                <thead class="bg-slate-50 dark:bg-slate-800/50">
+                                    <tr>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Chu kỳ</th>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Thời gian</th>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Tổng quỹ lương</th>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                            Trạng thái</th>
+                                        <th
+                                            class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">
+                                            Thao tác</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payroll-periods-list"
+                                    class="divide-y divide-slate-100 dark:divide-slate-800">
+                                    <!-- Content will be injected here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        async function loadPayrollPeriods() {
+            try {
+                const resp = await fetch('/api/payroll/periods');
+                const data = await resp.json();
+                if (data.success) {
+                    const tbody = document.getElementById('payroll-periods-list');
+                    tbody.innerHTML = data.data.map(p => `
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <td class="px-8 py-4">
+                                <div class="flex items-center gap-3">
+                                    <div class="h-9 w-9 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-500">
+                                        <span class="material-icons-round text-lg">calendar_month</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-white">Tháng ${p.period_month}/${p.period_year}</p>
+                                </div>
+                            </td>
+                            <td class="px-8 py-4 text-xs text-slate-500">
+                                Từ ${App.formatDate(p.start_date)} đến ${App.formatDate(p.end_date)}
+                            </td>
+                            <td class="px-8 py-4 text-sm font-bold">
+                                ${App.formatCurrency(p.total_amount)}
+                            </td>
+                            <td class="px-8 py-4">
+                                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${getStatusStyle(p.status)}">
+                                    ${getStatusLabel(p.status)}
+                                </span>
+                            </td>
+                            <td class="px-8 py-4 text-right">
+                                <button class="p-2 text-sky-500 hover:bg-sky-50 dark:hover:bg-sky-900/10 rounded-lg transition-all">
+                                    <span class="material-icons-round text-sm">visibility</span>
+                                </button>
+                                <button class="p-2 text-slate-400 hover:text-red-500 transition-all">
+                                    <span class="material-icons-round text-sm">more_vert</span>
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error('Failed to load payroll periods', e);
+            }
+        }
+
+        function getStatusStyle(status) {
+            switch (status) {
+                case 'draft': return 'bg-slate-100 text-slate-600';
+                case 'pending': return 'bg-amber-100 text-amber-700';
+                case 'approved': return 'bg-emerald-100 text-emerald-700';
+                default: return 'bg-slate-100 text-slate-600';
+            }
+        }
+
+        function getStatusLabel(status) {
+            switch (status) {
+                case 'draft': return 'BẢN NHÁP';
+                case 'pending': return 'CHỜ DUYỆT';
+                case 'approved': return 'ĐÃ DUYỆT';
+                case 'locked': return 'ĐÃ KHÓA';
+                default: return status.toUpperCase();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadPayrollPeriods);
+    </script>
+</body>
+
+</html>

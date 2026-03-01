@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Phân Quyền (RBAC) - HR ADMIN</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0f172a",
+            "accent": "#0ea5e9"
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+        },
+      },
+    }
+  </script>
+</head>
+
+<body>
+  <div
+    class="security-gradient text-white px-6 py-2 flex justify-between items-center text-[11px] uppercase tracking-widest font-bold fixed top-0 w-full z-50">
+    <div class="flex items-center gap-2">
+      <span class="material-icons-round text-sm text-red-500">gpp_maybe</span>
+      <span>Truy cập nội bộ nghiêm ngặt | 内部访问</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <span class="opacity-70">Lần đăng nhập cuối: 24/05/2024 08:30 AM</span>
+      <span class="bg-red-500/20 text-red-500 px-2 py-0.5 rounded border border-red-500/30">Mã hóa SSL: Hoạt động</span>
+    </div>
+  </div>
+
+  <!-- Layout Container -->
+  <div class="flex pt-8">
+    <!-- Sidebar will be injected here -->
+    <div id="sidebar-root"></div>
+
+    <div class="flex-1 ml-64 min-h-screen flex flex-col">
+      <!-- Header will be injected here -->
+      <div id="header-root"></div>
+
+      <main class="p-8 max-w-7xl mx-auto w-full">
+        <div class="flex justify-between items-center mb-8">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Phân quyền hệ thống</h1>
+            <p class="text-slate-500 text-sm mt-1">Quản lý vai trò và quyền hạn truy cập của người dùng.</p>
+          </div>
+          <button onclick="savePermissions()" class="btn-primary">
+            <span class="material-icons-round text-sm">save</span> Lưu thay đổi
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          <!-- Roles Sidebar -->
+          <div class="lg:col-span-1 space-y-4">
+            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Vai Trò</h3>
+            <div id="roles-list" class="space-y-2">
+              <!-- Roles loaded here -->
+            </div>
+          </div>
+
+          <!-- Permissions Grid -->
+          <div class="lg:col-span-3">
+            <div class="card overflow-hidden">
+              <div class="p-6 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
+                <h2 id="selected-role-name" class="text-lg font-bold">Chọn vai trò để cấu hình</h2>
+                <span class="material-icons-round text-slate-300">security</span>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                  <thead class="bg-slate-50 dark:bg-slate-800/50">
+                    <tr>
+                      <th class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Mô đun /
+                        Quyền hạn</th>
+                      <th class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-center">
+                        Cho phép</th>
+                    </tr>
+                  </thead>
+                  <tbody id="permissions-list" class="divide-y divide-slate-100 dark:divide-slate-800">
+                    <!-- Permissions loaded here -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+  <script>
+    let selectedRoleId = null;
+
+    async function loadRoles() {
+      try {
+        const resp = await fetch('/api/auth/roles');
+        const data = await resp.json();
+        if (data.success) {
+          const list = document.getElementById('roles-list');
+          list.innerHTML = data.data.map(role => `
+                        <button onclick="selectRole(${role.id}, '${role.role_name}')" class="role-btn w-full text-left px-4 py-3 rounded-xl border border-transparent hover:bg-slate-100 dark:hover:bg-slate-800 transition-all flex items-center justify-between group" data-role-id="${role.id}">
+                            <span class="text-sm font-bold text-slate-600 dark:text-slate-400 group-hover:text-sky-500">${role.role_name}</span>
+                            <span class="material-icons-round text-sm text-slate-300 group-hover:text-sky-500">chevron_right</span>
+                        </button>
+                    `).join('');
+        }
+      } catch (e) {
+        console.error('Failed to load roles', e);
+      }
+    }
+
+    async function selectRole(id, name) {
+      selectedRoleId = id;
+      document.getElementById('selected-role-name').textContent = `Quyền của: ${name}`;
+
+      document.querySelectorAll('.role-btn').forEach(btn => {
+        if (parseInt(btn.dataset.roleId) === id) {
+          btn.classList.add('bg-sky-50', 'dark:bg-sky-900/10', 'border-sky-100', 'dark:border-sky-900/20');
+          btn.querySelector('span').classList.add('text-sky-500');
+        } else {
+          btn.classList.remove('bg-sky-50', 'dark:bg-sky-900/10', 'border-sky-100', 'dark:border-sky-900/20');
+          btn.querySelector('span').classList.remove('text-sky-500');
+        }
+      });
+
+      try {
+        const [allResp, roleResp] = await Promise.all([
+          fetch('/api/auth/permissions'),
+          fetch(`/api/auth/roles/${id}/permissions`)
+        ]);
+        const allData = await allResp.json();
+        const roleData = await roleResp.json();
+
+        if (allData.success && roleData.success) {
+          const rolePermIds = roleData.data.map(p => p.id);
+          const tbody = document.getElementById('permissions-list');
+          tbody.innerHTML = allData.data.map(perm => `
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <td class="px-8 py-4">
+                                <div class="font-bold text-sm text-slate-700 dark:text-slate-300">${perm.permission_name}</div>
+                                <div class="text-[10px] text-slate-400">${perm.module} / ${perm.action}</div>
+                            </td>
+                            <td class="px-8 py-4 text-center">
+                                <input type="checkbox" data-permission-id="${perm.id}" ${rolePermIds.includes(perm.id) ? 'checked' : ''} class="w-5 h-5 rounded text-sky-500 focus:ring-sky-500 border-slate-300 bg-slate-50 dark:bg-slate-800">
+                            </td>
+                        </tr>
+                    `).join('');
+        }
+      } catch (e) {
+        console.error('Failed to load permissions', e);
+      }
+    }
+
+    async function savePermissions() {
+      if (!selectedRoleId) return;
+      const checkboxes = document.querySelectorAll('input[data-permission-id]:checked');
+      const permissionIds = Array.from(checkboxes).map(cb => parseInt(cb.dataset.permissionId));
+
+      try {
+        const resp = await fetch(`/api/auth/roles/${selectedRoleId}/permissions`, {
+          method: 'POST',
+          body: JSON.stringify({ permissions: permissionIds })
+        });
+        const data = await resp.json();
+        if (data.success) {
+          alert('Lưu phân quyền thành công!');
+        }
+      } catch (e) {
+        alert('Lỗi khi lưu phân quyền');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', loadRoles);
+  </script>
+</body>
+
+</html>

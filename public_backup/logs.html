@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Nhật Ký Hệ Thống - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body>
+    <div
+        class="security-gradient text-white px-6 py-2 flex justify-between items-center text-[11px] uppercase tracking-widest font-bold fixed top-0 w-full z-50">
+        <div class="flex items-center gap-2">
+            <span class="material-icons-round text-sm text-red-500">gpp_maybe</span>
+            <span>Truy cập nội bộ nghiêm ngặt | 内部访问</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <span class="opacity-70">Lần đăng nhập cuối: 24/05/2024 08:30 AM</span>
+            <span class="bg-red-500/20 text-red-500 px-2 py-0.5 rounded border border-red-500/30">Mã hóa SSL: Hoạt
+                động</span>
+        </div>
+    </div>
+
+    <!-- Layout Container -->
+    <div class="flex pt-8">
+        <!-- Sidebar will be injected here -->
+        <div id="sidebar-root"></div>
+
+        <div class="flex-1 ml-64 min-h-screen flex flex-col">
+            <!-- Header will be injected here -->
+            <div id="header-root"></div>
+
+            <main class="p-8 max-w-7xl mx-auto w-full">
+                <div class="flex justify-between items-center mb-8">
+                    <div>
+                        <h1 class="text-2xl font-bold text-slate-900 dark:text-white tracking-tight">Nhật ký hoạt động
+                        </h1>
+                        <p class="text-slate-500 text-sm mt-1">Theo dõi toàn bộ thay đổi và truy cập hệ thống.</p>
+                    </div>
+                    <button class="btn-secondary">
+                        <span class="material-icons-round text-sm">download</span> Tải file log
+                    </button>
+                </div>
+
+                <!-- Filters -->
+                <div class="card p-4 mb-6 flex flex-wrap items-center gap-6">
+                    <div class="flex flex-col">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase mb-1">Mô đun</label>
+                        <select
+                            class="form-select text-xs rounded-lg border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-2 pl-3 pr-10 min-w-[140px]">
+                            <option>Tất cả</option>
+                            <option>Nhân sự</option>
+                            <option>Lương</option>
+                            <option>Bảo mật</option>
+                        </select>
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="text-[10px] font-bold text-slate-500 uppercase mb-1">Người dùng</label>
+                        <input class="input-field py-2" placeholder="Tên hoặc Email..." type="text" />
+                    </div>
+                </div>
+
+                <!-- Logs Table -->
+                <div class="card overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead class="bg-slate-50 dark:bg-slate-800/50">
+                                <tr>
+                                    <th
+                                        class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        Thời gian</th>
+                                    <th
+                                        class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        Người thực hiện</th>
+                                    <th
+                                        class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        Hành động</th>
+                                    <th
+                                        class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        Mô đun</th>
+                                    <th
+                                        class="px-8 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                        Chi tiết</th>
+                                </tr>
+                            </thead>
+                            <tbody id="logs-list" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Content will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        async function loadLogs() {
+            try {
+                const resp = await fetch('/api/audit?limit=20');
+                const data = await resp.json();
+                if (data.success) {
+                    const tbody = document.getElementById('logs-list');
+                    tbody.innerHTML = data.data.logs.map(log => `
+                        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                            <td class="px-8 py-4 text-xs font-mono text-slate-500">
+                                ${new Date(log.created_at).toLocaleString('vi-VN')}
+                            </td>
+                            <td class="px-8 py-4">
+                                <div class="flex items-center gap-2">
+                                    <div class="h-6 w-6 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-[10px] font-bold">
+                                        ${log.full_name?.substring(0, 2).toUpperCase() || 'AD'}
+                                    </div>
+                                    <p class="text-xs font-bold text-slate-700 dark:text-slate-300">${log.full_name}</p>
+                                </div>
+                            </td>
+                            <td class="px-8 py-4">
+                                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${getActionBg(log.action)}">
+                                    ${log.action}
+                                </span>
+                            </td>
+                            <td class="px-8 py-4 text-xs font-medium text-slate-500">
+                                ${log.module}
+                            </td>
+                            <td class="px-8 py-4 text-xs text-slate-400 truncate max-w-xs">
+                                ${log.details || '-'}
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (e) {
+                console.error('Failed to load logs', e);
+            }
+        }
+
+        function getActionBg(action) {
+            if (action.includes('CREATE')) return 'bg-green-50 text-green-700';
+            if (action.includes('UPDATE')) return 'bg-amber-50 text-amber-700';
+            if (action.includes('DELETE')) return 'bg-red-50 text-red-700';
+            if (action.includes('LOGIN')) return 'bg-blue-50 text-blue-700';
+            return 'bg-slate-50 text-slate-600';
+        }
+
+        document.addEventListener('DOMContentLoaded', loadLogs);
+    </script>
+</body>
+
+</html>

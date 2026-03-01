@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cài Đặt Lịch Làm Việc &amp; Ngày Lễ | 工作安排与节假日设置</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .holiday-paid { background-color: rgba(19, 127, 236, 0.1); border: 1px solid #137fec; }
+        .holiday-unpaid { background-color: #f3f4f6; border: 1px solid #d1d5db; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-100 font-display min-h-screen">
+<!-- Header / Navigation -->
+<header class="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-6 py-4">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div>
+<h1 class="text-xl font-bold text-slate-900 dark:text-white">Cài Đặt Lịch Làm Việc &amp; Ngày Lễ</h1>
+<p class="text-sm text-slate-500 dark:text-slate-400">工作安排与节假日设置</p>
+</div>
+<div class="flex items-center gap-4">
+<!-- Language Toggle -->
+<div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="px-3 py-1.5 text-sm font-medium bg-white dark:bg-slate-700 shadow-sm rounded-md text-primary">VN</button>
+<button class="px-3 py-1.5 text-sm font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300">ZH</button>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors">
+<span class="material-icons text-sm">save</span>
+                    Lưu thay đổi / 保存更改
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto p-6 space-y-8">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Settings & Shifts -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Section: Working Days Policy -->
+<section class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 mb-6">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-icons text-primary">event_available</span>
+</div>
+<div>
+<h2 class="font-semibold text-slate-900 dark:text-white leading-tight">Quy định ngày công</h2>
+<p class="text-xs text-slate-500 uppercase tracking-wider">工作日政策</p>
+</div>
+</div>
+<div class="space-y-3">
+<label class="flex items-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<input checked="" class="text-primary focus:ring-primary h-4 w-4" name="working_days" type="radio"/>
+<div class="ml-3">
+<span class="block text-sm font-medium">Thứ 2 - Thứ 6</span>
+<span class="block text-xs text-slate-500 italic">周一至周五</span>
+</div>
+</label>
+<label class="flex items-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<input class="text-primary focus:ring-primary h-4 w-4" name="working_days" type="radio"/>
+<div class="ml-3">
+<span class="block text-sm font-medium">Thứ 2 - Thứ 7</span>
+<span class="block text-xs text-slate-500 italic">周一至周六</span>
+</div>
+</label>
+<label class="flex items-center p-3 border border-slate-200 dark:border-slate-700 rounded-lg cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+<input class="text-primary focus:ring-primary h-4 w-4" name="working_days" type="radio"/>
+<div class="ml-3">
+<span class="block text-sm font-medium">Tùy chỉnh</span>
+<span class="block text-xs text-slate-500 italic">自定义</span>
+</div>
+</label>
+</div>
+</section>
+<!-- Section: Shift Configuration -->
+<section class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-icons text-primary">schedule</span>
+</div>
+<div>
+<h2 class="font-semibold text-slate-900 dark:text-white leading-tight">Cấu hình Ca làm việc</h2>
+<p class="text-xs text-slate-500 uppercase tracking-wider">轮班模板</p>
+</div>
+</div>
+<button class="text-primary hover:text-primary/80">
+<span class="material-icons">add_circle_outline</span>
+</button>
+</div>
+<div class="space-y-4">
+<!-- Shift Card: Day -->
+<div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white">Ca Sáng (Day Shift)</h3>
+<p class="text-xs text-slate-500">日班</p>
+</div>
+<span class="px-2 py-0.5 text-[10px] bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 rounded-full font-bold uppercase">Active</span>
+</div>
+<div class="grid grid-cols-2 gap-4 text-xs">
+<div>
+<p class="text-slate-500 mb-1">Thời gian / 时间</p>
+<p class="font-medium text-slate-900 dark:text-slate-100">08:00 - 17:00</p>
+</div>
+<div>
+<p class="text-slate-500 mb-1">Nghỉ trưa / 休息</p>
+<p class="font-medium text-slate-900 dark:text-slate-100">60 phút / 分钟</p>
+</div>
+</div>
+</div>
+<!-- Shift Card: Night -->
+<div class="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 opacity-80">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h3 class="text-sm font-bold text-slate-900 dark:text-white">Ca Đêm (Night Shift)</h3>
+<p class="text-xs text-slate-500">夜班</p>
+</div>
+<button class="text-slate-400 hover:text-primary">
+<span class="material-icons text-sm">edit</span>
+</button>
+</div>
+<div class="grid grid-cols-2 gap-4 text-xs">
+<div>
+<p class="text-slate-500 mb-1">Thời gian / 时间</p>
+<p class="font-medium text-slate-900 dark:text-slate-100">20:00 - 05:00</p>
+</div>
+<div>
+<p class="text-slate-500 mb-1">Nghỉ giữa ca / 休息</p>
+<p class="font-medium text-slate-900 dark:text-slate-100">60 phút / 分钟</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Holiday Calendar -->
+<div class="lg:col-span-8">
+<section class="bg-white dark:bg-slate-900 p-6 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 h-full">
+<div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+<div class="flex items-center gap-3">
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-icons text-primary">calendar_month</span>
+</div>
+<div>
+<h2 class="font-semibold text-slate-900 dark:text-white leading-tight">Lịch nghỉ lễ công ty</h2>
+<p class="text-xs text-slate-500 uppercase tracking-wider">公司节假日日历</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
+<span class="material-icons text-slate-500">chevron_left</span>
+</button>
+<span class="text-sm font-bold min-w-[100px] text-center uppercase tracking-wide">Tháng 05, 2024</span>
+<button class="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded">
+<span class="material-icons text-slate-500">chevron_right</span>
+</button>
+</div>
+<div class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden md:block"></div>
+<div class="flex items-center gap-4 text-[10px] md:text-xs">
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 bg-primary rounded-sm"></div>
+<span class="text-slate-600 dark:text-slate-400 font-medium">Có hưởng lương (有薪)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<div class="w-3 h-3 bg-slate-300 dark:bg-slate-600 rounded-sm"></div>
+<span class="text-slate-600 dark:text-slate-400 font-medium">Không lương (无薪)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Calendar Grid -->
+<div class="grid grid-cols-7 gap-px bg-slate-200 dark:bg-slate-800 rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800">
+<!-- Day Headers -->
+<div class="bg-slate-50 dark:bg-slate-800/80 p-3 text-center text-xs font-bold text-slate-500">T2 / 一</div>
+<div class="bg-slate-50 dark:bg-slate-800/80 p-3 text-center text-xs font-bold text-slate-500">T3 / 二</div>
+<div class="bg-slate-50 dark:bg-slate-800/80 p-3 text-center text-xs font-bold text-slate-500">T4 / 三</div>
+<div class="bg-slate-50 dark:bg-slate-800/80 p-3 text-center text-xs font-bold text-slate-500">T5 / 四</div>
+<div class="bg-slate-50 dark:bg-slate-800/80 p-3 text-center text-xs font-bold text-slate-500">T6 / 五</div>
+<div class="bg-slate-50 dark:bg-slate-800/80 p-3 text-center text-xs font-bold text-red-400">T7 / 六</div>
+<div class="bg-slate-50 dark:bg-slate-800/80 p-3 text-center text-xs font-bold text-red-500">CN / 日</div>
+<!-- Empty Cells (Placeholder for current month start) -->
+<div class="bg-slate-50/50 dark:bg-slate-900/50 min-h-[100px] p-2"></div>
+<div class="bg-slate-50/50 dark:bg-slate-900/50 min-h-[100px] p-2"></div>
+<!-- Calendar Days -->
+<!-- May 1st - Holiday -->
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 relative group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 holiday-paid">
+<span class="text-sm font-bold text-primary">01</span>
+<div class="mt-2 space-y-1">
+<span class="block text-[10px] font-bold text-primary truncate leading-tight">Ngày Quốc tế Lao động</span>
+<span class="block text-[10px] text-primary/70 italic truncate">五一劳动节</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">02</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">03</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm font-medium text-red-400">04</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm font-medium text-red-500">05</span>
+</div>
+<!-- Second Week -->
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">06</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">07</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">08</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">09</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">10</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm font-medium text-red-400">11</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm font-medium text-red-500">12</span>
+</div>
+<!-- Third Week (Example of Unpaid) -->
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">13</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">14</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800 holiday-unpaid">
+<span class="text-sm font-bold text-slate-500">15</span>
+<div class="mt-2 space-y-1">
+<span class="block text-[10px] font-bold text-slate-500 truncate leading-tight">Nghỉ bù sự kiện</span>
+<span class="block text-[10px] text-slate-400 italic truncate">活动补休</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">16</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">17</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm font-medium text-red-400">18</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm font-medium text-red-500">19</span>
+</div>
+<!-- More Days... -->
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">20</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">21</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">22</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">23</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">24</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm font-medium text-red-400">25</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 bg-slate-50 dark:bg-slate-800/50">
+<span class="text-sm font-medium text-red-500">26</span>
+</div>
+<!-- Last Week -->
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">27</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">28</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">29</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">30</span>
+</div>
+<div class="bg-white dark:bg-slate-900 min-h-[100px] p-2 group cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800">
+<span class="text-sm font-medium text-slate-600 dark:text-slate-400">31</span>
+</div>
+<div class="bg-slate-50/50 dark:bg-slate-900/50 min-h-[100px] p-2"></div>
+<div class="bg-slate-50/50 dark:bg-slate-900/50 min-h-[100px] p-2"></div>
+</div>
+<!-- Legend & Note -->
+<div class="mt-6 flex flex-col md:flex-row justify-between gap-4">
+<div class="p-4 bg-primary/5 border border-primary/20 rounded-lg max-w-lg">
+<div class="flex gap-3">
+<span class="material-icons text-primary text-lg">info</span>
+<div class="text-xs text-slate-600 dark:text-slate-400">
+<p class="font-bold mb-1">Hướng dẫn / 说明:</p>
+<p>Nhấp vào một ngày để đánh dấu là ngày nghỉ. Các ngày nghỉ lễ sẽ tự động được tính vào bảng lương theo cấu hình. / 点击日期将其标记为假期。节假日将根据配置自动计入工资单。</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Floating Actions for Mobile/Compact Views -->
+<div class="fixed bottom-6 right-6 md:hidden">
+<button class="w-14 h-14 bg-primary text-white rounded-full shadow-lg flex items-center justify-center">
+<span class="material-icons">save</span>
+</button>
+</div>
+<!-- Hidden Template for Modal (Mockup logic) -->
+<div class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-[100] hidden items-center justify-center">
+<div class="bg-white dark:bg-slate-900 w-full max-w-md rounded-xl shadow-2xl overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<h3 class="font-bold text-slate-900 dark:text-white uppercase tracking-wide">Thiết lập ngày nghỉ / 设置假期</h3>
+<button class="text-slate-400 hover:text-slate-600">
+<span class="material-icons text-xl">close</span>
+</button>
+</div>
+<div class="p-6 space-y-4">
+<div>
+<label class="block text-sm font-medium mb-1">Tên ngày lễ / 节日名称</label>
+<input class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary" type="text"/>
+</div>
+<div>
+<label class="block text-sm font-medium mb-1">Loại ngày nghỉ / 假期类型</label>
+<select class="w-full rounded-lg border-slate-300 dark:border-slate-700 bg-transparent focus:ring-primary focus:border-primary">
+<option>Có hưởng lương (有薪)</option>
+<option>Không hưởng lương (无薪)</option>
+<option>Nghỉ bù (补休)</option>
+</select>
+</div>
+<div class="flex justify-end gap-3 mt-6">
+<button class="px-4 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 rounded-lg">Hủy / 取消</button>
+<button class="px-4 py-2 text-sm font-medium bg-primary text-white rounded-lg">Xác nhận / 确认</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

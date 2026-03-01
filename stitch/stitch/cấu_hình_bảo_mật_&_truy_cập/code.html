@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cấu Hình Bảo Mật &amp; Truy Cập | 安全与访问配置</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .status-dot {
+            height: 8px;
+            width: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-800 dark:text-slate-200 antialiased min-h-screen">
+<!-- Header Navigation -->
+<header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30">
+<div class="max-w-[1440px] mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-primary p-1.5 rounded-lg">
+<span class="material-icons text-white">shield</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-tight">Bảo Mật &amp; Truy Cập</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">安全与访问控制</p>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<!-- Language Toggle -->
+<div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg border border-slate-200 dark:border-slate-700">
+<button class="px-3 py-1 text-xs font-semibold bg-white dark:bg-primary shadow-sm rounded-md text-primary dark:text-white transition-all">VN</button>
+<button class="px-3 py-1 text-xs font-semibold text-slate-500 hover:text-primary transition-all">中文</button>
+</div>
+<div class="h-8 w-[1px] bg-slate-200 dark:bg-slate-700"></div>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="text-sm font-medium">Admin User</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-wider">Hệ thống / 系统</p>
+</div>
+<img alt="User profile" class="w-10 h-10 rounded-full border-2 border-primary/20" data-alt="Professional user profile avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2tgm2rwUTrXvx-RCqjXkeR3rIHg8DyTm7FVlc8HkufMFBW6hwY_ZqsNh1X-4lCC6qHRFNUNhMoYiTdtEhfg05kdId67S8tXJqhfQCzIhlSBDqLHh6dkSnE7lBxLka2SziFYGQd0e-x4OsGyrFZ6YUNrsftu_SEEeJ4CwEOdTiYc1AF4cdZdcOL7jeTTMVwSxVNGZOQudGIksVZKTLY2Acnhjzkfxp7yCqf6fy20E0s9IzuO8dqkn8XKoDRZHS2UIdNZ3NnUHAzBM"/>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-[1440px] mx-auto p-6 space-y-6">
+<!-- Summary Dashboard -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Phiên Hoạt Động / 活动会话</span>
+<span class="material-icons text-primary text-xl">devices</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold">12</span>
+<span class="text-xs text-emerald-500 font-medium">+2 hôm nay</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-slate-500 text-xs font-semibold uppercase tracking-wider">Truy cập lạ / 异常访问</span>
+<span class="material-icons text-amber-500 text-xl">warning_amber</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-2xl font-bold">0</span>
+<span class="text-xs text-slate-400 font-medium">24 giờ qua</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+<div class="flex items-center justify-between mb-2">
+<span class="text-slate-500 text-xs font-semibold uppercase tracking-wider">IP Hiện Tại / 当前 IP</span>
+<span class="material-icons text-slate-400 text-xl">public</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="text-lg font-mono font-bold text-primary">118.69.190.23</span>
+</div>
+</div>
+<div class="bg-white dark:bg-slate-900 p-5 rounded-xl border border-primary/20 dark:border-primary/30 shadow-sm bg-primary/5">
+<div class="flex items-center justify-between mb-2">
+<span class="text-primary text-xs font-bold uppercase tracking-wider">Trạng Thái / 安全状态</span>
+<span class="material-icons text-primary text-xl">verified_user</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="status-dot bg-emerald-500 animate-pulse"></span>
+<span class="text-sm font-semibold text-emerald-600">Ổn định / 稳定</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+<!-- Active Sessions List -->
+<div class="lg:col-span-2 space-y-4">
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden">
+<div class="p-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+<div>
+<h2 class="font-bold text-slate-800 dark:text-white">Danh Sách Phiên Đang Kết Nối</h2>
+<p class="text-xs text-slate-500">当前活动的会话列表</p>
+</div>
+<button class="bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/30 text-red-600 dark:text-red-400 px-4 py-2 rounded-lg text-xs font-bold transition-colors flex items-center gap-2 border border-red-200 dark:border-red-800">
+<span class="material-icons text-sm">logout</span>
+                            Đăng xuất tất cả / 全部登出
+                        </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-slate-50 dark:bg-slate-800/50 text-[10px] uppercase font-bold text-slate-500 border-b border-slate-200 dark:border-slate-800">
+<tr>
+<th class="px-5 py-3">Người dùng / 用户</th>
+<th class="px-5 py-3">Địa chỉ IP / IP地址</th>
+<th class="px-5 py-3">Thiết bị / 设备</th>
+<th class="px-5 py-3 text-right">Thao tác / 操作</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 text-primary flex items-center justify-center font-bold text-xs">A</div>
+<div>
+<p class="text-sm font-semibold">Admin (You)</p>
+<p class="text-[10px] text-emerald-500">Đang hoạt động / 活动中</p>
+</div>
+</div>
+</td>
+<td class="px-5 py-4">
+<code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">118.69.190.23</code>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="material-icons text-slate-400 text-sm">laptop_mac</span>
+<span class="text-xs text-slate-600 dark:text-slate-400">Chrome (MacOS 14.5)</span>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<span class="text-[10px] font-bold text-slate-400 italic">Phiên hiện tại</span>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold text-xs">P</div>
+<div>
+<p class="text-sm font-semibold">Phạm Văn A</p>
+<p class="text-[10px] text-slate-500">HR Manager</p>
+</div>
+</div>
+</td>
+<td class="px-5 py-4">
+<code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">14.226.11.109</code>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="material-icons text-slate-400 text-sm">smartphone</span>
+<span class="text-xs text-slate-600 dark:text-slate-400">Safari (iPhone 15)</span>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<button class="text-red-500 hover:text-red-700 text-[10px] font-bold underline">CƯỠNG ÉP THOÁT</button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-5 py-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-slate-200 dark:bg-slate-700 text-slate-500 flex items-center justify-center font-bold text-xs">T</div>
+<div>
+<p class="text-sm font-semibold">Trần Thị B</p>
+<p class="text-[10px] text-slate-500">Payroll Specialist</p>
+</div>
+</div>
+</td>
+<td class="px-5 py-4">
+<code class="text-xs font-mono bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">27.72.61.12</code>
+</td>
+<td class="px-5 py-4">
+<div class="flex items-center gap-2">
+<span class="material-icons text-slate-400 text-sm">desktop_windows</span>
+<span class="text-xs text-slate-600 dark:text-slate-400">Edge (Windows 11)</span>
+</div>
+</td>
+<td class="px-5 py-4 text-right">
+<button class="text-red-500 hover:text-red-700 text-[10px] font-bold underline">CƯỠNG ÉP THOÁT</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- RBAC Rule Visualization -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+<div class="mb-6">
+<h2 class="font-bold text-slate-800 dark:text-white">Cấu Hình Đường Dẫn (URL RBAC)</h2>
+<p class="text-xs text-slate-500 italic">URL 访问控制列表 - Chặn các truy cập trái phép vào thư mục ứng dụng</p>
+</div>
+<div class="space-y-3">
+<div class="flex items-center gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+<div class="flex-shrink-0 bg-primary/20 text-primary p-2 rounded">
+<span class="material-icons">code</span>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-xs font-mono font-bold bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">/app/*</span>
+<span class="text-[10px] text-slate-400">(Tất cả các chức năng nghiệp vụ)</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-primary text-white text-[10px] rounded-full font-bold">Admin / 管理员</span>
+<span class="px-2 py-0.5 bg-primary/20 text-primary text-[10px] rounded-full font-bold">HR Manager / 人事经理</span>
+<span class="px-2 py-0.5 bg-primary/20 text-primary text-[10px] rounded-full font-bold">Payroll / 薪资管理员</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+<div class="flex-shrink-0 bg-amber-500/20 text-amber-600 p-2 rounded">
+<span class="material-icons">settings_remote</span>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-2 mb-1">
+<span class="text-xs font-mono font-bold bg-slate-200 dark:bg-slate-700 px-2 py-0.5 rounded">/admin/*</span>
+<span class="text-[10px] text-slate-400">(Cấu hình hệ thống sâu)</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="px-2 py-0.5 bg-primary text-white text-[10px] rounded-full font-bold">Boss / 老板</span>
+<span class="px-2 py-0.5 bg-primary/20 text-primary text-[10px] rounded-full font-bold">System Admin / 系统管理员</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: Settings & Whitelist -->
+<div class="space-y-6">
+<!-- White-list Access -->
+<div class="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm p-6">
+<div class="mb-5">
+<h2 class="font-bold text-slate-800 dark:text-white leading-tight">Danh Sách Cho Phép</h2>
+<p class="text-xs text-slate-500 uppercase tracking-wide mt-0.5">访问白名单 (Email Whitelist)</p>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<input class="w-full text-sm border-slate-200 dark:border-slate-700 dark:bg-slate-800 rounded-lg pr-10 focus:ring-primary focus:border-primary" placeholder="Nhập email mới..." type="text"/>
+<button class="absolute right-2 top-1.5 text-primary hover:text-primary/80">
+<span class="material-icons">add_circle</span>
+</button>
+</div>
+<div class="space-y-2">
+<div class="flex items-center justify-between p-2 rounded bg-slate-50 dark:bg-slate-800 border-l-4 border-primary">
+<div class="flex flex-col">
+<span class="text-xs font-semibold">boss@company.com</span>
+<span class="text-[10px] text-slate-400">Owner (Sở hữu)</span>
+</div>
+<span class="material-icons text-slate-300 text-sm">lock</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-slate-50 dark:bg-slate-800">
+<div class="flex flex-col">
+<span class="text-xs font-semibold">it.support@company.com</span>
+<span class="text-[10px] text-slate-400">Admin</span>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-icons text-sm">cancel</span>
+</button>
+</div>
+<div class="flex items-center justify-between p-2 rounded bg-slate-50 dark:bg-slate-800">
+<div class="flex flex-col">
+<span class="text-xs font-semibold">hr.manager@company.com</span>
+<span class="text-[10px] text-slate-400">HR Lead</span>
+</div>
+<button class="text-slate-400 hover:text-red-500 transition-colors">
+<span class="material-icons text-sm">cancel</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
+<label class="flex items-center gap-3 cursor-pointer group">
+<div class="relative">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-200 dark:bg-slate-700 rounded-full peer-checked:bg-primary transition-colors"></div>
+<div class="absolute left-1 top-1 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-5"></div>
+</div>
+<div>
+<p class="text-xs font-bold text-slate-700 dark:text-slate-300">Xác thực 2 yếu tố (2FA)</p>
+<p class="text-[10px] text-slate-500">Bắt buộc cho tài khoản Admin</p>
+</div>
+</label>
+</div>
+</div>
+<!-- Security Log Preview -->
+<div class="bg-slate-900 text-slate-300 rounded-xl border border-slate-800 shadow-xl p-5 overflow-hidden relative">
+<div class="absolute top-0 right-0 p-4">
+<span class="material-icons text-emerald-500/20 text-5xl">terminal</span>
+</div>
+<div class="mb-4">
+<h2 class="text-xs font-bold text-white uppercase tracking-widest">Nhật ký bảo mật / 安全日志</h2>
+</div>
+<div class="font-mono text-[10px] space-y-1.5 opacity-80">
+<p><span class="text-emerald-500">[2023-10-27 10:45]</span> AUTH_SUCCESS: user 'admin'</p>
+<p><span class="text-emerald-500">[2023-10-27 10:42]</span> SESSION_START: ip 118.69.190.23</p>
+<p><span class="text-amber-500">[2023-10-27 09:15]</span> ROLE_CHANGE: user 'hr.manager' (updated)</p>
+<p><span class="text-emerald-500">[2023-10-26 23:59]</span> SYS_BACKUP: Completed successfully</p>
+<p class="animate-pulse cursor-default hover:text-white transition-colors">_</p>
+</div>
+</div>
+<!-- Action Banner -->
+<div class="bg-primary p-4 rounded-xl text-white shadow-lg shadow-primary/20">
+<div class="flex items-center gap-4">
+<span class="material-icons text-3xl opacity-50">help_outline</span>
+<div>
+<p class="text-xs font-bold">Cần hỗ trợ? / 需要帮助？</p>
+<p class="text-[10px] opacity-80 leading-relaxed">Mọi thay đổi trong mục này sẽ được ghi nhật ký và gửi thông báo tới Boss.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="max-w-[1440px] mx-auto p-6 flex flex-col md:flex-row items-center justify-between border-t border-slate-200 dark:border-slate-800 text-[10px] text-slate-500 gap-4 mt-8">
+<div class="flex items-center gap-4">
+<p>© 2023 HR &amp; Payroll System. Phiên bản 2.4.0</p>
+<div class="flex gap-2">
+<span class="px-1.5 py-0.5 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 rounded">SSL Secure</span>
+<span class="px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-blue-600 rounded">GDPR Compliant</span>
+</div>
+</div>
+<div class="flex gap-6">
+<a class="hover:text-primary transition-colors" href="#">Điều khoản / 条款</a>
+<a class="hover:text-primary transition-colors" href="#">Chính sách bảo mật / 隐私政策</a>
+</div>
+</footer>
+</body></html>

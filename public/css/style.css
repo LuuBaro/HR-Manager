@@ -1,0 +1,246 @@
+/* HR System Shared Styles - Pure CSS (No @apply for CDN Compatibility) */
+
+:root {
+    --primary: #0f172a;
+    --accent: #0ea5e9;
+    --sidebar-width: 256px;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.material-icons-round {
+    font-family: 'Material Icons Round' !important;
+}
+
+/* Sidebar Item Base */
+.sidebar-item {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 12px 16px !important;
+    border-radius: 14px !important;
+    color: #94a3b8 !important;
+    /* slate-400 */
+    text-decoration: none !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    margin: 2px 12px !important;
+}
+
+.sidebar-item:hover {
+    background-color: #f8fafc !important;
+    /* slate-50 */
+    color: #0ea5e9 !important;
+}
+
+.dark .sidebar-item:hover {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    /* slate-800 */
+}
+
+.sidebar-item-active {
+    background-color: #f0f9ff !important;
+    /* sky-50 */
+    color: #0ea5e9 !important;
+    font-weight: 800 !important;
+}
+
+.dark .sidebar-item-active {
+    background-color: rgba(14, 165, 233, 0.1) !important;
+}
+
+.sidebar-item span.material-icons-round {
+    font-size: 20px !important;
+}
+
+/* Component Classes */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    /* slate-200 */
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.dark .card {
+    background-color: #0f172a;
+    /* slate-900 */
+    border-color: #1e293b;
+    /* slate-800 */
+}
+
+.btn-primary {
+    background-color: #0ea5e9;
+    color: white;
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(14, 165, 233, 0.3);
+    transition: all 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #0284c7;
+    transform: translateY(-1px);
+    box-shadow: 0 12px 20px -3px rgba(14, 165, 233, 0.4);
+}
+
+.btn-secondary {
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    color: #334155;
+    padding: 8px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dark .btn-secondary {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #cbd5e1;
+}
+
+.btn-secondary:hover {
+    background-color: #f8fafc;
+}
+
+.input-field {
+    width: 100%;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 14px;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.input-field:focus {
+    border-color: #0ea5e9;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+}
+
+.dark .input-field {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: white;
+}
+
+/* Layout Utilities */
+.security-gradient {
+    background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1;
+    border-radius: 9999px;
+}
+
+.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #334155;
+}
+
+/* Fix for Sidebar Overlapping under Banner */
+aside {
+    padding-top: 40px !important;
+}
+
+/* Premium Effects */
+.glass {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+    background: rgba(15, 23, 42, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.animate-in {
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tracking-tighter {
+    letter-spacing: -0.05em;
+}
+
+.tracking-tight {
+    letter-spacing: -0.025em;
+}
+
+.tracking-widest {
+    letter-spacing: 0.1em;
+}
+
+/* Toast Animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+
+    to {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+}
+
+.animate-in.slide-in-from-right-full {
+    animation: slideInRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.animate-out.slide-out-to-right-full {
+    animation: slideOutRight 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

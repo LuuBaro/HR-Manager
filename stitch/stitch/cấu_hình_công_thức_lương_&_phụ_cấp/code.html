@@ -1,0 +1,284 @@
+<html class="light" lang="vi"><head>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/></head><body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">```html
+
+
+
+
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cấu Hình Công Thức Lương &amp; Phụ Cấp</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .formula-editor { font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', monospace; }
+        .variable-chip:hover { transform: translateY(-1px); }
+    </style>
+<!-- Header -->
+<header class="sticky top-0 z-30 w-full border-b border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-[1400px] mx-auto px-6 h-16 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-icons text-white text-lg">calculate</span>
+</div>
+<div>
+<h1 class="text-lg font-semibold leading-none">Cấu Hình Công Thức Lương</h1>
+<p class="text-xs text-slate-500 mt-1 uppercase tracking-wider font-medium">Payroll &amp; Allowance Configuration</p>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<!-- Language Toggle -->
+<div class="flex items-center bg-slate-100 dark:bg-slate-800 p-1 rounded-lg">
+<button class="px-3 py-1 text-xs font-medium bg-white dark:bg-slate-700 shadow-sm rounded-md flex items-center gap-2">
+<span class="w-4 h-3 bg-red-600 rounded-sm"></span> VN
+                    </button>
+<button class="px-3 py-1 text-xs font-medium text-slate-500 hover:text-slate-700 dark:hover:text-slate-300 flex items-center gap-2">
+<span class="w-4 h-3 bg-red-600 relative overflow-hidden flex items-center justify-center">
+<span class="material-icons text-[8px] text-yellow-400">star</span>
+</span> ZH
+                    </button>
+</div>
+<div class="h-6 w-px bg-slate-200 dark:border-slate-700"></div>
+<button class="bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 flex items-center gap-2">
+<span class="material-icons text-sm">save</span>
+                    Lưu cấu hình (保存)
+                </button>
+</div>
+</div>
+</header>
+<main class="max-w-[1400px] mx-auto p-6 grid grid-cols-12 gap-6">
+<!-- Section 1: Danh mục Phụ cấp & Khấu trừ -->
+<section class="col-span-12 xl:col-span-7 space-y-6">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden shadow-sm">
+<div class="p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center">
+<div>
+<h2 class="font-semibold text-slate-800 dark:text-white">Danh mục Phụ cấp &amp; Khấu trừ</h2>
+<p class="text-sm text-slate-500">津贴与扣除项 (Allowances &amp; Deductions)</p>
+</div>
+<button class="text-primary hover:bg-primary/10 px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 transition-colors">
+<span class="material-icons text-sm">add</span> Thêm khoản mới
+                    </button>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead class="bg-slate-50 dark:bg-slate-800/50">
+<tr>
+<th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Mã (代码)</th>
+<th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Tên khoản (名称)</th>
+<th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase">Loại (类型)</th>
+<th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-right">Giá trị (值)</th>
+<th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-center">Chịu thuế? (计税)</th>
+<th class="px-4 py-3 text-xs font-semibold text-slate-500 uppercase text-center"></th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-4 py-4 font-mono text-xs text-slate-500">MEAL_ALLOW</td>
+<td class="px-4 py-4">
+<div class="font-medium">Phụ cấp ăn trưa</div>
+<div class="text-xs text-slate-400">午餐补贴</div>
+</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 text-[10px] font-bold rounded bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 uppercase tracking-tighter">Cố định</span>
+</td>
+<td class="px-4 py-4 text-right font-semibold">730,000</td>
+<td class="px-4 py-4">
+<div class="flex justify-center">
+<div class="relative inline-flex h-5 w-9 items-center rounded-full bg-slate-200 dark:bg-slate-700">
+<span class="inline-block h-3.5 w-3.5 transform rounded-full bg-white transition translate-x-1"></span>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-center">
+<button class="text-slate-400 hover:text-red-500"><span class="material-icons text-sm">delete_outline</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-4 py-4 font-mono text-xs text-slate-500">TRAVEL_EXP</td>
+<td class="px-4 py-4">
+<div class="font-medium">Phụ cấp đi lại</div>
+<div class="text-xs text-slate-400">交通补贴</div>
+</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 text-[10px] font-bold rounded bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 uppercase tracking-tighter">Cố định</span>
+</td>
+<td class="px-4 py-4 text-right font-semibold">500,000</td>
+<td class="px-4 py-4">
+<div class="flex justify-center">
+<div class="relative inline-flex h-5 w-9 items-center rounded-full bg-primary/30">
+<span class="inline-block h-3.5 w-3.5 transform rounded-full bg-primary transition translate-x-4.5"></span>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-center">
+<button class="text-slate-400 hover:text-red-500"><span class="material-icons text-sm">delete_outline</span></button>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+<td class="px-4 py-4 font-mono text-xs text-slate-500">INS_DEDUCT</td>
+<td class="px-4 py-4">
+<div class="font-medium">Khấu trừ Bảo hiểm</div>
+<div class="text-xs text-slate-400">保险扣除</div>
+</td>
+<td class="px-4 py-4">
+<span class="px-2 py-1 text-[10px] font-bold rounded bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 uppercase tracking-tighter">Phần trăm</span>
+</td>
+<td class="px-4 py-4 text-right font-semibold text-red-500">10.5%</td>
+<td class="px-4 py-4">
+<div class="flex justify-center">
+<div class="relative inline-flex h-5 w-9 items-center rounded-full bg-slate-200 dark:bg-slate-700">
+<span class="inline-block h-3.5 w-3.5 transform rounded-full bg-white transition translate-x-1"></span>
+</div>
+</div>
+</td>
+<td class="px-4 py-4 text-center">
+<button class="text-slate-400 hover:text-red-500"><span class="material-icons text-sm">delete_outline</span></button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Predefined Variables -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-icons text-primary text-sm">info</span>
+<h3 class="font-semibold text-sm">Thư viện Biến hệ thống (变量库)</h3>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="variable-chip group flex items-center gap-2 px-3 py-1.5 bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-lg transition-all hover:bg-primary/20">
+<code class="text-primary font-bold text-xs uppercase">{Base_Salary}</code>
+<span class="text-[10px] text-slate-500 group-hover:text-primary transition-colors">Lương cơ bản</span>
+</button>
+<button class="variable-chip group flex items-center gap-2 px-3 py-1.5 bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-lg transition-all hover:bg-primary/20">
+<code class="text-primary font-bold text-xs uppercase">{Working_Days}</code>
+<span class="text-[10px] text-slate-500 group-hover:text-primary transition-colors">Ngày công</span>
+</button>
+<button class="variable-chip group flex items-center gap-2 px-3 py-1.5 bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-lg transition-all hover:bg-primary/20">
+<code class="text-primary font-bold text-xs uppercase">{OT_Hours}</code>
+<span class="text-[10px] text-slate-500 group-hover:text-primary transition-colors">Tăng ca</span>
+</button>
+<button class="variable-chip group flex items-center gap-2 px-3 py-1.5 bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-lg transition-all hover:bg-primary/20">
+<code class="text-primary font-bold text-xs uppercase">{Standard_Days}</code>
+<span class="text-[10px] text-slate-500 group-hover:text-primary transition-colors">Công chuẩn</span>
+</button>
+<button class="variable-chip group flex items-center gap-2 px-3 py-1.5 bg-primary/5 dark:bg-primary/10 border border-primary/20 rounded-lg transition-all hover:bg-primary/20">
+<code class="text-primary font-bold text-xs uppercase">{Total_Allowance}</code>
+<span class="text-[10px] text-slate-500 group-hover:text-primary transition-colors">Phụ cấp</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Section 2: Cấu hình Công thức Tổng & Test Tool -->
+<section class="col-span-12 xl:col-span-5 space-y-6">
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<div class="mb-5">
+<h2 class="font-semibold text-slate-800 dark:text-white">Cấu hình Công thức Tổng</h2>
+<p class="text-sm text-slate-500">总工资公式配置 (Total Formula)</p>
+</div>
+<div class="space-y-4">
+<div class="relative">
+<label class="block text-xs font-semibold text-slate-500 uppercase mb-2 tracking-wide">Trình chỉnh sửa công thức (公式编辑)</label>
+<div class="formula-editor border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden ring-offset-2 focus-within:ring-2 ring-primary transition-all">
+<div class="bg-slate-50 dark:bg-slate-800/50 px-3 py-2 flex gap-2 border-b border-slate-200 dark:border-slate-800">
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 font-bold text-xs">+</button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 font-bold text-xs">-</button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 font-bold text-xs">*</button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 font-bold text-xs">/</button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 font-bold text-xs">(</button>
+<button class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 font-bold text-xs">)</button>
+</div>
+<div class="p-4 bg-white dark:bg-slate-900 min-h-[120px] text-sm leading-relaxed outline-none" contenteditable="true">
+                                (<span class="bg-primary/10 text-primary px-1 rounded font-bold">{Base_Salary}</span> / <span class="bg-primary/10 text-primary px-1 rounded font-bold">{Standard_Days}</span>) * <span class="bg-primary/10 text-primary px-1 rounded font-bold">{Working_Days}</span> + <span class="bg-primary/10 text-primary px-1 rounded font-bold">{Total_Allowance}</span> - <span class="bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400 px-1 rounded font-bold">{Insurance_Deduction}</span>
+</div>
+</div>
+<p class="text-[11px] text-slate-400 mt-2 italic flex items-center gap-1">
+<span class="material-icons text-xs">auto_fix_high</span>
+                            Gợi ý: Click vào các biến ở thư viện để chèn nhanh vào công thức.
+                        </p>
+</div>
+<!-- Test Tool -->
+<div class="bg-slate-50 dark:bg-slate-800/40 rounded-lg p-4 border border-slate-200 dark:border-slate-800">
+<div class="flex items-center justify-between mb-3">
+<h4 class="text-xs font-bold uppercase text-slate-500 tracking-wider">Chạy thử công thức (公式验证)</h4>
+<span class="px-2 py-0.5 bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 text-[10px] font-bold rounded">HỢP LỆ</span>
+</div>
+<div class="grid grid-cols-2 gap-3 mb-4">
+<div>
+<label class="block text-[10px] text-slate-500 mb-1 uppercase">Lương cơ bản</label>
+<input class="w-full text-xs font-semibold bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded p-1.5 focus:ring-primary" type="text" value="15,000,000"/>
+</div>
+<div>
+<label class="block text-[10px] text-slate-500 mb-1 uppercase">Ngày công thực</label>
+<input class="w-full text-xs font-semibold bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded p-1.5 focus:ring-primary" type="text" value="24"/>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg">
+<div>
+<div class="text-[10px] text-slate-500 uppercase font-medium">Kết quả tạm tính</div>
+<div class="text-lg font-bold text-slate-800 dark:text-white">14,850,000 VNĐ</div>
+</div>
+<button class="bg-slate-900 dark:bg-slate-700 text-white p-2 rounded-lg hover:bg-slate-800 transition-colors">
+<span class="material-icons text-sm">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Configuration Summary/Activity -->
+<div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-5 shadow-sm">
+<h3 class="text-sm font-semibold mb-4">Lịch sử thay đổi (变更历史)</h3>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-primary shrink-0"></div>
+<div>
+<p class="text-xs font-medium">Cập nhật công thức tính OT (1.5x -&gt; 2.0x)</p>
+<p class="text-[10px] text-slate-400">Admin • 14:20 - 15/10/2023</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="mt-1 w-2 h-2 rounded-full bg-slate-300 dark:bg-slate-700 shrink-0"></div>
+<div>
+<p class="text-xs font-medium text-slate-500">Thêm phụ cấp thâm niên (Seniority)</p>
+<p class="text-[10px] text-slate-400">Admin • 09:15 - 12/10/2023</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Global Footer Actions (Mobile/Small Desktop) -->
+<div class="xl:hidden fixed bottom-0 left-0 w-full bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 flex gap-3">
+<button class="flex-1 bg-slate-100 dark:bg-slate-800 text-slate-600 font-medium py-2 rounded-lg text-sm">Hủy bỏ</button>
+<button class="flex-[2] bg-primary text-white font-medium py-2 rounded-lg text-sm">Lưu cấu hình</button>
+</div>
+</body></html><!-- 
+Image Placeholders Description (data-alt):
+- Logo placeholder (not used here, but for header context)
+- Profile avatar (not used, but for future scaling)
+- Abstract background gradient for the dashboard feel (primary-based)
+-->

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Quản Lý Bảng Lương - HR ADMIN</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <link href="/css/style.css" rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f172a",
+                        "accent": "#0ea5e9"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+
+<body class="bg-slate-50/50 dark:bg-slate-950 dark:text-slate-100">
+    <div class="flex h-screen overflow-hidden pt-8">
+        <div id="sidebar-root"></div>
+
+        <main class="flex-1 overflow-y-auto ml-64 flex flex-col">
+            <div id="header-root"></div>
+
+            <div class="p-8 max-w-7xl mx-auto w-full space-y-8">
+                <div class="flex justify-between items-end">
+                    <div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Trung tâm bảng
+                            lương</h1>
+                        <p class="text-slate-500 text-sm mt-1">Quản lý và phê duyệt các chu kỳ thanh toán lương định kỳ.
+                        </p>
+                    </div>
+                    <button onclick="openCreatePeriodModal()" class="btn-primary h-12 shadow-xl shadow-sky-500/20 px-8">
+                        <span class="material-icons-round text-sm">add_circle</span> TẠO CHU KỲ MỚI
+                    </button>
+                </div>
+
+                <!-- Payroll Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="card p-8 bg-white dark:bg-slate-900 shadow-xl border-none">
+                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Chu kỳ hiện tại
+                            / 当前周期</h3>
+                        <p id="stat-current-period" class="text-2xl font-black text-slate-900 dark:text-white">---</p>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span id="stat-current-status"
+                                class="px-2 py-0.5 bg-slate-100 text-slate-600 rounded-lg text-[9px] font-black uppercase tracking-widest">N/A</span>
+                            <span id="stat-current-amount" class="text-[10px] text-slate-400 font-bold">---</span>
+                        </div>
+                    </div>
+                    <div class="card p-8 bg-white dark:bg-slate-900 shadow-xl border-none">
+                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Tổng nhân sự /
+                            总人数</h3>
+                        <p id="stat-total-employees" class="text-2xl font-black text-slate-900 dark:text-white">0 Nhân
+                            viên</p>
+                        <div class="mt-4 w-full h-1 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                            <div id="stat-attendance-progress" class="h-full bg-sky-500" style="width: 0%"></div>
+                        </div>
+                        <p id="stat-attendance-label" class="text-[9px] text-slate-400 font-bold uppercase mt-2">Dữ liệu
+                            theo chu kỳ mới nhất</p>
+                    </div>
+                    <div class="card p-8 bg-slate-900 text-white shadow-xl border-none overflow-hidden relative">
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-sky-500/20 rounded-full -mr-16 -mt-16"></div>
+                        <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Bảo mật thanh
+                            toán</h3>
+                        <div class="flex items-center gap-3">
+                            <span class="material-icons-round text-sky-500">lock</span>
+                            <p class="text-xs font-bold leading-relaxed">Mọi giao dịch thanh toán lương đều được yêu cầu
+                                xác thực 2 lớp (MFA) trước khi lệnh chi được gửi đi.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Periods List Table -->
+                <div class="card shadow-2xl overflow-hidden bg-white dark:bg-slate-900 border-none">
+                    <div
+                        class="p-8 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/20 flex justify-between items-center">
+                        <div class="flex items-center gap-4">
+                            <div
+                                class="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-lg shadow-sky-500/20">
+                                <span class="material-icons-round">receipt_long</span>
+                            </div>
+                            <h2 class="text-xl font-black text-slate-900 dark:text-white tracking-tight">Lịch sử các chu
+                                kỳ xử lý</h2>
+                        </div>
+                        <div class="flex gap-4">
+                            <select id="filter-year" onchange="loadPayrollPeriods()"
+                                class="form-select rounded-xl text-xs font-black border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900">
+                                <option value="2026">Năm 2026</option>
+                                <option value="2025">Năm 2025</option>
+                                <option value="2024">Năm 2024</option>
+                                <option value="2023">Năm 2023</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead
+                                class="bg-slate-50/50 dark:bg-slate-800/50 text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                <tr>
+                                    <th class="px-8 py-5">Tháng / Năm</th>
+                                    <th class="px-8 py-5">Khoảng thời gian</th>
+                                    <th class="px-8 py-5">Tổng quỹ lương</th>
+                                    <th class="px-8 py-5">Trạng thái</th>
+                                    <th class="px-8 py-5 text-right">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody id="payroll-periods-list" class="divide-y divide-slate-100 dark:divide-slate-800">
+                                <!-- Data will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Create Payroll Period -->
+    <div id="create-period-modal"
+        class="modal hidden fixed inset-0 z-50 overflow-auto bg-black bg-opacity-50 flex items-center justify-center">
+        <div
+            class="relative bg-white dark:bg-slate-900 rounded-[32px] max-w-md w-full shadow-2xl p-10 transform transition-all">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h3 class="text-2xl font-black text-slate-800 dark:text-white uppercase tracking-tight">Tính Lương
+                        Kỳ Mới</h3>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Select month and year
+                        to process</p>
+                </div>
+                <button onclick="closeModal('create-period-modal')" class="text-slate-400 hover:text-slate-600">
+                    <span class="material-icons-round">close</span>
+                </button>
+            </div>
+
+            <div class="space-y-6">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tháng /
+                            月份</label>
+                        <select id="new-period-month"
+                            class="w-full px-5 py-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-black text-sm outline-none focus:ring-4 focus:ring-sky-500/10 transition-all">
+                            <option value="1">Tháng 1</option>
+                            <option value="2">Tháng 2</option>
+                            <option value="3">Tháng 3</option>
+                            <option value="4">Tháng 4</option>
+                            <option value="5">Tháng 5</option>
+                            <option value="6">Tháng 6</option>
+                            <option value="7">Tháng 7</option>
+                            <option value="8">Tháng 8</option>
+                            <option value="9">Tháng 9</option>
+                            <option value="10">Tháng 10</option>
+                            <option value="11">Tháng 11</option>
+                            <option value="12">Tháng 12</option>
+                        </select>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Năm /
+                            年份</label>
+                        <select id="new-period-year"
+                            class="w-full px-5 py-4 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50 font-black text-sm outline-none focus:ring-4 focus:ring-sky-500/10 transition-all">
+                            <option value="2023">2023</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="p-4 bg-sky-50 dark:bg-sky-950/20 rounded-2xl border border-sky-100 dark:border-sky-900/30">
+                    <div class="flex gap-3">
+                        <span class="material-icons-round text-sky-500 text-sm">info</span>
+                        <p class="text-[10px] font-bold text-slate-500 leading-relaxed uppercase">Hệ thống sẽ tự động
+                            quét dữ liệu chấm công và áp dụng công thức lương đã cấu hình để tính toán.</p>
+                    </div>
+                </div>
+
+                <div class="flex gap-4 pt-4">
+                    <button onclick="closeModal('create-period-modal')"
+                        class="flex-1 px-8 py-4 rounded-2xl border border-slate-100 dark:border-slate-800 font-black text-[10px] uppercase tracking-widest hover:bg-slate-50 transition-all">Hủy
+                        bỏ</button>
+                    <button id="btn-process-payroll" onclick="handleCreatePeriod()"
+                        class="flex-1 px-8 py-4 bg-sky-500 text-white rounded-2xl font-black text-[10px] uppercase tracking-widest shadow-xl shadow-sky-500/20 hover:bg-sky-600 transition-all">Bắt
+                        đầu tính</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/app.js"></script>
+    <script>
+        async function loadPayrollPeriods() {
+            const year = document.getElementById('filter-year').value || new Date().getFullYear();
+            try {
+                const resp = await fetch(`/api/payroll/periods?year=${year}`);
+                const data = await resp.json();
+                if (data.success) {
+                    const periods = data.data;
+                    const tbody = document.getElementById('payroll-periods-list');
+
+                    if (periods.length === 0) {
+                        tbody.innerHTML = `<tr><td colspan="5" class="text-center py-12 text-slate-400 italic">Không có kỳ lương nào trong năm ${year}</td></tr>`;
+                        updateDashboardCards(null);
+                        return;
+                    }
+
+                    // Update Dashboard with latest period info
+                    updateDashboardCards(periods[0]);
+
+                    tbody.innerHTML = periods.map(p => `
+                        <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all font-display group">
+                            <td class="px-8 py-5">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-10 h-10 rounded-xl bg-slate-50 dark:bg-slate-800 flex items-center justify-center group-hover:bg-sky-500 group-hover:text-white transition-all">
+                                        <span class="material-icons-round text-sm">calendar_month</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-black text-slate-900 dark:text-white uppercase tracking-tighter">Tháng ${p.period_month}/${p.period_year}</p>
+                                        <p class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${p.period_name || 'Payroll Cycle'}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-8 py-5 text-xs font-bold text-slate-500">
+                                ${App.formatDate(p.start_date)} — ${App.formatDate(p.end_date)}
+                            </td>
+                            <td class="px-8 py-5 font-black text-slate-900 dark:text-white">
+                                ${App.formatCurrency(p.total_net)}
+                            </td>
+                            <td class="px-8 py-5">
+                                <span class="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border ${getStatusStyle(p.status)}">
+                                    ${getStatusLabel(p.status)}
+                                </span>
+                            </td>
+                            <td class="px-8 py-5 text-right text-slate-300">
+                                <div class="flex items-center justify-end gap-2">
+                                    <button onclick="window.location.href='/payroll-approval.html?id=${p.id}'" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-sky-500 hover:text-white transition-all shadow-sm">
+                                        <span class="material-icons-round text-sm">visibility</span>
+                                    </button>
+                                    ${p.status !== 'locked' ? `
+                                    <button onclick="deletePeriod(${p.id})" class="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800 text-red-500 hover:bg-red-500 hover:text-white transition-all shadow-sm">
+                                        <span class="material-icons-round text-sm">delete</span>
+                                    </button>
+                                    ` : ''}
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                }
+            } catch (e) { console.error('Load payroll fail:', e); }
+        }
+
+        function updateDashboardCards(latestPeriod) {
+            if (!latestPeriod) {
+                document.getElementById('stat-current-period').innerText = 'Chưa có dữ liệu';
+                document.getElementById('stat-total-employees').innerText = '0 Nhân viên';
+                document.getElementById('stat-current-status').innerText = 'N/A';
+                document.getElementById('stat-current-amount').innerText = '---';
+                return;
+            }
+
+            document.getElementById('stat-current-period').innerText = `Tháng ${latestPeriod.period_month}/${latestPeriod.period_year}`;
+            document.getElementById('stat-total-employees').innerText = `${latestPeriod.total_employees} Nhân viên`;
+
+            const statusBadge = document.getElementById('stat-current-status');
+            statusBadge.innerText = getStatusLabel(latestPeriod.status);
+            statusBadge.className = `px-2 py-0.5 rounded-lg text-[9px] font-black uppercase tracking-widest ${getStatusCardStyle(latestPeriod.status)}`;
+
+            document.getElementById('stat-current-amount').innerText = `Tổng chi: ${App.formatCurrency(latestPeriod.total_net)}`;
+
+            // Progress bar just for visual effect
+            document.getElementById('stat-attendance-progress').style.width = latestPeriod.status === 'locked' ? '100%' : '75%';
+            document.getElementById('stat-attendance-label').innerText = latestPeriod.status === 'locked' ? '100% Đã hoàn tất' : 'Đang trong quá trình xét duyệt';
+        }
+
+        function getStatusCardStyle(status) {
+            switch (status) {
+                case 'draft': return 'bg-slate-100 text-slate-600';
+                case 'pending': return 'bg-amber-100 text-amber-700';
+                case 'approved': return 'bg-emerald-100 text-emerald-700';
+                case 'locked': return 'bg-sky-100 text-sky-700';
+                default: return 'bg-slate-100 text-slate-600';
+            }
+        }
+
+        function openCreatePeriodModal() {
+            const modal = document.getElementById('create-period-modal');
+
+            // Set default year and month to current
+            const now = new Date();
+            document.getElementById('new-period-month').value = now.getMonth() + 1;
+            document.getElementById('new-period-year').value = now.getFullYear();
+
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        async function deletePeriod(id) {
+            if (!confirm('Bạn có chắc chắn muốn xóa kỳ lương này? Mọi tính toán liên quan sẽ bị mất. / 您确定要删除此工资期吗？相关计算将丢失。')) return;
+
+            try {
+                const resp = await fetch(`/api/payroll/periods/${id}`, { method: 'DELETE' });
+                const result = await resp.json();
+                if (result.success) {
+                    App.toast('Xóa thành công', 'success');
+                    loadPayrollPeriods();
+                } else {
+                    App.toast(result.message, 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                App.toast('Lỗi khi xóa kỳ lương', 'error');
+            }
+        }
+
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        async function handleCreatePeriod() {
+            const month = document.getElementById('new-period-month').value;
+            const year = document.getElementById('new-period-year').value;
+            const btn = document.getElementById('btn-process-payroll');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="material-icons-round animate-spin">sync</span> ĐANG TÍNH...';
+            App.toast(`Đang khởi tạo và tính lương cho tháng ${month}/${year}...`, 'info');
+
+            try {
+                const resp = await fetch('/api/payroll/periods', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ period_month: parseInt(month), period_year: parseInt(year) })
+                });
+                const result = await resp.json();
+
+                if (result.success) {
+                    App.toast('Tính lương thành công! Đang chuyển hướng đến trang duyệt...', 'success');
+                    setTimeout(() => {
+                        window.location.href = `/payroll-approval.html?id=${result.data.period_id}`;
+                    }, 1500);
+                } else {
+                    const msg = result.errors ? result.errors[0].msg : (result.message || 'Lỗi khi tính lương');
+                    App.toast(msg, 'error');
+                }
+            } catch (e) {
+                console.error(e);
+                App.toast('Lỗi hệ thống khi tính lương', 'error');
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Bắt đầu tính';
+            }
+        }
+
+        function getStatusStyle(status) {
+            switch (status) {
+                case 'draft': return 'bg-slate-50 text-slate-400 border-slate-200';
+                case 'pending': return 'bg-amber-50 text-amber-600 border-amber-200';
+                case 'approved': return 'bg-emerald-50 text-emerald-600 border-emerald-200';
+                case 'locked': return 'bg-slate-900 text-slate-400 border-slate-700';
+                default: return 'bg-slate-50 text-slate-400 border-slate-200';
+            }
+        }
+
+        function getStatusLabel(status) {
+            switch (status) {
+                case 'draft': return 'Bản nháp';
+                case 'pending': return 'Chờ duyệt';
+                case 'approved': return 'Đã phê duyệt';
+                case 'locked': return 'Đã khóa';
+                default: return status;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set year filter to current year
+            document.getElementById('filter-year').value = new Date().getFullYear();
+            loadPayrollPeriods();
+        });
+    </script>
+</body>
+
+</html>
